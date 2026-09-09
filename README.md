@@ -1,10 +1,12 @@
-# DineFlow — Indian Restaurant ERP & Cloud Kitchen Operating System
+# DineFlow — Enterprise Indian Restaurant ERP & Management System
 
 [![Django](https://img.shields.io/badge/Django-5.2+-1E7A35?style=flat&logo=django&logoColor=white)](https://www.djangoproject.com/)
-[![Tests](https://img.shields.io/badge/Pytest-9%2F9%20Passing-1E7A35?style=flat&logo=pytest&logoColor=white)](file:///c:/Users/lenovo/Downloads/Elevateiq/DineFlow/tests/test_views.py)
-[![Design](https://img.shields.io/badge/Palette-Zero--Blue%20Warm%20Spice-C24312?style=flat)](file:///c:/Users/lenovo/Downloads/Elevateiq/DineFlow/static/css/dineflow-tokens.css)
+[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
+[![Database](https://img.shields.io/badge/Database-PostgreSQL%20%2F%20SQLite-orange.svg)]()
+[![Code Style](https://img.shields.io/badge/Code%20Style-Ruff-000000.svg)](https://astral.sh/ruff)
+[![Design](https://img.shields.io/badge/Palette-Zero--Blue%20Warm%20Spice-C24312?style=flat)](static/css/dineflow-tokens.css)
 
-**DineFlow** is a comprehensive, multi-outlet, omnichannel enterprise ERP crafted specifically for Indian hospitality chains, fine-dining restaurants, quick-service restaurants (QSRs), and cloud kitchens.
+**DineFlow** is a comprehensive, multi-outlet, omnichannel enterprise ERP & Operating System crafted specifically for Indian hospitality chains, fine-dining restaurants, quick-service restaurants (QSRs), and cloud kitchens.
 
 ---
 
@@ -57,71 +59,45 @@ Switch between any role at any time via the top navbar **Role Switcher** or the 
 * **Table Reservations** (`/tables/reservations/`): Guest booking calendar with SMS confirmation and advance deposit management.
 
 ### 4. Menu Engineering & Recipe Costing
-* **Menu Master** (`/menu/`): Searchable menu items with FSSAI calorie counts, spice levels, allergens, and dietary badges.
-* **Category Master** (`/menu/categories/`): Course ordering, tax slab mapping, printer routing.
-* **Recipe Costing & Yield** (`/menu/recipe-costing/`): Ingredient-level breakdown, standard food cost % vs. actual, and portion margin calculators.
-
-### 5. Supply Chain, Inventory & Procurement
-* **Stock Ledger** (`/inventory/`): Real-time ingredient balance, min reorder levels, unit conversions (kg, g, L, ml, pcs).
-* **Purchase Orders & GRN** (`/inventory/purchase-orders/`): Vendor POs with Goods Received Notes (GRN) matching.
-* **Wastage & Spoilage Log** (`/inventory/waste-log/`): Kitchen prep loss and expiry logging with reason tracking.
-* **Supplier Directory** (`/suppliers/`): Verified vendor records with GSTIN and payment terms.
-
-### 6. Human Resources & Indian Payroll
-* **Employee Directory** (`/hr/employees/`): Staff KYC, designation, role assignment, and bank details.
-* **Attendance & Biometric Sync** (`/hr/attendance/`): Daily check-in/out logs, shift hours, overtime.
-* **Shift Scheduling** (`/hr/shifts/`): Morning, Evening, and Split-shift rosters.
-* **Statutory Payroll** (`/hr/payroll/`): Salary slips with Provident Fund (PF 12%), ESI (0.75%/3.25%), Professional Tax (PT), and TDS deductions.
-
-### 7. CRM, Loyalty & Guest Experience
-* **Customer Registry** (`/crm/customers/`): VIP tags, dietary preferences, anniversary/birthday triggers.
-* **Loyalty Club** (`/crm/loyalty/`): Tiered points engine with redemption rules.
-* **Promotions & Coupons** (`/crm/offers/`): Discount rules (Flat ₹, %, BOGO, Happy Hours).
-* **Feedback & Reviews** (`/crm/feedback/`): Table QR rating logs with manager escalation.
-
-### 8. Analytics, AI & Compliance
-* **Business BI Suite** (`/analytics/bi/`): Pure HTML5 Canvas charts with zero external chart library bloat.
-* **AI Demand Forecasting** (`/analytics/forecast/`): Day-wise footfall and raw ingredient usage predictions based on historical trends, weather, and festival calendar.
-* **GST Compliance** (`/analytics/tax/` & `/tax/slabs/`): GSTR-1 and GSTR-3B export formatters, HSN tax slab management (0%, 5%, 12%, 18%).
-
-### 9. Multi-Branch & Security Administration
-* **Multi-Branch Control** (`/settings/branches/`): Headquarter view of Indiranagar, Koramangala, Connaught Place, and Bandra West outlets.
-* **RBAC Engine** (`/settings/roles/`): Granular permission matrix for all 10 roles.
-* **Audit Logs** (`/settings/audit/`): Immutable security trail of logins, price changes, discounts, and order cancellations.
-* **Backup & Restore** (`/settings/backup/`): Snapshot generation, S3 sync, and point-in-time recovery.
+* **Menu Master** (`/menu/`): Multi-price tiers, portion sizes, add-on groups, allergens, and dietary tagging.
+* **Recipe Costing & BOM**: Ingredient-level cost breakdown, gross margin calculations, and automatic inventory depletion on KOT firing.
 
 ---
 
-## 💻 Tech Stack & Architecture
+## 🏛️ Enterprise Database Architecture (Part 3)
+
+- **Multi-Tenant Architecture**: Supports multiple restaurants, branches, and tiered permissions.
+- **24 Normalized Domain Apps**: Employees, Menu, Tables, Orders, Kitchen (KOT), Inventory, Purchases, Billing, Payments, Customers, Delivery, Offers, Loyalty, Reviews, Expenses, Taxes, Analytics, ML, Reports, Audit logs, and Backups.
+- **Indian Regulatory Localization**: Dual GST calculation (2.5% CGST + 2.5% SGST for intra-state, 5.0% IGST for inter-state), dynamic UPI B2C payment QR codes (`upi://pay`), itemized round-off adjustments, and authentic Indian culinary datasets.
+- **Transactional Integrity**: Concurrency-safe atomic invoice generation (`select_for_update()`), automatic Bill of Materials (BOM) recipe inventory deductions upon KOT preparation, and immutable audit ledgers.
+- **Zero-Lint Quality**: 100% compliant with PEP 8 and Ruff guidelines, with 0 errors across the codebase.
 
 ```
-DineFlow Architecture
-│
-├── Public Website & Authentication
-│   ├── Landing Page with Ambient Canvas Animation (Canvas Spice & Steam)
-│   ├── Role-Aware Auth (Login, Register with GSTIN/FSSAI, OTP, Forgot Password)
-│   └── Error Handler (404, 403, 500, Session Timeout)
-│
-├── Core & Middleware Layer
-│   ├── Global Context Processor (Role switcher, branches, notifications)
-│   ├── Custom Template Tags (inr_format, status_class, diet_badge)
-│   └── Django 5.2 MVC
-│
-├── Presentation & Styling (Zero-Blue Design System)
-│   ├── dineflow-tokens.css (CSS variables for warm Indian palette)
-│   ├── dineflow-base.css (Global typography, layouts, grids)
-│   ├── dineflow-components.css (Cards, badges, tables, modals, drawers, toasts)
-│   ├── dineflow-pos.css & dineflow-kds.css (Specialized UI shells)
-│   └── dineflow-landing.css (Hero animations, pricing cards, testimonials)
-│
-└── Reactive JavaScript Engines
-    ├── landing-animation.js (Spice particles, steam physics)
-    ├── dineflow-core.js (Role switcher, toasts, modal controllers)
-    ├── pos-engine.js (Cart state machine, GST split, UPI QR renderer, thermal prints)
-    ├── kds-engine.js (Live timer countdowns, station filter, bump system)
-    ├── table-engine.js (Floor plan layout, status sync, reservations)
-    ├── analytics-engine.js (Pure Canvas line, bar, donut charts)
-    └── export-print.js (CSV/Excel client exporter, print formatter)
+apps/
+├── core/           # Tenant root (Restaurant), Multi-branch, Custom User, RBAC Roles
+├── employees/      # Staff profiles, Departments, Designations, Shifts, Payroll
+├── menu/           # Categories, Menu Items, Variants, Addons, Recipe BOM Ingredients
+├── tables/         # Sections (AC, Family, Terrace), Tables, Seating Constraints, Reservations
+├── orders/         # Dine-in, Takeaway, Delivery, Order Items, Order Discounts, Taxes
+├── kitchen/        # Kitchen Stations, KOTs (Kitchen Order Tickets), Station Routing
+├── inventory/      # Stock levels, Batches, Stock Movements (Ledger), Adjustments, Waste
+├── suppliers/      # Supplier registry, Contacts, Ratings
+├── purchases/      # Purchase Orders (PO), Goods Receipt Notes (GRN), Purchase Inwarding
+├── billing/        # Invoices, Sequential Numbering, GST splits, Round-off, B2C UPI QR
+├── payments/       # Cash, UPI, Card transactions, Refunds, Reconciliations
+├── customers/      # Customer directory, Addresses, Dietary Preferences
+├── delivery/       # Delivery orders, Delivery rider assignments, Status tracking
+├── offers/         # Offers, Promo coupons, Branch & menu scoping
+├── loyalty/        # Customer tiers (Bronze/Silver/Gold/Platinum), Points ledger, Rewards
+├── reviews/        # Ratings (Food, Service, Ambiance 1-5), Moderation
+├── expenses/       # Branch operating expense categories, Approvals
+├── taxes/          # Tax categories, HSN/SAC codes, CGST/SGST/IGST rules
+├── notifications/  # Notification center, Channel preferences
+├── analytics/      # Daily/Monthly sales snapshots, Demand forecasting aggregates
+├── ml/             # ML dataset registries, Training runs, Demand predictions
+├── reports/        # Custom report definitions, Scheduled exports
+├── audit/          # Change Data Capture (CDC) diffs, Security event logging
+└── settings_app/   # Dynamic system configs, Automated checksummed backups
 ```
 
 ---
@@ -130,38 +106,52 @@ DineFlow Architecture
 
 ### 1. Requirements
 * Python 3.10+
-* Django 5.0+
+* Django 5.2+
 
-### 2. Run Locally
+### 2. Setup Environment & Install Dependencies
 ```bash
-# Navigate to the project root
-cd c:\Users\lenovo\Downloads\Elevateiq\DineFlow
+git clone https://github.com/pernamittasumanthreddy/dineflow.git
+cd dineflow
 
-# Apply migrations
-python manage.py migrate
-
-# Run test suite
-pytest
-
-# Start the development server
-python manage.py runserver
+# Activate virtual environment
+.venv\Scripts\activate   # On Windows
+source .venv/bin/activate # On Linux/macOS
 ```
 
-Open your browser at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+### 3. Apply Migrations & Seed Demo Data
+```bash
+# Apply schema migrations
+python manage.py migrate
+
+# Seed realistic multi-restaurant Indian demo dataset
+python scripts/seed_demo_data.py
+```
+
+### 4. Run Automated Test Suite
+```bash
+python manage.py test tests
+```
+
+### 5. Start Development Server
+```bash
+python manage.py runserver
+```
+* **Landing Page & Dashboards**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+* **Admin Portal**: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+  * **Super Admin**: `admin@dineflow.com` | `AdminPassword@123`
 
 ---
 
-## 🧪 Test Suite
+## 📚 Technical Documentation
 
-Run automated unit and integration tests:
-```bash
-pytest
-```
-Expected output:
-```text
-tests\test_views.py .........                                            [100%]
-============================== 9 passed in 1.05s ==============================
-```
+Detailed architectural reports are available in the [`docs/`](docs/) directory:
+- [Database Architecture Specification](docs/database_architecture.md)
+- [Mermaid Entity-Relationship (ER) Diagram](docs/er_diagram.md)
+- [Model Relationships & Foreign Key Policies](docs/model_relationships.md)
+- [Data Dictionary](docs/data_dictionary.md)
+- [Database Indexing & Query Optimization Guide](docs/indexing_guide.md)
+- [PostgreSQL Production Migration Guide](docs/migration_guide.md)
+- [Backup & Disaster Recovery Guide](docs/backup_restore_guide.md)
 
 ---
 
