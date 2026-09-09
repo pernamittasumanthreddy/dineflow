@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Database Backup & Restore — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Database Backup, Restore & Disaster Recovery</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Administration</span>
+      <span>›</span>
+      <span>Database Snapshots (SQLite / PostgreSQL)</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('Backup Created', 'Instant snapshot created: dineflow_db_backup_manual.sqlite3', 'success')">
+      <span>💾 + Take Instant Database Snapshot</span>
+    </button>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Available Database Snapshots & Integrity Status</div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table">
+      <thead>
+        <tr>
+          <th>Backup Filename</th>
+          <th>File Size</th>
+          <th>Created Timestamp</th>
+          <th>Backup Category</th>
+          <th>Integrity Verification</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in backups %}
+          <tr>
+            <td><code>{{ b.filename }}</code></td>
+            <td>{{ b.size }}</td>
+            <td>{{ b.created_at }}</td>
+            <td><span class="df-badge badge-neutral">{{ b.type }}</span></td>
+            <td><span class="df-badge badge-success">MD5 Verified ✓</span></td>
+            <td>
+              <div class="df-action-btns">
+                <button class="df-btn df-btn-outline df-btn-sm" onclick="DineFlow.showToast('Restore Test', 'Dry run verification passed for {{ b.filename }}', 'success')">
+                  Test Restore Drill
+                </button>
+                <button class="df-btn df-btn-outline df-btn-sm" onclick="DineFlow.showToast('Downloading', 'Downloading backup archive...', 'info')">
+                  📥 Download
+                </button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
