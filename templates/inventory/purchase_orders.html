@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Purchase Orders & GRN — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Purchase Orders (PO) & Goods Receipt Notes (GRN)</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Supply Chain</span>
+      <span>›</span>
+      <span>Vendor Procurement</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('New Purchase Order', 'Opening PO drafting wizard...', 'info')">
+      <span>+ Generate New PO</span>
+    </button>
+    <a href="{% url 'suppliers:list' %}" class="df-btn df-btn-outline">
+      <span>🏭 Manage Vendors</span>
+    </a>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Procurement Orders & Inwarding Status</div>
+    <div style="display:flex; gap:0.5rem;">
+      <input type="text" id="df-po-search" class="df-input-search" placeholder="Search PO #, supplier...">
+      <button class="df-btn df-btn-outline df-btn-sm" onclick="ExportPrint.exportTableToCSV('df-po-table', 'purchase_orders.csv')">Export CSV</button>
+    </div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table" id="df-po-table">
+      <thead>
+        <tr>
+          <th>PO Number</th>
+          <th>Vendor / Supplier</th>
+          <th>Order Date</th>
+          <th>Items Summary</th>
+          <th>Order Amount</th>
+          <th>GRN Inwarding Status</th>
+          <th>Approval Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for po in po_list %}
+          <tr>
+            <td><strong>{{ po.po_num }}</strong></td>
+            <td><strong>{{ po.supplier }}</strong></td>
+            <td>{{ po.date }}</td>
+            <td style="font-size:0.8125rem; color:var(--df-text-secondary);">{{ po.items_count }}</td>
+            <td style="font-weight:700; color:var(--df-maroon-800);">{{ po.amount|inr }}</td>
+            <td><span class="df-badge badge-warning">{{ po.grn_status }}</span></td>
+            <td><span class="df-badge badge-success">{{ po.status }}</span></td>
+            <td>
+              <div class="df-action-btns">
+                <button class="df-btn-icon" onclick="DineFlow.showToast('Inward Goods', 'GRN recorded for {{ po.po_num }}', 'success')" title="Record Goods Receipt (GRN)">📥</button>
+                <button class="df-btn-icon" onclick="DineFlow.showToast('Print PO', 'Printing Purchase Order {{ po.po_num }}', 'info')" title="Print PO">🖨️</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    DineFlow.initTableFilter('df-po-search', 'df-po-table');
+  });
+</script>
+{% endblock %}
