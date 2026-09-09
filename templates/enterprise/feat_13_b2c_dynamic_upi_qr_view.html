@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dynamic NPCI UPI B2C Intent QR Code Generator | DineFlow Enterprise ERP{% endblock %}
+{% block content %}
+<div class="df-enterprise-container df-theme-warm-spice">
+    <header class="df-page-header">
+        <div class="df-header-breadcrumbs">
+            <span>ERP</span> &gt; <span>PAYMENTS</span> &gt; <span class="active">Dynamic NPCI UPI B2C Intent QR Code Generator</span>
+        </div>
+        <div class="df-header-actions">
+            <button class="df-btn df-btn-spice" id="btn-create-feat_13_b2c_dynamic_upi_qr">+ Create Record</button>
+            <button class="df-btn df-btn-outline" id="btn-export-feat_13_b2c_dynamic_upi_qr">Export GSTR / CSV</button>
+        </div>
+    </header>
+
+    <section class="df-analytics-strip">
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 1: Dynamic NPCI UP</span>
+            <span class="df-stat-value">₹{{ stat_1|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 2: Dynamic NPCI UP</span>
+            <span class="df-stat-value">₹{{ stat_2|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 3: Dynamic NPCI UP</span>
+            <span class="df-stat-value">₹{{ stat_3|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 4: Dynamic NPCI UP</span>
+            <span class="df-stat-value">₹{{ stat_4|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+    </section>
+
+    <main class="df-table-responsive-wrapper">
+        <table class="df-table df-table-striped" id="table-feat_13_b2c_dynamic_upi_qr">
+            <thead>
+                <tr>
+                    <th>Record ID</th>
+                    <th>Restaurant Branch</th>
+                    <th>Reference Code</th>
+                    <th>Amount (INR)</th>
+                    <th>CGST (2.5%)</th>
+                    <th>SGST (2.5%)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-01">
+                    <td><code>DF-PAY-0001</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-01</code></td>
+                    <td><strong>₹{{ row_1_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-02">
+                    <td><code>DF-PAY-0002</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-02</code></td>
+                    <td><strong>₹{{ row_2_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-03">
+                    <td><code>DF-PAY-0003</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-03</code></td>
+                    <td><strong>₹{{ row_3_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-04">
+                    <td><code>DF-PAY-0004</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-04</code></td>
+                    <td><strong>₹{{ row_4_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-05">
+                    <td><code>DF-PAY-0005</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-05</code></td>
+                    <td><strong>₹{{ row_5_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-06">
+                    <td><code>DF-PAY-0006</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-06</code></td>
+                    <td><strong>₹{{ row_6_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-07">
+                    <td><code>DF-PAY-0007</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-07</code></td>
+                    <td><strong>₹{{ row_7_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-08">
+                    <td><code>DF-PAY-0008</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-08</code></td>
+                    <td><strong>₹{{ row_8_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-09">
+                    <td><code>DF-PAY-0009</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-09</code></td>
+                    <td><strong>₹{{ row_9_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-10">
+                    <td><code>DF-PAY-0010</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-10</code></td>
+                    <td><strong>₹{{ row_10_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-11">
+                    <td><code>DF-PAY-0011</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-11</code></td>
+                    <td><strong>₹{{ row_11_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-12">
+                    <td><code>DF-PAY-0012</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-12</code></td>
+                    <td><strong>₹{{ row_12_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-13">
+                    <td><code>DF-PAY-0013</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-13</code></td>
+                    <td><strong>₹{{ row_13_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-14">
+                    <td><code>DF-PAY-0014</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-14</code></td>
+                    <td><strong>₹{{ row_14_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-15">
+                    <td><code>DF-PAY-0015</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-15</code></td>
+                    <td><strong>₹{{ row_15_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-16">
+                    <td><code>DF-PAY-0016</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-16</code></td>
+                    <td><strong>₹{{ row_16_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-17">
+                    <td><code>DF-PAY-0017</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-17</code></td>
+                    <td><strong>₹{{ row_17_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-18">
+                    <td><code>DF-PAY-0018</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-18</code></td>
+                    <td><strong>₹{{ row_18_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-19">
+                    <td><code>DF-PAY-0019</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-19</code></td>
+                    <td><strong>₹{{ row_19_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-20">
+                    <td><code>DF-PAY-0020</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-20</code></td>
+                    <td><strong>₹{{ row_20_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-21">
+                    <td><code>DF-PAY-0021</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-21</code></td>
+                    <td><strong>₹{{ row_21_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-22">
+                    <td><code>DF-PAY-0022</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-22</code></td>
+                    <td><strong>₹{{ row_22_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-23">
+                    <td><code>DF-PAY-0023</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-23</code></td>
+                    <td><strong>₹{{ row_23_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-24">
+                    <td><code>DF-PAY-0024</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-24</code></td>
+                    <td><strong>₹{{ row_24_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_13_b2c_dynamic_upi_qr-25">
+                    <td><code>DF-PAY-0025</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_13_B2-25</code></td>
+                    <td><strong>₹{{ row_25_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+<script src="{% static "js/enterprise/feat_13_b2c_dynamic_upi_qr_engine.js" %}"></script>
+{% endblock %}
