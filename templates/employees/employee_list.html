@@ -64,7 +64,7 @@
                         {{ emp.branch.name|default:"HQ" }}
                     </td>
                     <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700; color: var(--accent-gold);">
-                        {{ emp.monthly_gross_salary|inr }}
+                        {{ emp.gross_monthly_salary|inr }}
                     </td>
                     <td style="padding: 0.85rem 1.25rem; text-align: right;">
                         <a href="{% url 'employees:detail' emp.id %}" class="btn btn-sm btn-outline">Profile & CTC</a>

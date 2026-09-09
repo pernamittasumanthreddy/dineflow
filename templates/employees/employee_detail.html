@@ -56,12 +56,12 @@
                 </div>
                 <div>
                     <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">EPF UAN</span>
-                    <span style="font-family: monospace; color: var(--accent-gold);">{{ employee.epf_uan|default:"NOT APPLICABLE" }}</span>
+                    <span style="font-family: monospace; color: var(--accent-gold);">{{ employee.uan_number|default:"NOT APPLICABLE" }}</span>
                 </div>
                 <div>
                     <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">BANK ACCOUNT & IFSC</span>
                     <div style="font-family: monospace; color: var(--text-primary);">{{ employee.bank_account_number|default:"—" }}</div>
-                    <div style="font-family: monospace; color: var(--text-secondary); font-size: 0.8rem;">IFSC: {{ employee.bank_ifsc|default:"—" }}</div>
+                    <div style="font-family: monospace; color: var(--text-secondary); font-size: 0.8rem;">IFSC: {{ employee.ifsc_code|default:"—" }}</div>
                 </div>
             </div>
         </div>
@@ -75,16 +75,16 @@
             </h3>
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; text-align: center;">
                 <div>
-                    <div style="color: var(--text-muted); font-size: 0.78rem;">BASIC (40%)</div>
+                    <div style="color: var(--text-muted); font-size: 0.78rem;">BASIC</div>
                     <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 0.25rem;">{{ employee.basic_salary|inr }}</div>
                 </div>
                 <div>
-                    <div style="color: var(--text-muted); font-size: 0.78rem;">HRA (20%)</div>
-                    <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 0.25rem;">{{ employee.hra|inr }}</div>
+                    <div style="color: var(--text-muted); font-size: 0.78rem;">HRA</div>
+                    <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 0.25rem;">{{ employee.hra_allowance|inr }}</div>
                 </div>
                 <div>
                     <div style="color: var(--text-muted); font-size: 0.78rem;">GROSS MONTHLY</div>
-                    <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-gold); margin-top: 0.25rem;">{{ employee.monthly_gross_salary|inr }}</div>
+                    <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-gold); margin-top: 0.25rem;">{{ employee.gross_monthly_salary|inr }}</div>
                 </div>
             </div>
         </div>
