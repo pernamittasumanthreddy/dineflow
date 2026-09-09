@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Touch POS Terminal — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-pos-wrapper">
+  
+  <!-- Left Side: Food Catalog & Ordering Grid -->
+  <div class="df-pos-catalog">
+    
+    <!-- Topbar: Order Type & Search -->
+    <div class="df-pos-topbar">
+      <!-- Order Type Tabs -->
+      <div class="df-pos-order-type-tabs">
+        <button class="df-pos-type-tab active" data-type="dine_in">🍽️ Dine-In</button>
+        <button class="df-pos-type-tab" data-type="takeaway">🥡 Takeaway</button>
+        <button class="df-pos-type-tab" data-type="delivery">🛵 Delivery</button>
+      </div>
+
+      <!-- Dish Search Input -->
+      <div class="df-search-input-group" style="max-width: 340px;">
+        <span class="df-search-icon">🔍</span>
+        <input type="text" id="df-pos-search" class="df-input-search" placeholder="Search dish name / category...">
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="{% url 'tables:floor_plan' %}" class="df-btn df-btn-outline df-btn-sm" title="Change Table">
+          <span>🪑 Tables</span>
+        </a>
+        <button class="df-btn df-btn-outline df-btn-sm" onclick="POSEngine.clearCart()" title="Clear Entire Order">
+          <span>🗑️ Clear</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Pills Bar -->
+    <div class="df-pos-categories-bar">
+      {% for cat in categories %}
+        <div class="df-pos-category-pill {% if forloop.first %}active{% endif %}" data-category="{{ cat.key }}">
+          <span>{{ cat.icon }}</span>
+          <span>{{ cat.name }}</span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Food Items Grid -->
+    <div class="df-pos-food-grid" id="df-pos-food-grid">
+      {% for item in menu_items %}
+        <div class="df-food-card" data-category="{{ item.category }}" onclick="POSEngine.addItem({{ item.id }}, '{{ item.name|escapejs }}', {{ item.price }}, '{{ item.category }}', '{{ item.diet }}')">
+          <div>
+            <div class="df-food-top">
+              <span class="df-diet-mark {{ item.diet|diet_badge }}"></span>
+              <span class="df-food-category-tag">⏱️ {{ item.prep_time }}</span>
+            </div>
+            <div class="df-food-name">{{ item.name }}</div>
+          </div>
+          <div class="df-food-bottom">
+            <span class="df-food-price">{{ item.price|inr }}</span>
+            <button class="df-food-add-btn">+</button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Right Side: Order Cart & Bill Computation Panel -->
+  <div class="df-pos-cart-panel">
+    
+    <!-- Cart Header -->
+    <div class="df-pos-cart-header">
+      <div class="df-pos-table-badge">
+        <span>🪑</span>
+        <span id="df-pos-active-table">{{ selected_table }}</span>
+      </div>
+      <div style="font-size: 0.8125rem; font-weight: 700; color: var(--df-text-secondary);" id="df-pos-item-count">
+        0 items
+      </div>
+    </div>
+
+    <!-- Cart Item List -->
+    <div class="df-pos-cart-items" id="df-pos-cart-items-container">
+      <!-- Dynamically rendered by POSEngine -->
+    </div>
+
+    <!-- Cart Financial Computation Summary -->
+    <div class="df-pos-cart-summary">
+      <div class="df-summary-row">
+        <span>Subtotal:</span>
+        <span id="df-pos-subtotal" style="font-weight: 700;">₹0.00</span>
+      </div>
+      <div class="df-summary-row tax">
+        <span>CGST (2.5%):</span>
+        <span id="df-pos-cgst">₹0.00</span>
+      </div>
+      <div class="df-summary-row tax">
+        <span>SGST (2.5%):</span>
+        <span id="df-pos-sgst">₹0.00</span>
+      </div>
+      <div class="df-summary-row grand-total">
+        <span>GRAND TOTAL:</span>
+        <span id="df-pos-grand-total">₹0.00</span>
+      </div>
+    </div>
+
+    <!-- POS Actions (Fire KOT & Settle Bill) -->
+    <div class="df-pos-cart-actions">
+      <button class="df-btn df-btn-maroon df-btn-lg" onclick="POSEngine.fireKOT()">
+        🔥 Fire KOT
+      </button>
+      <button class="df-btn df-btn-terracotta df-btn-lg" onclick="POSEngine.showSettlementModal()">
+        💵 Settle Bill & Tax Invoice
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    POSEngine.init();
+  });
+</script>
+{% endblock %}
