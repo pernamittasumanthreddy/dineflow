@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Guest Portal & DineClub — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Guest Experience & DineClub Rewards</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Guest Portal</span>
+      <span>›</span>
+      <span style="color:var(--df-saffron-700); font-weight:700;">Welcome, Dr. Anjali Sharma</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'tables:reservations' %}" class="df-btn df-btn-terracotta">
+      <span>📅 Book a Table</span>
+    </a>
+    <a href="{% url 'menu:item_list' %}" class="df-btn df-btn-maroon">
+      <span>🍽️ Browse Digital QR Menu</span>
+    </a>
+    <a href="{% url 'crm:loyalty_points' %}" class="df-btn df-btn-outline">
+      <span>🎁 Redeem Rewards</span>
+    </a>
+  </div>
+</div>
+
+<!-- Customer KPIs -->
+<div class="df-kpi-grid">
+  {% for kpi in kpis %}
+    <div class="df-kpi-card">
+      <div class="df-kpi-top">
+        <div class="df-kpi-label">{{ kpi.label }}</div>
+        <div class="df-kpi-icon {{ kpi.icon }}">{{ kpi.emoji }}</div>
+      </div>
+      <div class="df-kpi-value">{{ kpi.value }}</div>
+      <div class="df-kpi-bottom">
+        <span class="df-trend-pill df-trend-up">{{ kpi.trend }}</span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Available Offers & Coupons Grid -->
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">My Active DineClub Offers & Promo Coupons</div>
+    <span class="df-badge badge-success">Gold Tier Exclusive</span>
+  </div>
+  <div class="df-card-body">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.25rem;">
+      
+      <div style="border:1px dashed var(--df-terracotta-600); border-radius:var(--df-radius-lg); padding:1.25rem; background:var(--df-terracotta-100);">
+        <div style="font-weight:800; color:var(--df-terracotta-800); font-size:1.2rem;">FLAT ₹150 OFF</div>
+        <div style="font-size:0.875rem; color:var(--df-text-primary); margin:0.35rem 0;">Valid on any Hyderabadi Handi Biryani</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
+          <code style="font-weight:700; background:#FFF; padding:3px 8px; border-radius:4px; border:1px solid #DDD;">BIRYANI150</code>
+          <button class="df-btn df-btn-terracotta df-btn-sm" onclick="DineFlow.showToast('Coupon Applied', 'Code BIRYANI150 will be auto-applied at billing.', 'success')">Apply in Cart</button>
+        </div>
+      </div>
+
+      <div style="border:1px dashed var(--df-maroon-700); border-radius:var(--df-radius-lg); padding:1.25rem; background:var(--df-maroon-100);">
+        <div style="font-weight:800; color:var(--df-maroon-800); font-size:1.2rem;">FREE GULAB JAMUN</div>
+        <div style="font-size:0.875rem; color:var(--df-text-primary); margin:0.35rem 0;">Complimentary with dining bills above ₹1,000</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
+          <code style="font-weight:700; background:#FFF; padding:3px 8px; border-radius:4px; border:1px solid #DDD;">SWEETGOLD</code>
+          <button class="df-btn df-btn-maroon df-btn-sm" onclick="DineFlow.showToast('Coupon Applied', 'Free Dessert voucher claimed.', 'success')">Apply in Cart</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
