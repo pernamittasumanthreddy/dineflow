@@ -1,0 +1,80 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block title %}Sign In — DineFlow Restaurant ERP{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1.5rem;">
+  <div style="background: rgba(28, 28, 34, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--df-radius-xl); box-shadow: 0 24px 48px rgba(0,0,0,0.5); width: 100%; max-width: 520px; padding: 2.5rem; backdrop-filter: blur(16px);">
+    
+    <!-- Logo & Title -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="df-brand-logo" style="margin: 0 auto 1rem; width: 50px; height: 50px; font-size: 1.5rem;">DF</div>
+      <h1 style="font-family: var(--df-font-serif); font-size: 1.85rem; font-weight: 700; color: #FFF; margin-bottom: 0.35rem;">Welcome to DineFlow</h1>
+      <p style="color: #A6A6B8; font-size: 0.875rem;">Indian Restaurant ERP & Cloud Kitchen OS</p>
+    </div>
+
+    <!-- Quick Demo Role Selector -->
+    <div style="background: rgba(122, 26, 36, 0.3); border: 1px solid rgba(194, 67, 18, 0.3); border-radius: var(--df-radius-md); padding: 1rem; margin-bottom: 1.75rem;">
+      <div style="font-size: 0.75rem; font-weight: 700; color: var(--df-saffron-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.65rem;">
+        ⚡ Instant Role Demo Login (Click Any Role):
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;">
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('owner')">👑 Restaurant Owner</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('super_admin')">🛡️ Super Admin</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('manager')">👔 General Manager</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('kitchen')">👨‍🍳 Kitchen Staff (KDS)</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('waiter')">🤵 Waiter / Captain</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('cashier')">💵 Cashier (Billing)</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('inventory')">📦 Inventory Manager</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('hr')">👥 HR Manager</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('customer')">⭐ Customer Portal</button>
+        <button type="button" class="df-btn df-btn-sm df-btn-outline" style="color:#FFF; border-color:rgba(255,255,255,0.2); font-size:0.75rem;" onclick="setLoginRole('analytics')">📈 Analytics & BI</button>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <form method="POST" action="{% url 'accounts:login' %}" id="df-login-form">
+      {% csrf_token %}
+      <input type="hidden" name="role" id="selected-role-input" value="owner">
+
+      <div class="df-form-group">
+        <label class="df-form-label" style="color: #FFF;">Email / Mobile (+91)</label>
+        <input type="text" name="username" class="df-form-control" value="pavan.varma@dineflow.in" required style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+      </div>
+
+      <div class="df-form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+          <label class="df-form-label" style="color: #FFF; margin-bottom: 0;">Password</label>
+          <a href="{% url 'accounts:forgot_password' %}" style="font-size: 0.75rem; color: var(--df-saffron-400); text-decoration: none;">Forgot Password?</a>
+        </div>
+        <input type="password" name="password" id="password-input" class="df-form-control" value="••••••••••••" required style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; font-size: 0.8125rem;">
+        <label style="display: flex; align-items: center; gap: 0.4rem; color: #D1D1DE; cursor: pointer;">
+          <input type="checkbox" checked style="accent-color: var(--df-terracotta-600);">
+          Remember me for 30 days
+        </label>
+        <a href="{% url 'accounts:otp_verify' %}" style="color: var(--df-saffron-400); text-decoration: none;">Login with OTP 📱</a>
+      </div>
+
+      <button type="submit" class="df-btn df-btn-terracotta df-btn-lg" style="width: 100%;">
+        Sign In to DineFlow →
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.75rem; font-size: 0.875rem; color: #8C8C9E;">
+      New restaurant or cloud kitchen? 
+      <a href="{% url 'accounts:register' %}" style="color: var(--df-saffron-400); font-weight: 600; text-decoration: none;">Register Branch</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setLoginRole(role) {
+    document.getElementById('selected-role-input').value = role;
+    document.getElementById('df-login-form').submit();
+  }
+</script>
+{% endblock %}

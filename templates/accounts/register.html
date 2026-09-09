@@ -1,0 +1,93 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block title %}Register Restaurant — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem;">
+  <div style="background: rgba(28, 28, 34, 0.88); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--df-radius-xl); box-shadow: 0 24px 48px rgba(0,0,0,0.5); width: 100%; max-width: 680px; padding: 2.5rem; backdrop-filter: blur(16px);">
+    
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="df-brand-logo" style="margin: 0 auto 1rem; width: 48px; height: 48px; font-size: 1.4rem;">DF</div>
+      <h1 style="font-family: var(--df-font-serif); font-size: 1.85rem; font-weight: 700; color: #FFF; margin-bottom: 0.35rem;">Onboard Your Restaurant</h1>
+      <p style="color: #A6A6B8; font-size: 0.875rem;">14-Day Full Enterprise Free Trial • No Credit Card Required</p>
+    </div>
+
+    <form method="POST" action="{% url 'accounts:register' %}">
+      {% csrf_token %}
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        
+        <div class="df-form-group">
+          <label class="df-form-label" style="color: #FFF;">Restaurant / Brand Name *</label>
+          <input type="text" class="df-form-control" value="Andhra Spice Kitchen" required style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label" style="color: #FFF;">Owner / Partner Full Name *</label>
+          <input type="text" class="df-form-control" value="Pavan Kumar Varma" required style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label" style="color: #FFF;">Official Email ID *</label>
+          <input type="email" class="df-form-control" value="pavan.varma@dineflow.in" required style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label" style="color: #FFF;">Mobile Number (+91) *</label>
+          <input type="tel" class="df-form-control" value="+91 98490 12345" required style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label" style="color: #FFF;">GSTIN (15 Digits)</label>
+          <input type="text" class="df-form-control" value="36AABCS1429B1Z8" placeholder="e.g. 36AABCS1429B1Z8" style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label" style="color: #FFF;">FSSAI License # (14 Digits)</label>
+          <input type="text" class="df-form-control" value="10020042001234" placeholder="e.g. 10020042001234" style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label" style="color: #FFF;">State</label>
+          <select class="df-select df-form-control" style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+            <option selected>Telangana (Hyderabad)</option>
+            <option>Karnataka (Bangalore)</option>
+            <option>Delhi NCR (New Delhi)</option>
+            <option>Tamil Nadu (Chennai)</option>
+            <option>Maharashtra (Mumbai / Pune)</option>
+            <option>Andhra Pradesh (Vijayawada / Vizag)</option>
+            <option>Kerala (Kochi)</option>
+          </select>
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label" style="color: #FFF;">Restaurant Format</label>
+          <select class="df-select df-form-control" style="background: rgba(18, 18, 22, 0.7); color: #FFF; border-color: #383845;">
+            <option selected>Fine Dining & Bar</option>
+            <option>Casual Dining Restaurant</option>
+            <option>Cloud Kitchen / Dark Kitchen</option>
+            <option>QSR & Fast Food</option>
+            <option>Cafe & Bakery</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="df-form-group" style="margin-top: 0.5rem;">
+        <label style="display: flex; align-items: center; gap: 0.4rem; color: #D1D1DE; font-size: 0.8125rem; cursor: pointer;">
+          <input type="checkbox" checked required style="accent-color: var(--df-terracotta-600);">
+          I agree to DineFlow ERP Terms of Service, Privacy Policy & GST Compliance Rules.
+        </label>
+      </div>
+
+      <button type="submit" class="df-btn df-btn-terracotta df-btn-lg" style="width: 100%; margin-top: 1rem;">
+        Complete Registration & Launch ERP 🚀
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: #8C8C9E;">
+      Already have an account? 
+      <a href="{% url 'accounts:login' %}" style="color: var(--df-saffron-400); font-weight: 600; text-decoration: none;">Sign In</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
