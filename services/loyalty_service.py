@@ -44,18 +44,20 @@ class LoyaltyService:
         tier = account.tier
 
         # Default rule: 1 point per ₹20 spent (5%), multiplied by tier multiplier
-        base_points = (order.final_amount * Decimal('0.05')).quantize(Decimal('0.01'))
-        awarded_points = (base_points * tier.points_multiplier).quantize(Decimal('0.01'))
+        final_amt = Decimal(str(order.final_amount))
+        multiplier = Decimal(str(tier.points_multiplier))
+        base_points = (final_amt * Decimal('0.05')).quantize(Decimal('0.01'))
+        awarded_points = (base_points * multiplier).quantize(Decimal('0.01'))
 
-        bal_before = account.current_points
+        bal_before = Decimal(str(account.current_points))
         bal_after = bal_before + awarded_points
 
         account.current_points = bal_after
-        account.lifetime_earned_points += awarded_points
+        account.lifetime_earned_points = Decimal(str(account.lifetime_earned_points)) + awarded_points
         account.last_activity_date = timezone.now()
 
         # Update customer lifetime totals
-        customer.total_spend += order.final_amount
+        customer.total_spend = Decimal(str(customer.total_spend)) + final_amt
         customer.total_visits += 1
         customer.loyalty_points = bal_after
         customer.save(update_fields=['total_spend', 'total_visits', 'loyalty_points', 'updated_at'])
