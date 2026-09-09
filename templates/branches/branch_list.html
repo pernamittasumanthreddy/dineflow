@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Restaurant Outlets & Branches | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Multi-Branch Outlets & Locations</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Branch switcher, outlet operating hours, and manager assignments</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'restaurants:profile' %}" class="btn btn-outline">Corporate Profile</a>
+        <a href="{% url 'branches:create' %}" class="btn btn-primary">+ Add New Branch</a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem;">
+    {% for b in branches %}
+    <div class="card" style="border-top: 4px solid {% if request.user.branch.id == b.id %}var(--accent-gold){% else %}var(--border-color){% endif %};">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.25rem 0;">{{ b.name }}</h3>
+                <span style="font-family: monospace; font-size: 0.75rem; color: var(--text-muted);">CODE: {{ b.code }}</span>
+            </div>
+            <div>
+                {% if request.user.branch.id == b.id %}
+                    <span class="badge badge-success">ACTIVE CONTEXT</span>
+                {% else %}
+                    <span class="badge" style="background: rgba(255,255,255,0.06);">Outlet</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            <div>📍 {{ b.address }}, {{ b.city }} - {{ b.pincode }}</div>
+            <div>📞 {{ b.phone_number }}</div>
+            <div>👤 Manager: <strong style="color: var(--text-primary);">{{ b.manager.display_name|default:"Unassigned" }}</strong></div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+            <a href="{% url 'branches:edit' b.id %}" class="btn btn-sm btn-outline">Edit Branch</a>
+            {% if request.user.branch.id != b.id %}
+                <a href="{% url 'branches:switch' b.id %}" class="btn btn-sm btn-primary">Switch Context ➔</a>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        No branches configured.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Order Pipeline | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Order Management Pipeline</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Lifecycle Tracking: POS & Dine-In, Delivery, Takeaway, and Room Service</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'kitchen:kds' %}" class="btn btn-outline">🍳 Open KDS</a>
+        <a href="{% url 'orders:pos' %}" class="btn btn-primary">⚡ Terminal POS</a>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div style="min-width: 180px;">
+            <select name="status" class="form-control" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                {% for s_val, s_name in statuses %}
+                    <option value="{{ s_val }}" {% if status_filter == s_val %}selected{% endif %}>{{ s_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="min-width: 180px;">
+            <select name="type" class="form-control" onchange="this.form.submit()">
+                <option value="">All Order Types</option>
+                {% for t_val, t_name in order_types %}
+                    <option value="{{ t_val }}" {% if type_filter == t_val %}selected{% endif %}>{{ t_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if status_filter or type_filter %}
+            <a href="{% url 'orders:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Orders Table -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Order #</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Type & Location</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Server / Waiter</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Time</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Grand Total</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in orders %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <a href="{% url 'orders:detail' o.id %}" style="color: var(--accent-gold); font-weight: 700; text-decoration: none;">
+                            #{{ o.order_number }}
+                        </a>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);">{{ o.items.count }} items</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem;">
+                        <div style="font-weight: 600; color: var(--text-primary);">{{ o.get_order_type_display }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                            {% if o.table %}Table {{ o.table.table_number }} ({{ o.table.section.name }}){% else %}Counter / Direct{% endif %}
+                        </div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ o.server.display_name|default:"POS Cashier" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-muted); font-size: 0.82rem;">
+                        {{ o.created_at|date:"d M, H:i" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        {% if o.status == 'COMPLETED' %}
+                            <span class="badge badge-success">COMPLETED</span>
+                        {% elif o.status == 'PREPARING' %}
+                            <span class="badge badge-warning">PREPARING</span>
+                        {% elif o.status == 'READY' %}
+                            <span class="badge badge-info">READY</span>
+                        {% elif o.status == 'CANCELLED' %}
+                            <span class="badge badge-danger">CANCELLED</span>
+                        {% else %}
+                            <span class="badge" style="background: rgba(255,255,255,0.1); color: var(--text-primary);">{{ o.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700; color: var(--accent-gold); font-size: 0.95rem;">
+                        {{ o.grand_total|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'orders:detail' o.id %}" class="btn btn-sm btn-outline">View</a>
+                        {% if o.status != 'COMPLETED' and o.status != 'CANCELLED' %}
+                            <a href="{% url 'payments:checkout' o.id %}" class="btn btn-sm btn-primary" style="margin-left: 0.25rem;">Pay</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No orders recorded matching criteria.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

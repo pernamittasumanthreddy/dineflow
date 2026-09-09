@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Tax Invoices & Revenue | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">GST Invoices & Revenue Register</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Statutory SAC 9963 Invoices, CGST + SGST Ledger & Thermal Print Queue</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'reports:gstr1_excel' %}" class="btn btn-outline">📥 Export GSTR-1 Excel</a>
+        <a href="{% url 'orders:list' %}" class="btn btn-primary">⚡ Active Orders</a>
+    </div>
+</div>
+
+<!-- Revenue Stat Cards -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+    <div class="card stat-card" style="border-left: 4px solid var(--accent-gold);">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Total Billed Revenue</div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-gold); margin-top: 0.25rem;">{{ total_revenue|inr }}</div>
+    </div>
+    <div class="card stat-card" style="border-left: 4px solid #3b82f6;">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">CGST Collected (2.5%)</div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: #3b82f6; margin-top: 0.25rem;">{{ total_cgst|inr }}</div>
+    </div>
+    <div class="card stat-card" style="border-left: 4px solid #10b981;">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">SGST Collected (2.5%)</div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: #10b981; margin-top: 0.25rem;">{{ total_sgst|inr }}</div>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 1; min-width: 220px;">
+            <input type="text" name="q" value="{{ search_q|default:'' }}" class="form-control" placeholder="Search by invoice number or customer...">
+        </div>
+        <div style="min-width: 160px;">
+            <input type="date" name="date" value="{{ date_filter|default:'' }}" class="form-control" onchange="this.form.submit()">
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if search_q or date_filter %}
+            <a href="{% url 'billing:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Invoices Table -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Invoice #</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Date & Time</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Customer</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Taxable Subtotal</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Total GST</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Grand Total</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Payment</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inv in invoices %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <a href="{% url 'billing:detail' inv.id %}" style="font-weight: 700; color: var(--accent-gold); text-decoration: none;">
+                            {{ inv.invoice_number }}
+                        </a>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Order #{{ inv.order.order_number }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ inv.created_at|date:"d M Y, H:i" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-primary); font-size: 0.88rem;">
+                        {{ inv.customer.name|default:"Walk-in Guest" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; color: var(--text-secondary);">
+                        {{ inv.taxable_subtotal|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ inv.total_tax_amount|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 800; color: var(--accent-gold); font-size: 0.95rem;">
+                        {{ inv.grand_total|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        {% if inv.is_paid %}
+                            <span class="badge badge-success">PAID</span>
+                        {% else %}
+                            <span class="badge badge-warning">UNPAID</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'billing:detail' inv.id %}" class="btn btn-sm btn-outline">Tax Inv</a>
+                        <a href="{% url 'billing:thermal' inv.id %}" target="_blank" class="btn btn-sm btn-outline" title="Thermal Print">🖨️</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No tax invoices recorded matching criteria.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

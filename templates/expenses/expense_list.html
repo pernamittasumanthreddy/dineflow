@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Operating Expenses | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Operating Expenses & Petty Cash</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">LPG, utilities, kitchen maintenance, and operational outlays</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'sales:dashboard' %}" class="btn btn-outline">Sales Dashboard</a>
+        <a href="{% url 'expenses:create' %}" class="btn btn-primary">+ Record Expense</a>
+    </div>
+</div>
+
+<!-- Total Expense Metric -->
+<div class="card stat-card" style="border-left: 4px solid var(--danger-color); max-width: 320px; margin-bottom: 1.5rem;">
+    <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Total Expenses Recorded</div>
+    <div style="font-size: 1.8rem; font-weight: 800; color: var(--danger-color); margin-top: 0.25rem;">{{ total_amount|inr }}</div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div style="min-width: 180px;">
+            <select name="category" class="form-control" onchange="this.form.submit()">
+                <option value="">All Expense Categories</option>
+                {% for c in categories %}
+                    <option value="{{ c.id }}" {% if selected_category == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="min-width: 160px;">
+            <input type="date" name="date" value="{{ date_filter|default:'' }}" class="form-control" onchange="this.form.submit()">
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if selected_category or date_filter %}
+            <a href="{% url 'expenses:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Date & Title</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Category</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Payment Mode</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Logged By</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in expenses %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <div style="font-weight: 600; color: var(--text-primary);">{{ e.title }}</div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);">{{ e.expense_date|date:"d M Y" }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem;">
+                        <span class="badge badge-info">{{ e.category.name }}</span>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ e.payment_mode }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ e.requested_by.display_name }}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right; font-weight: 800; color: var(--danger-color); font-size: 1rem;">
+                        {{ e.amount|inr }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No operating expenses recorded for this selection.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

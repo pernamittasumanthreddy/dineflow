@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Supplier Directory | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Vendor & Supplier Directory</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Provisions Procurement, GSTIN Records, and Banking Details</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'purchases:list' %}" class="btn btn-outline">Purchase Orders</a>
+        <a href="{% url 'suppliers:create' %}" class="btn btn-primary">+ Add Supplier</a>
+    </div>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Company Name</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">GSTIN</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Contact Person</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Phone & City</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Payment Terms</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in suppliers %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <a href="{% url 'suppliers:detail' s.id %}" style="font-weight: 600; color: var(--text-primary); text-decoration: none;">
+                            {{ s.company_name }}
+                        </a>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; font-family: monospace; font-size: 0.82rem; color: var(--accent-gold);">
+                        {{ s.gstin|default:"Unregistered" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        {{ s.contact_person }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        <div>{{ s.phone_number }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ s.city }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        <span class="badge badge-info">{{ s.payment_terms_days }} Days</span>
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'suppliers:detail' s.id %}" class="btn btn-sm btn-outline">Profile</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No suppliers registered yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

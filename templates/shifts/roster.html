@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Shift Roster & Scheduling | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Shift Roster & Duty Scheduling</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Morning, Evening, and Night Kitchen & Service Station Rostering</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'attendance:list' %}" class="btn btn-outline">Attendance Logs</a>
+        <a href="{% url 'attendance:punch' %}" class="btn btn-primary">Punch Terminal</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+        <div style="min-width: 180px;">
+            <input type="date" name="date" value="{{ selected_date }}" class="form-control" onchange="this.form.submit()">
+        </div>
+        <button type="submit" class="btn btn-outline">Select Date</button>
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Staff Member</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Assigned Shift</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Duty Hours</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Station / Role</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rosters %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: var(--text-primary);">
+                        {{ r.employee.user.display_name }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem;">
+                        <span class="badge badge-info">{{ r.shift.name }}</span>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ r.shift.start_time|time:"H:i" }} - {{ r.shift.end_time|time:"H:i" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ r.station_assigned|default:"General Floor" }}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        {% if r.is_off %}
+                            <span class="badge badge-warning">WEEKLY OFF</span>
+                        {% else %}
+                            <span class="badge badge-success">SCHEDULED</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No shift rosters scheduled for {{ selected_date }}.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

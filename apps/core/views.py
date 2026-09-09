@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.db import models
 
 def home_redirect_view(request):
     """Redirect to dashboard if logged in, otherwise to login."""

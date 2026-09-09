@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Notification Center | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Notification & Alert Center</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Low stock alerts, KDS order notifications, and operational broadcasts</p>
+    </div>
+    <form method="POST" action="{% url 'notifications:mark_all_read' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline">✓ Mark All as Read</button>
+    </form>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 0.75rem;">
+    {% for n in notifications %}
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-left: 4px solid {% if not n.is_read %}var(--accent-gold){% else %}var(--border-color){% endif %}; background: {% if not n.is_read %}rgba(217,119,6,0.04){% else %}var(--bg-card){% endif %};">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="font-size: 1.5rem;">
+                {% if n.notification_type == 'CRITICAL' %}🚨
+                {% elif n.notification_type == 'WARNING' %}⚠️
+                {% elif n.notification_type == 'SUCCESS' %}✅
+                {% else %}🔔{% endif %}
+            </div>
+            <div>
+                <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">{{ n.title }}</div>
+                <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.15rem;">{{ n.message }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">{{ n.created_at|timesince }} ago</div>
+            </div>
+        </div>
+
+        <div>
+            {% if not n.is_read %}
+                <a href="{% url 'notifications:mark_read' n.id %}" class="btn btn-sm btn-outline">Mark Read</a>
+            {% else %}
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Read</span>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="card" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        You're all caught up! No notifications in your inbox.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

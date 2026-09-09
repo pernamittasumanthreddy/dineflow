@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="max-width: 550px; margin: 2rem auto;">
+    <div class="card">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.25rem 0;">{{ title }}</h2>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">Allocate a physical dining table to a floor section</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger-color); color: #fca5a5; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Table Number / Label</label>
+                    {{ form.table_number }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Floor Section</label>
+                    {{ form.section }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Seating Capacity</label>
+                    {{ form.capacity }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Table Shape</label>
+                    {{ form.shape }}
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <a href="{% url 'tables:floor_plan' %}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Table</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

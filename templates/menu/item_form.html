@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">{{ title }}</h1>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Register food item with tax, pricing, and dietary classification</p>
+        </div>
+        <a href="{% url 'menu:catalog' %}" class="btn btn-outline">Back to Catalog</a>
+    </div>
+
+    <div class="card">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger-color); color: #fca5a5; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Dish Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Item Code / SKU</label>
+                    {{ form.code }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Category</label>
+                    {{ form.category }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Dietary Classification</label>
+                    {{ form.food_type }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Base Price (₹)</label>
+                    {{ form.base_price }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Tax Category</label>
+                    {{ form.tax_category }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Kitchen Prep Time (Minutes)</label>
+                    {{ form.preparation_time_minutes }}
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Description</label>
+                {{ form.description }}
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Dish Image</label>
+                {{ form.image }}
+            </div>
+
+            <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem; background: rgba(255,255,255,0.02); padding: 0.75rem 1rem; border-radius: 6px;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--text-primary); cursor: pointer;">
+                    {{ form.is_available }} Available for Order
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--text-primary); cursor: pointer;">
+                    {{ form.is_active }} Active in System
+                </label>
+            </div>
+
+            <div style="text-align: right;">
+                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem;">Save Menu Item</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

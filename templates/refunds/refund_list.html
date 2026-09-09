@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Refund Governance | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Refund Vouchers & Dual-Approval</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Dual-key internal controls: Cashier requests, Manager/Owner authorizes</p>
+    </div>
+    <a href="{% url 'payments:list' %}" class="btn btn-outline">Back to Payments</a>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+        <div style="min-width: 180px;">
+            <select name="status" class="form-control" onchange="this.form.submit()">
+                <option value="">All Voucher Statuses</option>
+                {% for s_val, s_name in statuses %}
+                    <option value="{{ s_val }}" {% if status_filter == s_val %}selected{% endif %}>{{ s_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if status_filter %}
+            <a href="{% url 'refunds:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Voucher #</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Order Ref</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Reason</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Requested By</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Amount</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Manager Approval</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in refunds %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem; font-family: monospace; font-size: 0.82rem; color: var(--accent-gold); font-weight: 600;">
+                        {{ r.refund_number }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-primary); font-size: 0.88rem;">
+                        Order #{{ r.order.order_number }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem; max-width: 250px;">
+                        {{ r.reason }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ r.requested_by.display_name }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 800; color: var(--danger-color);">
+                        -{{ r.amount|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        {% if r.status == 'APPROVED' %}
+                            <span class="badge badge-success">APPROVED</span>
+                        {% elif r.status == 'REJECTED' %}
+                            <span class="badge badge-danger">REJECTED</span>
+                        {% else %}
+                            <span class="badge badge-warning">PENDING APPROVAL</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        {% if r.status == 'PENDING' and request.user.role in 'MANAGER RESTAURANT_OWNER SUPER_ADMIN' %}
+                        <form method="POST" action="{% url 'refunds:approve' r.id %}" style="display: inline-flex; gap: 0.4rem;">
+                            {% csrf_token %}
+                            <input type="text" name="manager_notes" placeholder="Notes..." class="form-control" style="font-size: 0.75rem; padding: 0.2rem 0.4rem; width: 90px;">
+                            <button type="submit" name="decision" value="APPROVE" class="btn btn-sm btn-primary" style="background: var(--success-color); border-color: var(--success-color); padding: 0.2rem 0.5rem; font-size: 0.75rem;">Approve</button>
+                            <button type="submit" name="decision" value="REJECT" class="btn btn-sm btn-outline" style="color: var(--danger-color); border-color: var(--danger-color); padding: 0.2rem 0.5rem; font-size: 0.75rem;">Reject</button>
+                        </form>
+                        {% elif r.approved_by %}
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">By {{ r.approved_by.display_name }}</span>
+                        {% else %}
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Pending Review</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No refund requests submitted.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

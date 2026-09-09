@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Edit {{ item.name }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Edit: {{ item.name }}</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">SKU: {{ item.code }} | {{ item.category.name }} | Base Price: {{ item.base_price|inr }}</p>
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+        <a href="{% url 'menu:item_toggle_availability' item.id %}" class="btn btn-outline">
+            {% if item.is_available %}86 Item (Unavailable){% else %}Mark Available{% endif %}
+        </a>
+        <a href="{% url 'menu:catalog' %}" class="btn btn-outline">Back to Catalog</a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 3fr 2fr; gap: 1.5rem;">
+    <!-- Main Item Form -->
+    <div class="card">
+        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+            Dish Specifications
+        </h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="save_item">
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Dish Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Item Code</label>
+                    {{ form.code }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Category</label>
+                    {{ form.category }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Dietary Type</label>
+                    {{ form.food_type }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Base Price (₹)</label>
+                    {{ form.base_price }}
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Description</label>
+                {{ form.description }}
+            </div>
+
+            <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem; background: rgba(255,255,255,0.02); padding: 0.75rem 1rem; border-radius: 6px;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--text-primary); cursor: pointer;">
+                    {{ form.is_available }} Available
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--text-primary); cursor: pointer;">
+                    {{ form.is_active }} Active
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Save Specifications</button>
+        </form>
+    </div>
+
+    <!-- Side Panel: Variants, Addons, and BOM Recipes -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Portion Variants -->
+        <div class="card">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1rem; display: flex; justify-content: space-between;">
+                <span>Portion Variants</span>
+                <span class="badge badge-info">{{ variants.count }}</span>
+            </h3>
+            
+            <div style="margin-bottom: 1rem;">
+                {% for var in variants %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; background: rgba(255,255,255,0.02); border-radius: 6px; margin-bottom: 0.5rem; border: 1px solid var(--border-color);">
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 0.88rem;">{{ var.name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ var.code }}</div>
+                    </div>
+                    <div style="font-weight: 700; color: var(--accent-gold);">{{ var.price|inr }}</div>
+                </div>
+                {% empty %}
+                <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0;">No portion variants defined (uses base price).</p>
+                {% endfor %}
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add_variant">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    {{ variant_form.name }}
+                    {{ variant_form.price }}
+                </div>
+                <button type="submit" class="btn btn-sm btn-outline" style="width: 100%;">+ Add Variant</button>
+            </form>
+        </div>
+
+        <!-- Addons -->
+        <div class="card">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1rem; display: flex; justify-content: space-between;">
+                <span>Add-ons & Modifiers</span>
+                <span class="badge badge-info">{{ addons.count }}</span>
+            </h3>
+
+            <div style="margin-bottom: 1rem;">
+                {% for ad in addons %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; background: rgba(255,255,255,0.02); border-radius: 6px; margin-bottom: 0.5rem; border: 1px solid var(--border-color);">
+                    <div style="font-weight: 600; color: var(--text-primary); font-size: 0.88rem;">{{ ad.name }}</div>
+                    <div style="font-weight: 700; color: var(--accent-gold);">+{{ ad.price|inr }}</div>
+                </div>
+                {% empty %}
+                <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0;">No optional add-ons configured.</p>
+                {% endfor %}
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add_addon">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    {{ addon_form.name }}
+                    {{ addon_form.price }}
+                </div>
+                <button type="submit" class="btn btn-sm btn-outline" style="width: 100%;">+ Add Modifer</button>
+            </form>
+        </div>
+
+        <!-- BOM Recipe Ingredients -->
+        <div class="card">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1rem;">
+                Recipe Bill of Materials (BOM)
+            </h3>
+            {% for r in recipe_ingredients %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+                <span style="color: var(--text-secondary);">{{ r.ingredient.name }}</span>
+                <span style="font-family: monospace; color: var(--accent-gold);">{{ r.quantity_required }} {{ r.ingredient.unit }}</span>
+            </div>
+            {% empty %}
+            <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0;">No raw inventory linked to this recipe BOM.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

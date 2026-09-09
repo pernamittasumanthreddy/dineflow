@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="max-width: 650px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">{{ title }}</h1>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Register new raw inventory supplier</p>
+        </div>
+        <a href="{% url 'suppliers:list' %}" class="btn btn-outline">Back to Suppliers</a>
+    </div>
+
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger-color); color: #fca5a5; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Company / Vendor Name</label>
+                    {{ form.company_name }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Contact Person</label>
+                    {{ form.contact_person }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">GSTIN</label>
+                    {{ form.gstin }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Phone Number</label>
+                    {{ form.phone_number }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">City</label>
+                    {{ form.city }}
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Full Address</label>
+                {{ form.address }}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Bank Account Number</label>
+                    {{ form.bank_account_number }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Bank IFSC Code</label>
+                    {{ form.bank_ifsc }}
+                </div>
+            </div>
+
+            <div style="text-align: right;">
+                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem;">Save Supplier</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

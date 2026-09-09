@@ -1,0 +1,115 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand-icon">👑</div>
+    <div>
+      <div class="brand-name">DineFlow</div>
+      <div class="brand-sub">Enterprise ERP</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Operations</div>
+    <a href="{% url 'core:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+      <span class="icon">📊</span> <span>Dashboard</span>
+    </a>
+    <a href="{% url 'orders:pos' %}" class="nav-link {% if request.resolver_match.url_name == 'pos' %}active{% endif %}">
+      <span class="icon">⚡</span> <span>POS Terminal</span>
+    </a>
+    <a href="{% url 'orders:list' %}" class="nav-link {% if 'orders' in request.path and request.resolver_match.url_name != 'pos' %}active{% endif %}">
+      <span class="icon">📋</span> <span>Orders Queue</span>
+    </a>
+    <a href="{% url 'tables:floor_plan' %}" class="nav-link {% if 'tables' in request.path %}active{% endif %}">
+      <span class="icon">🪑</span> <span>Dining Tables</span>
+    </a>
+    <a href="{% url 'reservations:list' %}" class="nav-link {% if 'reservations' in request.path %}active{% endif %}">
+      <span class="icon">📅</span> <span>Reservations</span>
+    </a>
+
+    <div class="nav-section-title">Kitchen & Food</div>
+    <a href="{% url 'kitchen:kds' %}" class="nav-link {% if 'kitchen' in request.path %}active{% endif %}">
+      <span class="icon">🍳</span> <span>Live KDS Board</span>
+    </a>
+    <a href="{% url 'menu:catalog' %}" class="nav-link {% if 'menu' in request.path %}active{% endif %}">
+      <span class="icon">📖</span> <span>Menu Catalog</span>
+    </a>
+
+    <div class="nav-section-title">Billing & Revenue</div>
+    <a href="{% url 'billing:list' %}" class="nav-link {% if 'billing' in request.path %}active{% endif %}">
+      <span class="icon">🧾</span> <span>GST Invoices</span>
+    </a>
+    <a href="{% url 'payments:list' %}" class="nav-link {% if 'payments' in request.path %}active{% endif %}">
+      <span class="icon">💳</span> <span>Payments</span>
+    </a>
+    <a href="{% url 'refunds:list' %}" class="nav-link {% if 'refunds' in request.path %}active{% endif %}">
+      <span class="icon">↩️</span> <span>Refund Vouchers</span>
+    </a>
+    <a href="{% url 'sales:dashboard' %}" class="nav-link {% if 'sales' in request.path %}active{% endif %}">
+      <span class="icon">💵</span> <span>Cash Drawer & Z-Report</span>
+    </a>
+
+    <div class="nav-section-title">Inventory & Vendors</div>
+    <a href="{% url 'inventory:stock_list' %}" class="nav-link {% if 'inventory' in request.path %}active{% endif %}">
+      <span class="icon">📦</span> <span>Stock Ledger</span>
+    </a>
+    <a href="{% url 'purchases:list' %}" class="nav-link {% if 'purchases' in request.path %}active{% endif %}">
+      <span class="icon">🛒</span> <span>Purchase Orders</span>
+    </a>
+    <a href="{% url 'suppliers:list' %}" class="nav-link {% if 'suppliers' in request.path %}active{% endif %}">
+      <span class="icon">🏢</span> <span>Suppliers</span>
+    </a>
+    <a href="{% url 'expenses:list' %}" class="nav-link {% if 'expenses' in request.path %}active{% endif %}">
+      <span class="icon">📉</span> <span>Expenses</span>
+    </a>
+
+    <div class="nav-section-title">Staff & Payroll</div>
+    <a href="{% url 'employees:list' %}" class="nav-link {% if 'employees' in request.path %}active{% endif %}">
+      <span class="icon">👥</span> <span>Staff Directory</span>
+    </a>
+    <a href="{% url 'attendance:punch' %}" class="nav-link {% if 'attendance' in request.path %}active{% endif %}">
+      <span class="icon">⏱️</span> <span>Time Clock & Attendance</span>
+    </a>
+    <a href="{% url 'shifts:roster' %}" class="nav-link {% if 'shifts' in request.path %}active{% endif %}">
+      <span class="icon">🗓️</span> <span>Shift Roster</span>
+    </a>
+    <a href="{% url 'payroll:list' %}" class="nav-link {% if 'payroll' in request.path %}active{% endif %}">
+      <span class="icon">💰</span> <span>Payroll (INR)</span>
+    </a>
+
+    <div class="nav-section-title">Guests & Fleet</div>
+    <a href="{% url 'customers:list' %}" class="nav-link {% if 'customers' in request.path %}active{% endif %}">
+      <span class="icon">👤</span> <span>Guest CRM</span>
+    </a>
+    <a href="{% url 'delivery:board' %}" class="nav-link {% if 'delivery' in request.path %}active{% endif %}">
+      <span class="icon">🛵</span> <span>Delivery Fleet</span>
+    </a>
+    <a href="{% url 'offers:list' %}" class="nav-link {% if 'offers' in request.path %}active{% endif %}">
+      <span class="icon">🏷️</span> <span>Offers & Coupons</span>
+    </a>
+    <a href="{% url 'loyalty:dashboard' %}" class="nav-link {% if 'loyalty' in request.path %}active{% endif %}">
+      <span class="icon">⭐</span> <span>Loyalty Rewards</span>
+    </a>
+    <a href="{% url 'reviews:list' %}" class="nav-link {% if 'reviews' in request.path %}active{% endif %}">
+      <span class="icon">💬</span> <span>Reviews</span>
+    </a>
+
+    <div class="nav-section-title">Intelligence & System</div>
+    <a href="{% url 'analytics:dashboard' %}" class="nav-link {% if 'analytics' in request.path %}active{% endif %}">
+      <span class="icon">📈</span> <span>RevPASH Analytics</span>
+    </a>
+    <a href="{% url 'ml_prediction:forecast' %}" class="nav-link {% if 'ml_prediction' in request.path %}active{% endif %}">
+      <span class="icon">🤖</span> <span>ML Demand Forecaster</span>
+    </a>
+    <a href="{% url 'reports:index' %}" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
+      <span class="icon">📑</span> <span>Statutory Reports</span>
+    </a>
+    <a href="{% url 'audit:list' %}" class="nav-link {% if 'audit' in request.path %}active{% endif %}">
+      <span class="icon">🛡️</span> <span>Audit Trail</span>
+    </a>
+    <a href="{% url 'settings_manager:overview' %}" class="nav-link {% if 'settings' in request.path %}active{% endif %}">
+      <span class="icon">⚙️</span> <span>System Config</span>
+    </a>
+    <a href="{% url 'backups:list' %}" class="nav-link {% if 'backups' in request.path %}active{% endif %}">
+      <span class="icon">💾</span> <span>Database Backups</span>
+    </a>
+  </nav>
+</aside>

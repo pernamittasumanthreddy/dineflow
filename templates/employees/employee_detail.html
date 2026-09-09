@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}{{ employee.user.display_name }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">{{ employee.user.display_name }}</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">
+            {{ employee.employee_id }} | {{ employee.designation.title }} | {{ employee.department.name }}
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'employees:list' %}" class="btn btn-outline">Back to Staff</a>
+        <a href="{% url 'attendance:punch' %}" class="btn btn-primary">Punch Clock</a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+    <!-- Profile & Statutory Details -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="card">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin: 0 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                Employee Profile
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem;">
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">CONTACT & EMAIL</span>
+                    <strong style="color: var(--text-primary);">{{ employee.user.email }}</strong>
+                    <div style="color: var(--text-secondary); font-size: 0.82rem;">{{ employee.user.phone_number|default:"—" }}</div>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">DATE OF JOINING</span>
+                    <span style="color: var(--text-primary);">{{ employee.date_of_joining|date:"d M Y" }}</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">BRANCH ALLOCATION</span>
+                    <span style="color: var(--text-primary);">{{ employee.branch.name|default:"HQ" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin: 0 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                Statutory & Bank Information
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem;">
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">PAN NUMBER</span>
+                    <span style="font-family: monospace; color: var(--text-primary);">{{ employee.pan_number|default:"NOT PROVIDED" }}</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">AADHAAR NUMBER</span>
+                    <span style="font-family: monospace; color: var(--text-primary);">{{ employee.aadhaar_number|default:"NOT PROVIDED" }}</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">EPF UAN</span>
+                    <span style="font-family: monospace; color: var(--accent-gold);">{{ employee.epf_uan|default:"NOT APPLICABLE" }}</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">BANK ACCOUNT & IFSC</span>
+                    <div style="font-family: monospace; color: var(--text-primary);">{{ employee.bank_account_number|default:"—" }}</div>
+                    <div style="font-family: monospace; color: var(--text-secondary); font-size: 0.8rem;">IFSC: {{ employee.bank_ifsc|default:"—" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Salary Master & Recent Payslips -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="card" style="background: linear-gradient(145deg, #11141c 0%, #0d1017 100%);">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin: 0 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                Monthly Salary Structure (CTC)
+            </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; text-align: center;">
+                <div>
+                    <div style="color: var(--text-muted); font-size: 0.78rem;">BASIC (40%)</div>
+                    <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 0.25rem;">{{ employee.basic_salary|inr }}</div>
+                </div>
+                <div>
+                    <div style="color: var(--text-muted); font-size: 0.78rem;">HRA (20%)</div>
+                    <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 0.25rem;">{{ employee.hra|inr }}</div>
+                </div>
+                <div>
+                    <div style="color: var(--text-muted); font-size: 0.78rem;">GROSS MONTHLY</div>
+                    <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-gold); margin-top: 0.25rem;">{{ employee.monthly_gross_salary|inr }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary);">
+                Recent Generated Payslips
+            </div>
+            <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                        <th style="padding: 0.75rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Period</th>
+                        <th style="padding: 0.75rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Earnings</th>
+                        <th style="padding: 0.75rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Deductions</th>
+                        <th style="padding: 0.75rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Net Disbursed</th>
+                        <th style="padding: 0.75rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payrolls %}
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: var(--text-primary);">
+                            {{ p.month }}/{{ p.year }}
+                        </td>
+                        <td style="padding: 0.85rem 1rem; text-align: right; color: var(--text-secondary);">
+                            {{ p.gross_earnings|inr }}
+                        </td>
+                        <td style="padding: 0.85rem 1rem; text-align: right; color: var(--danger-color);">
+                            -{{ p.total_deductions|inr }}
+                        </td>
+                        <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700; color: var(--accent-gold);">
+                            {{ p.net_salary|inr }}
+                        </td>
+                        <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                            <a href="{% url 'payroll:payslip' p.id %}" class="btn btn-sm btn-outline">Payslip</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="padding: 2.5rem; text-align: center; color: var(--text-muted);">
+                            No payslips generated for this employee yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

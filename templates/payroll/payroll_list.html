@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Payroll Register | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Monthly Payroll Register</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Statutory Indian Payroll: Basic, HRA, EPF (12%), ESIC (0.75%), PT & LOP</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'employees:list' %}" class="btn btn-outline">Staff Directory</a>
+        <a href="{% url 'payroll:generate_batch' %}" class="btn btn-primary">⚡ Generate Month Batch</a>
+    </div>
+</div>
+
+<!-- Month Aggregates -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+    <div class="card stat-card" style="border-left: 4px solid var(--accent-gold);">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Gross Salary Outlay</div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-gold); margin-top: 0.25rem;">{{ total_gross|inr }}</div>
+    </div>
+    <div class="card stat-card" style="border-left: 4px solid var(--success-color);">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Net Salary Disbursed</div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: var(--success-color); margin-top: 0.25rem;">{{ total_net|inr }}</div>
+    </div>
+    <div class="card stat-card" style="border-left: 4px solid #3b82f6;">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Total EPF Remitted</div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: #3b82f6; margin-top: 0.25rem;">{{ total_epf|inr }}</div>
+    </div>
+</div>
+
+<!-- Period Filter -->
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+        <div style="min-width: 180px;">
+            <select name="month" class="form-control" onchange="this.form.submit()">
+                {% for m_num, m_name in months %}
+                    <option value="{{ m_num }}" {% if selected_month == m_num %}selected{% endif %}>{{ m_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="min-width: 120px;">
+            <input type="number" name="year" value="{{ selected_year }}" class="form-control" onchange="this.form.submit()">
+        </div>
+        <button type="submit" class="btn btn-outline">Load Period</button>
+    </form>
+</div>
+
+<!-- Payroll Table -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Staff Member</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Designation</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Gross Earnings</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">EPF (12%)</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Total Deductions</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Net Take-Home</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in payrolls %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <div style="font-weight: 600; color: var(--text-primary);">{{ p.employee.user.display_name }}</div>
+                        <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-muted);">{{ p.employee.employee_id }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ p.employee.designation.title }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 600; color: var(--text-primary);">
+                        {{ p.gross_earnings|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ p.epf_deduction|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; color: var(--danger-color); font-size: 0.85rem;">
+                        -{{ p.total_deductions|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 800; color: var(--accent-gold);">
+                        {{ p.net_salary|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        {% if p.status == 'PAID' %}
+                            <span class="badge badge-success">PAID</span>
+                        {% else %}
+                            <span class="badge badge-warning">GENERATED</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'payroll:payslip' p.id %}" class="btn btn-sm btn-outline">Payslip</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No payroll generated for {{ selected_month }}/{{ selected_year }}. Click "Generate Month Batch" to run.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

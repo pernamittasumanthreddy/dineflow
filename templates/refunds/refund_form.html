@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Initiate Refund Request | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="max-width: 550px; margin: 2rem auto;">
+    <div class="card">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.25rem 0;">Initiate Refund Request</h2>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+            Order #{{ payment.order.order_number }} | Settled via {{ payment.get_payment_method_display }}
+        </p>
+
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; margin-bottom: 1.25rem; font-size: 0.88rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+                <span style="color: var(--text-muted);">Original Paid Amount:</span>
+                <span style="font-weight: 700; color: var(--text-primary);">{{ payment.amount|inr }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Txn Reference:</span>
+                <span style="font-family: monospace; color: var(--accent-gold);">{{ payment.transaction_reference|default:"CASH" }}</span>
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Refund Amount (₹)</label>
+                <input type="number" step="0.01" max="{{ payment.amount }}" name="amount" value="{{ payment.amount }}" class="form-control" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Audit Reason for Refund</label>
+                <textarea name="reason" rows="3" class="form-control" placeholder="E.g., Customer returned dish due to food intolerance / Bill overcharged..." required></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <a href="{% url 'payments:list' %}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary" style="background: var(--warning-color); border-color: var(--warning-color); color: #000; font-weight: 700;">
+                    Submit for Dual-Approval
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

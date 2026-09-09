@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Authentication Audit Log | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Authentication Audit Log</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Recent sign-in attempts, security lockouts, and client IP forensic records</p>
+    </div>
+    <a href="{% url 'accounts:user_list' %}" class="btn btn-outline">Back to Users</a>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Timestamp (IST)</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Attempted Identifier</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Resolved User</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">IP Address</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Outcome</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in histories %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem; font-family: monospace; font-size: 0.82rem; color: var(--text-secondary);">
+                        {{ log.timestamp|date:"d M Y, H:i:s" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; font-weight: 500; color: var(--text-primary);">
+                        {{ log.attempted_email }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        {{ log.user.display_name|default:"Unregistered" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; font-family: monospace; font-size: 0.82rem; color: var(--accent-gold);">
+                        {{ log.ip_address }}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: center;">
+                        {% if log.status == 'SUCCESS' %}
+                            <span class="badge badge-success">SUCCESS</span>
+                        {% elif log.status == 'LOCKED' %}
+                            <span class="badge badge-danger">LOCKED</span>
+                        {% else %}
+                            <span class="badge badge-warning">FAILED</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 2.5rem; text-align: center; color: var(--text-muted);">
+                        No authentication audit logs recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

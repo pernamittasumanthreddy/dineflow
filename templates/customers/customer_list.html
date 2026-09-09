@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Customer CRM Directory | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Customer Directory & CRM</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Guest dining history, loyalty tiers, lifetime spend, and preference profiles</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'loyalty:dashboard' %}" class="btn btn-outline">⭐ Loyalty Tiers</a>
+        <a href="{% url 'offers:list' %}" class="btn btn-primary">🎁 Offers & Coupons</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+        <div style="flex: 1; min-width: 250px;">
+            <input type="text" name="q" value="{{ search_q|default:'' }}" class="form-control" placeholder="Search by customer name, phone, or email...">
+        </div>
+        <button type="submit" class="btn btn-outline">Search</button>
+        {% if search_q %}
+            <a href="{% url 'customers:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Guest Name</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Contact Details</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Total Visits</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Lifetime Spend</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in customers %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <a href="{% url 'customers:detail' c.id %}" style="font-weight: 600; color: var(--text-primary); text-decoration: none;">
+                            {{ c.name }}
+                        </a>
+                        {% if c.loyalty_account %}
+                            <div style="font-size: 0.75rem; color: var(--accent-gold);">
+                                {{ c.loyalty_account.get_current_tier_display }} ({{ c.loyalty_account.points_balance }} pts)
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        <div>{{ c.phone }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ c.email|default:"—" }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center; font-weight: 600; color: var(--text-primary);">
+                        {{ c.total_visits }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 800; color: var(--accent-gold);">
+                        {{ c.total_spent|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'customers:detail' c.id %}" class="btn btn-sm btn-outline">Profile</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No customer profiles matching search query.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

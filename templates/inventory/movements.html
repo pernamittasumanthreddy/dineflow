@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Stock Audit Ledger | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Inventory Audit Movements Ledger</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Immutable Transaction Record: Order Consumptions, PO Receipts, and Spoilage</p>
+    </div>
+    <a href="{% url 'inventory:stock_list' %}" class="btn btn-outline">Back to Stock Master</a>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+        <div style="min-width: 200px;">
+            <select name="type" class="form-control" onchange="this.form.submit()">
+                <option value="">All Movement Types</option>
+                {% for code, name in movement_types %}
+                    <option value="{{ code }}" {% if selected_type == code %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if selected_type %}
+            <a href="{% url 'inventory:movements' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Timestamp</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Raw Ingredient</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Movement Type</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Change Qty</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Before / After</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Reference</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Operator</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in movements %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem; font-family: monospace; font-size: 0.82rem; color: var(--text-secondary);">
+                        {{ m.created_at|date:"d M Y, H:i" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--text-primary);">
+                        {{ m.ingredient.name }}
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">({{ m.ingredient.unit }})</span>
+                    </td>
+                    <td style="padding: 0.85rem 1rem;">
+                        <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-primary);">{{ m.get_movement_type_display }}</span>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700; {% if m.quantity > 0 %}color: var(--success-color);{% else %}color: var(--danger-color);{% endif %}">
+                        {% if m.quantity > 0 %}+{% endif %}{{ m.quantity }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-family: monospace; font-size: 0.82rem; color: var(--text-secondary);">
+                        {{ m.stock_before }} ➔ <strong style="color: var(--text-primary);">{{ m.stock_after }}</strong>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; font-family: monospace; font-size: 0.8rem; color: var(--accent-gold);">
+                        {{ m.reference_id|default:"MANUAL" }}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ m.recorded_by.display_name|default:"System" }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No stock movement records found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
