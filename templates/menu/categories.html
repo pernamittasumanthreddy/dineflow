@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Menu Categories & Modifiers — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Menu Categories & Modifier Groups</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Menu Engineering</span>
+      <span>›</span>
+      <span>Categories & Station Mappings</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('New Category', 'Opening category creation drawer...', 'info')">
+      <span>+ Add Category</span>
+    </button>
+    <a href="{% url 'menu:item_list' %}" class="df-btn df-btn-outline">
+      <span>📜 Menu Master Dishes</span>
+    </a>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Active Categories & KDS Station Routing</div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table">
+      <thead>
+        <tr>
+          <th>Category Name</th>
+          <th>Category Code</th>
+          <th>Active Dishes</th>
+          <th>KDS Target Station</th>
+          <th>Default GST Slab</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in categories %}
+          <tr>
+            <td><strong>{{ c.name }}</strong></td>
+            <td><code>{{ c.code }}</code></td>
+            <td><span class="df-badge badge-neutral">{{ c.items_count }} Items</span></td>
+            <td><span class="df-badge badge-warning">{{ c.station }}</span></td>
+            <td>{{ c.tax_slab }}</td>
+            <td>
+              <div class="df-action-btns">
+                <button class="df-btn-icon" onclick="DineFlow.showToast('Edit Category', 'Editing {{ c.name }}', 'info')">✏️</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
