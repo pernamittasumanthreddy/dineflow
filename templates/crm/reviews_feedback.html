@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Reviews & Feedback — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Customer Reviews, Ratings & Table Feedback</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>CRM</span>
+      <span>›</span>
+      <span>Digital Table QR Feedback</span>
+    </div>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Recent Table Dining Reviews & Sentiment Log</div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table">
+      <thead>
+        <tr>
+          <th>Review ID</th>
+          <th>Guest</th>
+          <th>Table</th>
+          <th>Overall Rating</th>
+          <th>Food / Service / Ambiance</th>
+          <th>Review Comment</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reviews %}
+          <tr>
+            <td><code>{{ r.id }}</code></td>
+            <td><strong>{{ r.guest }}</strong></td>
+            <td>{{ r.table }}</td>
+            <td style="color:var(--df-gold-800); font-weight:800;">
+              {% for i in "12345"|slice:r.rating %}★{% endfor %}
+            </td>
+            <td style="font-size:0.8125rem;">🍲 {{ r.food }}/5 • 🤵 {{ r.service }}/5 • 🎶 {{ r.ambiance }}/5</td>
+            <td style="font-size:0.875rem; color:var(--df-text-primary); font-style:italic;">"{{ r.comment }}"</td>
+            <td style="font-size:0.75rem; color:var(--df-text-muted);">{{ r.date }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

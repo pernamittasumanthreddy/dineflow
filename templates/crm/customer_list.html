@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Customer Directory — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Customer Directory & CRM Profiles</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>CRM & Growth</span>
+      <span>›</span>
+      <span>Guest Master Directory</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('New Customer', 'Opening guest registration drawer...', 'info')">
+      <span>+ Add Customer</span>
+    </button>
+    <a href="{% url 'crm:loyalty_points' %}" class="df-btn df-btn-maroon">
+      <span>🎁 DineClub Loyalty Points</span>
+    </a>
+    <a href="{% url 'crm:offers_coupons' %}" class="df-btn df-btn-outline">
+      <span>🎟️ Promo Codes</span>
+    </a>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Registered Restaurant Guests & Dining History</div>
+    <div style="display:flex; gap:0.5rem;">
+      <input type="text" id="df-cust-search" class="df-input-search" placeholder="Search customer, mobile, tier...">
+      <button class="df-btn df-btn-outline df-btn-sm" onclick="ExportPrint.exportTableToCSV('df-customers-table', 'customers.csv')">Export CSV</button>
+    </div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table" id="df-customers-table">
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Full Name</th>
+          <th>Mobile (+91)</th>
+          <th>Email ID</th>
+          <th>Total Visits</th>
+          <th>Lifetime Spend (LTV)</th>
+          <th>DineClub Tier</th>
+          <th>Favorite Dish</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+          <tr>
+            <td><code>{{ c.id }}</code></td>
+            <td><strong>{{ c.name }}</strong></td>
+            <td>{{ c.phone }}</td>
+            <td>{{ c.email }}</td>
+            <td><span class="df-badge badge-neutral">{{ c.visits }} Visits</span></td>
+            <td style="font-weight:700; color:var(--df-maroon-800);">{{ c.total_spent|inr }}</td>
+            <td><span class="df-badge badge-warning">{{ c.tier }}</span></td>
+            <td style="font-size:0.8125rem;">{{ c.fav_dish }}</td>
+            <td>
+              <div class="df-action-btns">
+                <button class="df-btn-icon" onclick="DineFlow.showToast('Customer Profile', 'Viewing full profile of {{ c.name }}', 'info')">👁️</button>
+                <button class="df-btn-icon" onclick="DineFlow.showToast('WhatsApp Sent', 'Promo offer sent to {{ c.phone }}', 'success')">📱</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    DineFlow.initTableFilter('df-cust-search', 'df-customers-table');
+  });
+</script>
+{% endblock %}
