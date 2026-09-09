@@ -104,18 +104,40 @@ apps/
 
 ## ⚡ Quick Start Guide
 
-### 1. Requirements
-* Python 3.10+
-* Django 5.2+
+### 1. Prerequisites & Manifests
+* **Python**: 3.12+ (paired with [`pyproject.toml`](pyproject.toml) and [`poetry.lock`](poetry.lock))
+* **Node.js**: 20+ (paired with [`package.json`](package.json) and [`package-lock.json`](package-lock.json))
+* Complete lockfile documentation: [**`DEPENDENCIES.md`**](DEPENDENCIES.md)
 
 ### 2. Setup Environment & Install Dependencies
+
+#### Option A: Using Poetry (Recommended - Exact Lockfile Installation)
 ```bash
-git clone https://github.com/pernamittasumanthreddy/dineflow.git
-cd dineflow
+# Install exact pinned dependencies from poetry.lock
+poetry install
 
 # Activate virtual environment
-.venv\Scripts\activate   # On Windows
-source .venv/bin/activate # On Linux/macOS
+poetry shell
+```
+
+#### Option B: Using Standard Python Virtual Environment (`venv` + `pip`)
+```bash
+# Windows
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+# Linux / macOS
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install from pinned requirements
+pip install -r requirements.txt
+```
+
+#### Option C: Frontend Assets (Optional)
+```bash
+# Install pinned frontend dependencies from package-lock.json
+npm ci
 ```
 
 ### 3. Apply Migrations & Seed Demo Data

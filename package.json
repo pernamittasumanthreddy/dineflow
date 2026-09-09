@@ -1,0 +1,28 @@
+{
+  "name": "dineflow",
+  "version": "1.0.0",
+  "description": "DineFlow Enterprise Restaurant ERP & Management System - Frontend Assets",
+  "scripts": {
+    "dev": "python manage.py runserver 127.0.0.1:8000",
+    "backend": "python manage.py runserver 127.0.0.1:8001 --settings=dineflow.settings",
+    "test": "pytest",
+    "lint": "ruff check ."
+  },
+  "keywords": [
+    "restaurant-erp",
+    "pos",
+    "kds",
+    "dineflow",
+    "enterprise"
+  ],
+  "author": "Pernamitta Sumanth Reddy <sumanthreddy@dineflow.in>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
+    "autoprefixer": "^10.4.20",
+    "lucide": "^1.16.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
+  }
+}

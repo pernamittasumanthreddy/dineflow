@@ -23,25 +23,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
-    # DineFlow ERP Modular Apps
+    # DineFlow ERP Frontend & Business Apps
     'apps.landing',
     'apps.accounts',
     'apps.dashboard',
     'apps.pos',
     'apps.kds',
-    'apps.tables',
-    'apps.menu',
-    'apps.orders',
-    'apps.inventory',
-    'apps.suppliers',
-    'apps.billing',
     'apps.hr',
     'apps.crm',
-    'apps.delivery',
-    'apps.expenses',
     'apps.tax_mgmt',
-    'apps.analytics',
-    'apps.settings_app',
     'apps.restaurants',
     'apps.branches',
 ]

@@ -6,8 +6,8 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    # Default to dineflow.settings for full database architecture
-    settings_module = os.environ.get('DJANGO_SETTINGS_MODULE') or 'dineflow.settings'
+    # Default to dineflow_core.settings for full web application & frontend dashboards
+    settings_module = os.environ.get('DJANGO_SETTINGS_MODULE') or 'dineflow_core.settings'
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
     try:
         from django.core.management import execute_from_command_line
