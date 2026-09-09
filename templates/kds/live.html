@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Kitchen Display System (KDS) Live — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-kds-wrapper">
+  
+  <!-- KDS Header Bar -->
+  <div class="df-kds-header">
+    <div class="df-kds-title-group">
+      <span class="df-kds-pulse"></span>
+      <h1 style="font-size: 1.4rem; font-weight: 800; color: #FFF; margin: 0;">
+        KDS Live Cooking Queue • {{ ACTIVE_BRANCH }}
+      </h1>
+      <span class="df-badge badge-success" style="font-size: 0.75rem;">Audio Alerts Enabled 🔔</span>
+    </div>
+
+    <!-- Station Selection Filter -->
+    <div class="df-kds-stations">
+      <button class="df-kds-station-btn active" data-station="all">All Stations (4)</button>
+      <button class="df-kds-station-btn" data-station="tandoor">Tandoor & Starters</button>
+      <button class="df-kds-station-btn" data-station="biryani">Biryani & Rice</button>
+      <button class="df-kds-station-btn" data-station="curry">Curries & Breads</button>
+    </div>
+  </div>
+
+  <!-- KDS 4-Column Kanban Board -->
+  <div class="df-kds-board">
+    
+    <!-- 1. NEW TICKETS -->
+    <div class="df-kds-column col-new">
+      <div class="df-kds-column-header">
+        <span>1. New Tickets (KOT)</span>
+        <span class="df-badge badge-warning">Queue</span>
+      </div>
+      <div class="df-kds-order-list" id="df-kds-col-new">
+        <!-- Rendered via KDSEngine -->
+      </div>
+    </div>
+
+    <!-- 2. PREPARING -->
+    <div class="df-kds-column col-prep">
+      <div class="df-kds-column-header">
+        <span>2. On Flame / Cooking</span>
+        <span class="df-badge badge-warning" style="background:#E0531A; color:#FFF;">Active</span>
+      </div>
+      <div class="df-kds-order-list" id="df-kds-col-prep">
+        <!-- Rendered via KDSEngine -->
+      </div>
+    </div>
+
+    <!-- 3. READY TO SERVE -->
+    <div class="df-kds-column col-ready">
+      <div class="df-kds-column-header">
+        <span>3. Plated & Ready</span>
+        <span class="df-badge badge-success">Call Runner</span>
+      </div>
+      <div class="df-kds-order-list" id="df-kds-col-ready">
+        <!-- Rendered via KDSEngine -->
+      </div>
+    </div>
+
+    <!-- 4. COMPLETED -->
+    <div class="df-kds-column col-completed">
+      <div class="df-kds-column-header">
+        <span>4. Served / Dispatched</span>
+        <span class="df-badge badge-neutral">Done</span>
+      </div>
+      <div class="df-kds-order-list" id="df-kds-col-done">
+        <!-- Rendered via KDSEngine -->
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    KDSEngine.init();
+  });
+</script>
+{% endblock %}
