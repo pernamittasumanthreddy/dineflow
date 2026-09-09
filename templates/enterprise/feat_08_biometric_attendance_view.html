@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Biometric Hardware Fingerprint Attendance Sync | DineFlow Enterprise ERP{% endblock %}
+{% block content %}
+<div class="df-enterprise-container df-theme-warm-spice">
+    <header class="df-page-header">
+        <div class="df-header-breadcrumbs">
+            <span>ERP</span> &gt; <span>HR</span> &gt; <span class="active">Biometric Hardware Fingerprint Attendance Sync</span>
+        </div>
+        <div class="df-header-actions">
+            <button class="df-btn df-btn-spice" id="btn-create-feat_08_biometric_attendance">+ Create Record</button>
+            <button class="df-btn df-btn-outline" id="btn-export-feat_08_biometric_attendance">Export GSTR / CSV</button>
+        </div>
+    </header>
+
+    <section class="df-analytics-strip">
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 1: Biometric Hardw</span>
+            <span class="df-stat-value">₹{{ stat_1|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 2: Biometric Hardw</span>
+            <span class="df-stat-value">₹{{ stat_2|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 3: Biometric Hardw</span>
+            <span class="df-stat-value">₹{{ stat_3|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 4: Biometric Hardw</span>
+            <span class="df-stat-value">₹{{ stat_4|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+    </section>
+
+    <main class="df-table-responsive-wrapper">
+        <table class="df-table df-table-striped" id="table-feat_08_biometric_attendance">
+            <thead>
+                <tr>
+                    <th>Record ID</th>
+                    <th>Restaurant Branch</th>
+                    <th>Reference Code</th>
+                    <th>Amount (INR)</th>
+                    <th>CGST (2.5%)</th>
+                    <th>SGST (2.5%)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-01">
+                    <td><code>DF-HR-0001</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-01</code></td>
+                    <td><strong>₹{{ row_1_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-02">
+                    <td><code>DF-HR-0002</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-02</code></td>
+                    <td><strong>₹{{ row_2_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-03">
+                    <td><code>DF-HR-0003</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-03</code></td>
+                    <td><strong>₹{{ row_3_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-04">
+                    <td><code>DF-HR-0004</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-04</code></td>
+                    <td><strong>₹{{ row_4_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-05">
+                    <td><code>DF-HR-0005</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-05</code></td>
+                    <td><strong>₹{{ row_5_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-06">
+                    <td><code>DF-HR-0006</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-06</code></td>
+                    <td><strong>₹{{ row_6_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-07">
+                    <td><code>DF-HR-0007</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-07</code></td>
+                    <td><strong>₹{{ row_7_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-08">
+                    <td><code>DF-HR-0008</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-08</code></td>
+                    <td><strong>₹{{ row_8_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-09">
+                    <td><code>DF-HR-0009</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-09</code></td>
+                    <td><strong>₹{{ row_9_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-10">
+                    <td><code>DF-HR-0010</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-10</code></td>
+                    <td><strong>₹{{ row_10_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-11">
+                    <td><code>DF-HR-0011</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-11</code></td>
+                    <td><strong>₹{{ row_11_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-12">
+                    <td><code>DF-HR-0012</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-12</code></td>
+                    <td><strong>₹{{ row_12_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-13">
+                    <td><code>DF-HR-0013</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-13</code></td>
+                    <td><strong>₹{{ row_13_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-14">
+                    <td><code>DF-HR-0014</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-14</code></td>
+                    <td><strong>₹{{ row_14_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-15">
+                    <td><code>DF-HR-0015</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-15</code></td>
+                    <td><strong>₹{{ row_15_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-16">
+                    <td><code>DF-HR-0016</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-16</code></td>
+                    <td><strong>₹{{ row_16_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-17">
+                    <td><code>DF-HR-0017</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-17</code></td>
+                    <td><strong>₹{{ row_17_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-18">
+                    <td><code>DF-HR-0018</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-18</code></td>
+                    <td><strong>₹{{ row_18_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-19">
+                    <td><code>DF-HR-0019</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-19</code></td>
+                    <td><strong>₹{{ row_19_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-20">
+                    <td><code>DF-HR-0020</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-20</code></td>
+                    <td><strong>₹{{ row_20_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-21">
+                    <td><code>DF-HR-0021</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-21</code></td>
+                    <td><strong>₹{{ row_21_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-22">
+                    <td><code>DF-HR-0022</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-22</code></td>
+                    <td><strong>₹{{ row_22_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-23">
+                    <td><code>DF-HR-0023</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-23</code></td>
+                    <td><strong>₹{{ row_23_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-24">
+                    <td><code>DF-HR-0024</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-24</code></td>
+                    <td><strong>₹{{ row_24_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_08_biometric_attendance-25">
+                    <td><code>DF-HR-0025</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_08_BI-25</code></td>
+                    <td><strong>₹{{ row_25_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+<script src="{% static "js/enterprise/feat_08_biometric_attendance_engine.js" %}"></script>
+{% endblock %}
