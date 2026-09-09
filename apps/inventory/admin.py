@@ -1,8 +1,16 @@
 from django.contrib import admin
+
 from .models import (
-    Unit, InventoryCategory, InventoryItem, Ingredient,
-    Stock, StockBatch, StockMovement, StockAdjustment,
-    ExpiryRecord, WasteRecord, InventoryAlert
+    Ingredient,
+    InventoryAlert,
+    InventoryCategory,
+    InventoryItem,
+    Stock,
+    StockAdjustment,
+    StockBatch,
+    StockMovement,
+    Unit,
+    WasteRecord,
 )
 
 

@@ -1,10 +1,18 @@
 from decimal import Decimal
+
 from django.db import transaction
 from django.utils import timezone
-from apps.loyalty.models import CustomerTier, LoyaltyAccount, LoyaltyTransaction, Reward, RewardRedemption
-from apps.customers.models import Customer
-from apps.orders.models import Order
+
 from apps.audit.models import AuditLog
+from apps.customers.models import Customer
+from apps.loyalty.models import (
+    CustomerTier,
+    LoyaltyAccount,
+    LoyaltyTransaction,
+    Reward,
+    RewardRedemption,
+)
+from apps.orders.models import Order
 
 
 class LoyaltyService:

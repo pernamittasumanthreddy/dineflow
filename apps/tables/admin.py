@@ -1,7 +1,11 @@
 from django.contrib import admin
+
 from .models import (
-    TableSection, RestaurantTable, TableStatus,
-    Reservation, ReservationGuest, TableAssignment
+    Reservation,
+    ReservationGuest,
+    RestaurantTable,
+    TableAssignment,
+    TableSection,
 )
 
 

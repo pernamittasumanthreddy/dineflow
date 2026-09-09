@@ -1,13 +1,26 @@
 from decimal import Decimal
+
 from django.test import TestCase
 from django.utils import timezone
-from apps.core.models import Restaurant, Branch, User
-from apps.customers.models import Customer
-from apps.tables.models import TableSection, RestaurantTable, Reservation, TableAssignment
+
 from apps.billing.models import Invoice
-from apps.payments.models import Payment, PaymentMethod, Refund, RefundReason
+from apps.core.models import Branch, Restaurant, User
+from apps.customers.models import Customer
+from apps.employees.models import (
+    Department,
+    Designation,
+    Employee,
+    Payroll,
+    PayrollItem,
+)
 from apps.orders.models import Order
-from apps.employees.models import Department, Designation, Employee, Payroll, PayrollItem
+from apps.payments.models import Payment, PaymentMethod, Refund, RefundReason
+from apps.tables.models import (
+    Reservation,
+    RestaurantTable,
+    TableAssignment,
+    TableSection,
+)
 
 
 class ReservationsAndPaymentsTestCase(TestCase):

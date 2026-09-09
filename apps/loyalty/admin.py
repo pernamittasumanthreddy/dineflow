@@ -1,7 +1,11 @@
 from django.contrib import admin
+
 from .models import (
-    CustomerTier, LoyaltyAccount, LoyaltyTransaction,
-    Reward, RewardRedemption
+    CustomerTier,
+    LoyaltyAccount,
+    LoyaltyTransaction,
+    Reward,
+    RewardRedemption,
 )
 
 

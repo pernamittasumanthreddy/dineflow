@@ -1,7 +1,10 @@
 from django.contrib import admin
+
 from .models import (
-    KitchenStation, KitchenOrder, KitchenOrderItem,
-    KitchenStatusHistory, PreparationTimer
+    KitchenOrder,
+    KitchenOrderItem,
+    KitchenStation,
+    PreparationTimer,
 )
 
 

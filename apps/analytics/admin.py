@@ -1,8 +1,11 @@
 from django.contrib import admin
+
 from .models import (
-    DailySalesSnapshot, MonthlySalesSnapshot, ProductSalesAnalytics,
-    CustomerAnalytics, InventoryAnalytics, ExpenseAnalytics,
-    ProfitAnalytics, DemandPrediction
+    DailySalesSnapshot,
+    DemandPrediction,
+    MonthlySalesSnapshot,
+    ProductSalesAnalytics,
+    ProfitAnalytics,
 )
 
 

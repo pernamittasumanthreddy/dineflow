@@ -1,8 +1,6 @@
 from django.contrib import admin
-from .models import (
-    PaymentMethod, Payment, PaymentTransaction,
-    RefundReason, Refund
-)
+
+from .models import Payment, PaymentMethod, PaymentTransaction, Refund, RefundReason
 
 
 @admin.register(PaymentMethod)

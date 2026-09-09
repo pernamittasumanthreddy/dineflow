@@ -1,7 +1,14 @@
 from django.contrib import admin
+
 from .models import (
-    Department, Designation, Employee, Shift, ShiftAssignment,
-    Attendance, LeaveType, Leave, SalaryStructure, Payroll, PayrollItem
+    Attendance,
+    Department,
+    Designation,
+    Employee,
+    Leave,
+    Payroll,
+    PayrollItem,
+    Shift,
 )
 
 

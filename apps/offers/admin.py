@@ -1,8 +1,6 @@
 from django.contrib import admin
-from .models import (
-    Offer, Coupon, CouponUsage,
-    OfferMenuItem, OfferBranch
-)
+
+from .models import Coupon, CouponUsage, Offer
 
 
 class CouponInline(admin.TabularInline):

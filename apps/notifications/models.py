@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from apps.core.models import BaseModel, Restaurant, Branch, User
+
+from apps.core.models import BaseModel, Branch, Restaurant, User
 
 
 class Notification(BaseModel):

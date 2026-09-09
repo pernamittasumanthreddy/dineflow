@@ -1,7 +1,6 @@
-from decimal import Decimal
 from django.test import TestCase
-from apps.core.models import Restaurant, Branch
-from apps.settings_app.models import BackupRecord
+
+from apps.core.models import Branch, Restaurant
 from services.backup_service import DatabaseBackupService
 
 

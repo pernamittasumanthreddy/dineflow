@@ -1,7 +1,15 @@
 from django.contrib import admin
+
 from .models import (
-    Menu, MenuCategory, MenuItem, MenuVariant, MenuAddon,
-    MenuItemAddon, PriceHistory, Recipe, FoodIngredient
+    FoodIngredient,
+    Menu,
+    MenuAddon,
+    MenuCategory,
+    MenuItem,
+    MenuItemAddon,
+    MenuVariant,
+    PriceHistory,
+    Recipe,
 )
 
 

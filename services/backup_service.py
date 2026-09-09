@@ -1,12 +1,13 @@
+import hashlib
 import os
 import shutil
-import hashlib
-from datetime import datetime
 from pathlib import Path
+
 from django.conf import settings
 from django.utils import timezone
-from apps.settings_app.models import BackupRecord
+
 from apps.audit.models import AuditLog
+from apps.settings_app.models import BackupRecord
 
 
 class DatabaseBackupService:
@@ -28,7 +29,7 @@ class DatabaseBackupService:
         backup_dir = Path(settings.BACKUP_DIR)
         backup_dir.mkdir(parents=True, exist_ok=True)
 
-        timestamp_str = datetime.now().strftime('%Y%m%d_%H%M%S')
+        timestamp_str = timezone.now().strftime('%Y%m%d_%H%M%S')
         backup_id = f"BK_{timestamp_str}"
 
         db_engine = settings.DB_ENGINE
@@ -45,8 +46,7 @@ class DatabaseBackupService:
                 elif hasattr(connection, 'connection') and connection.connection:
                     # Non-blocking SQL dump for in-memory test databases
                     with open(str(target_path), 'w', encoding='utf-8') as f:
-                        for line in connection.connection.iterdump():
-                            f.write(f"{line}\n")
+                        f.writelines(f"{line}\n" for line in connection.connection.iterdump())
                 else:
                     with open(str(target_path), 'wb') as f:
                         f.write(b"SQLITE_SNAPSHOT_DATA")
@@ -54,19 +54,19 @@ class DatabaseBackupService:
                 file_size = os.path.getsize(target_path)
                 checksum = cls.calculate_sha256(str(target_path))
                 status = 'COMPLETED'
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 target_path = ''
                 file_size = 0
                 checksum = ''
                 status = 'FAILED'
-                notes += f' Backup exception: {str(e)}'
+                notes += f' Backup exception: {e!s}'
         else:
             # PostgreSQL dump logic using standard pg_dump command wrapper (production mode)
             target_filename = f"dineflow_pg_dump_{timestamp_str}.sql"
             target_path = backup_dir / target_filename
             status = 'COMPLETED'
             file_size = 1024
-            checksum = hashlib.sha256(f"pg_dump_{timestamp_str}".encode('utf-8')).hexdigest()
+            checksum = hashlib.sha256(f"pg_dump_{timestamp_str}".encode()).hexdigest()
 
         record = BackupRecord.objects.create(
             backup_id=backup_id,

@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import (
-    ReportDefinition, ReportExecution, ReportSchedule, ReportExport
-)
+
+from .models import ReportDefinition, ReportExecution, ReportExport, ReportSchedule
 
 
 class ReportExportInline(admin.TabularInline):

@@ -1,7 +1,12 @@
 from django.contrib import admin
+
 from .models import (
-    MLDataset, MLFeature, MLModel,
-    MLModelVersion, MLTrainingRun, MLPrediction
+    MLDataset,
+    MLFeature,
+    MLModel,
+    MLModelVersion,
+    MLPrediction,
+    MLTrainingRun,
 )
 
 

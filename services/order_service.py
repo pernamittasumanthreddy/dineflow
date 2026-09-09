@@ -1,14 +1,19 @@
 from decimal import Decimal
+
 from django.db import transaction
 from django.utils import timezone
-from apps.orders.models import Order, OrderItem, OrderItemAddon, OrderStatusHistory, OrderTax
-from apps.kitchen.models import KitchenOrder, KitchenOrderItem, KitchenStation
-from apps.payments.models import Payment, PaymentMethod, PaymentTransaction
-from apps.billing.models import Invoice
-from apps.tables.models import RestaurantTable
+
 from apps.audit.models import AuditLog
-from services.inventory_service import InventoryService
+from apps.kitchen.models import KitchenOrder, KitchenOrderItem, KitchenStation
+from apps.orders.models import (
+    Order,
+    OrderItem,
+    OrderItemAddon,
+    OrderStatusHistory,
+)
+from apps.payments.models import Payment, PaymentMethod, PaymentTransaction
 from services.billing_service import BillingService
+from services.inventory_service import InventoryService
 
 
 class OrderService:

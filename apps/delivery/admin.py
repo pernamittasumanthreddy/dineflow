@@ -1,7 +1,10 @@
 from django.contrib import admin
+
 from .models import (
-    DeliveryOrder, DeliveryAddress,
-    DeliveryAssignment, DeliveryStatusHistory
+    DeliveryAddress,
+    DeliveryAssignment,
+    DeliveryOrder,
+    DeliveryStatusHistory,
 )
 
 

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Review, ReviewResponse, ReviewModeration
+
+from .models import Review, ReviewModeration, ReviewResponse
 
 
 class ReviewResponseInline(admin.StackedInline):

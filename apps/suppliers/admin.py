@@ -1,7 +1,11 @@
 from django.contrib import admin
+
 from .models import (
-    Supplier, SupplierContact, SupplierProduct,
-    SupplierPayment, SupplierRating
+    Supplier,
+    SupplierContact,
+    SupplierPayment,
+    SupplierProduct,
+    SupplierRating,
 )
 
 

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import ExpenseCategory, Expense, ExpenseApproval, ExpenseAttachment
+
+from .models import Expense, ExpenseApproval, ExpenseAttachment, ExpenseCategory
 
 
 @admin.register(ExpenseCategory)

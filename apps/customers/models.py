@@ -1,6 +1,6 @@
 from django.db import models
-from django.db.models import Q, CheckConstraint
-from django.utils import timezone
+from django.db.models import CheckConstraint, Q
+
 from apps.core.models import BaseModel, Restaurant
 
 

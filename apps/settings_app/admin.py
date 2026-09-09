@@ -1,7 +1,11 @@
 from django.contrib import admin
+
 from .models import (
-    SystemSetting, RestaurantSetting, BranchSetting,
-    NotificationSetting, BackupRecord
+    BackupRecord,
+    BranchSetting,
+    NotificationSetting,
+    RestaurantSetting,
+    SystemSetting,
 )
 
 

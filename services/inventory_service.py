@@ -1,13 +1,20 @@
 from decimal import Decimal
+
 from django.db import transaction
 from django.utils import timezone
-from apps.inventory.models import (
-    Stock, StockBatch, StockMovement, StockAdjustment,
-    WasteRecord, InventoryAlert, InventoryItem
-)
-from apps.purchases.models import GoodsReceipt
-from apps.orders.models import Order
+
 from apps.audit.models import AuditLog
+from apps.inventory.models import (
+    InventoryAlert,
+    InventoryItem,
+    Stock,
+    StockAdjustment,
+    StockBatch,
+    StockMovement,
+    WasteRecord,
+)
+from apps.orders.models import Order
+from apps.purchases.models import GoodsReceipt
 
 
 class InventoryService:

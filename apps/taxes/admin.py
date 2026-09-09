@@ -1,7 +1,10 @@
 from django.contrib import admin
+
 from .models import (
-    TaxCategory, TaxRate, TaxRule,
-    RestaurantTaxConfiguration, BranchTaxConfiguration
+    BranchTaxConfiguration,
+    RestaurantTaxConfiguration,
+    TaxCategory,
+    TaxRate,
 )
 
 

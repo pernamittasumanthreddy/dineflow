@@ -1,10 +1,12 @@
 from decimal import Decimal
-from django.test import TestCase
+
 from django.db import IntegrityError
-from apps.core.models import Restaurant, Branch
-from apps.inventory.models import Unit, InventoryCategory, InventoryItem, Stock
+from django.test import TestCase
+
+from apps.core.models import Branch, Restaurant
+from apps.inventory.models import InventoryCategory, InventoryItem, Stock, Unit
 from apps.menu.models import Menu, MenuCategory, MenuItem
-from apps.tables.models import TableSection, RestaurantTable
+from apps.tables.models import RestaurantTable, TableSection
 
 
 class DatabaseConstraintsTestCase(TestCase):

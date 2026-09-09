@@ -1,7 +1,11 @@
 from django.contrib import admin
+
 from .models import (
-    Order, OrderItem, OrderItemAddon,
-    OrderStatusHistory, OrderDiscount, OrderTax, OrderNote
+    Order,
+    OrderDiscount,
+    OrderItem,
+    OrderStatusHistory,
+    OrderTax,
 )
 
 

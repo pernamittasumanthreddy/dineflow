@@ -1,7 +1,11 @@
 from django.contrib import admin
+
 from .models import (
-    Customer, CustomerAddress, CustomerPreference,
-    CustomerOrderHistory, CustomerReservationHistory
+    Customer,
+    CustomerAddress,
+    CustomerOrderHistory,
+    CustomerPreference,
+    CustomerReservationHistory,
 )
 
 

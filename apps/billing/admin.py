@@ -1,7 +1,10 @@
 from django.contrib import admin
+
 from .models import (
-    InvoiceNumberSequence, Invoice, InvoiceItem,
-    InvoiceTax, InvoiceDiscount
+    Invoice,
+    InvoiceItem,
+    InvoiceNumberSequence,
+    InvoiceTax,
 )
 
 

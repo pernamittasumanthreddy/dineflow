@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import AuditLog, SecurityEvent, LoginHistory
+
+from .models import AuditLog, LoginHistory, SecurityEvent
 
 
 @admin.register(AuditLog)

@@ -1,0 +1,11 @@
+# Ruff configuration for DineFlow Django Restaurant ERP
+
+target-version = "py312"
+line-length = 120
+
+[lint]
+# In Django, models (indexes, constraints, ordering) and admin (list_display, search_fields)
+# declaratively use mutable lists by design.
+ignore = [
+    "RUF012",  # mutable-class-default
+]

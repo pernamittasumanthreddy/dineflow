@@ -1,7 +1,8 @@
 import os
 import sys
-from decimal import Decimal
 from datetime import date, timedelta
+from decimal import Decimal
+
 from django.utils import timezone
 
 # Setup Django environment if run as standalone script
@@ -14,23 +15,61 @@ if not os.environ.get('DJANGO_SETTINGS_MODULE'):
     import django
     django.setup()
 
-from apps.core.models import User, Role, Restaurant, RestaurantSettings, Branch, BranchSettings, UserRole
-from apps.inventory.models import Unit, InventoryCategory, InventoryItem, Stock, StockBatch, StockMovement
-from apps.suppliers.models import Supplier, SupplierProduct
-from apps.menu.models import Menu, MenuCategory, MenuItem, MenuVariant, MenuAddon, Recipe, FoodIngredient
-from apps.tables.models import TableSection, RestaurantTable
-from apps.kitchen.models import KitchenStation
-from apps.employees.models import Department, Designation, Employee, Shift, SalaryStructure
-from apps.customers.models import Customer, CustomerPreference
-from apps.loyalty.models import CustomerTier, LoyaltyAccount
-from apps.taxes.models import TaxCategory, TaxRate, RestaurantTaxConfiguration, BranchTaxConfiguration
-from apps.payments.models import PaymentMethod, RefundReason
-from apps.orders.models import Order, OrderItem, OrderTax, OrderStatusHistory
-from apps.billing.models import Invoice, InvoiceItem, InvoiceTax
-from apps.payments.models import Payment, PaymentTransaction
-from apps.expenses.models import ExpenseCategory, Expense
 from apps.analytics.models import DailySalesSnapshot
+from apps.billing.models import Invoice, InvoiceItem
+from apps.core.models import (
+    Branch,
+    BranchSettings,
+    Restaurant,
+    RestaurantSettings,
+    Role,
+    User,
+    UserRole,
+)
+from apps.customers.models import Customer, CustomerPreference
+from apps.employees.models import (
+    Department,
+    Designation,
+    Employee,
+    SalaryStructure,
+    Shift,
+)
+from apps.expenses.models import Expense, ExpenseCategory
+from apps.inventory.models import (
+    InventoryCategory,
+    InventoryItem,
+    Stock,
+    StockBatch,
+    StockMovement,
+    Unit,
+)
+from apps.kitchen.models import KitchenStation
+from apps.loyalty.models import CustomerTier, LoyaltyAccount
+from apps.menu.models import (
+    FoodIngredient,
+    Menu,
+    MenuAddon,
+    MenuCategory,
+    MenuItem,
+    MenuVariant,
+    Recipe,
+)
 from apps.notifications.models import Notification
+from apps.orders.models import Order, OrderItem, OrderStatusHistory
+from apps.payments.models import (
+    Payment,
+    PaymentMethod,
+    PaymentTransaction,
+    RefundReason,
+)
+from apps.suppliers.models import Supplier
+from apps.tables.models import RestaurantTable, TableSection
+from apps.taxes.models import (
+    BranchTaxConfiguration,
+    RestaurantTaxConfiguration,
+    TaxCategory,
+    TaxRate,
+)
 
 
 def seed_all():
@@ -314,7 +353,7 @@ def seed_all():
         for b_obj in r_obj.branches.all():
             for code, inv_item in created_items.items():
                 initial_qty = Decimal('100.000')
-                stk, created = Stock.objects.get_or_create(
+                _stk, created = Stock.objects.get_or_create(
                     branch=b_obj,
                     inventory_item=inv_item,
                     defaults={
@@ -407,8 +446,8 @@ def seed_all():
         ]
 
         # Addons
-        addon_cheese, _ = MenuAddon.objects.get_or_create(restaurant=r_obj, name='Extra Cheese / Paneer', defaults={'price': Decimal('40.00')})
-        addon_raita, _ = MenuAddon.objects.get_or_create(restaurant=r_obj, name='Special Dum Raita & Salan', defaults={'price': Decimal('30.00')})
+        MenuAddon.objects.get_or_create(restaurant=r_obj, name='Extra Cheese / Paneer', defaults={'price': Decimal('40.00')})
+        MenuAddon.objects.get_or_create(restaurant=r_obj, name='Special Dum Raita & Salan', defaults={'price': Decimal('30.00')})
 
         for name, cat, price, dietary, rec, spicy, prep in menu_items_data:
             m_item, _ = MenuItem.objects.get_or_create(
@@ -434,7 +473,7 @@ def seed_all():
                 menu_item=m_item,
                 defaults={
                     'title': f'Standard SOP Recipe for {name}',
-                    'instructions': f'Prepared according to master chef standards for authentic taste.',
+                    'instructions': 'Prepared according to master chef standards for authentic taste.',
                     'yield_servings': 1,
                 }
             )
@@ -472,7 +511,7 @@ def seed_all():
         desig_waiter, _ = Designation.objects.get_or_create(department=dept_service, code='CAPTAIN', defaults={'title': 'Captain Waiter', 'level': 2})
         desig_mgr, _ = Designation.objects.get_or_create(department=dept_mgmt, code='MGR', defaults={'title': 'Branch General Manager', 'level': 4})
 
-        shift_gen, _ = Shift.objects.get_or_create(branch=b_obj, name='Regular Service Shift', defaults={'start_time': '10:00:00', 'end_time': '22:30:00'})
+        _shift_gen, _ = Shift.objects.get_or_create(branch=b_obj, name='Regular Service Shift', defaults={'start_time': '10:00:00', 'end_time': '22:30:00'})
 
         # Sample staff user & employee
         staff_data = [
@@ -676,7 +715,7 @@ def seed_all():
     for b_code, b_obj in branches.items():
         # Operating Expenses
         exp_cat_rent, _ = ExpenseCategory.objects.get_or_create(restaurant=b_obj.restaurant, code='RENT', defaults={'name': 'Property Rent & Maintenance'})
-        exp_cat_util, _ = ExpenseCategory.objects.get_or_create(restaurant=b_obj.restaurant, code='UTILITIES', defaults={'name': 'Electricity & Commercial LPG'})
+        _exp_cat_util, _ = ExpenseCategory.objects.get_or_create(restaurant=b_obj.restaurant, code='UTILITIES', defaults={'name': 'Electricity & Commercial LPG'})
 
         Expense.objects.get_or_create(
             branch=b_obj,

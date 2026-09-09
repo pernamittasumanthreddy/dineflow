@@ -1,9 +1,11 @@
 from decimal import Decimal
+
 from django.test import TestCase
-from apps.core.models import Restaurant, Branch
-from apps.menu.models import Menu, MenuCategory, MenuItem
+
+from apps.core.models import Branch, Restaurant
 from apps.customers.models import Customer
-from apps.loyalty.models import CustomerTier, LoyaltyAccount, LoyaltyTransaction
+from apps.loyalty.models import CustomerTier, LoyaltyTransaction
+from apps.menu.models import Menu, MenuCategory, MenuItem
 from apps.orders.models import Order, OrderItem
 from services.billing_service import BillingService
 from services.loyalty_service import LoyaltyService

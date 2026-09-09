@@ -1,6 +1,7 @@
 from django.db import models
-from django.db.models import Q, CheckConstraint
-from apps.core.models import BaseModel, Restaurant, Branch
+from django.db.models import CheckConstraint, Q
+
+from apps.core.models import BaseModel, Branch, Restaurant
 
 
 class TaxCategory(BaseModel):

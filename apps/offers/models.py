@@ -1,7 +1,8 @@
 from django.db import models
-from django.db.models import Q, CheckConstraint
+from django.db.models import CheckConstraint, Q
 from django.utils import timezone
-from apps.core.models import BaseModel, Restaurant, Branch
+
+from apps.core.models import BaseModel, Branch, Restaurant
 
 
 class Offer(BaseModel):
