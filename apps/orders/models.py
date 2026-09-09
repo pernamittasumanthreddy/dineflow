@@ -18,8 +18,19 @@ class OrderStatus(models.TextChoices):
     COMPLETED = 'COMPLETED', 'Completed & Paid'
     CANCELLED = 'CANCELLED', 'Cancelled'
 
+class OrderQuerySet(models.QuerySet):
+    def with_details(self):
+        """Optimizes queries by prefetching table, server, customer, and order items."""
+        return self.select_related('table', 'server', 'customer', 'branch').prefetch_related('items__menu_item')
+
+    def active_orders(self):
+        """Returns non-finalized orders currently on the dining floor or kitchen."""
+        return self.filter(status__in=[OrderStatus.NEW, OrderStatus.CONFIRMED, OrderStatus.PREPARING, OrderStatus.READY])
+
 class Order(TimeStampedModel, SoftDeleteModel):
     """Core transaction order entity traversing the POS & Kitchen lifecycle."""
+    objects = OrderQuerySet.as_manager()
+
     order_number = models.CharField('Order #', max_length=50, unique=True, db_index=True)
     order_type = models.CharField(max_length=20, choices=OrderType.choices, default=OrderType.DINE_IN)
     status = models.CharField(
