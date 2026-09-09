@@ -624,6 +624,9 @@ def seed_all():
             order_num = f"ORD-{b_obj.code}-{order_date.strftime('%Y%m%d')}-{order_counter:04d}"
             order_counter += 1
 
+            if Order.objects.filter(order_number=order_num).exists():
+                continue
+
             subtotal = Decimal('0.00')
             order = Order.objects.create(
                 restaurant=r_obj,
