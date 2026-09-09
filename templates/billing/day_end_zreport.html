@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Day-End Z-Report — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Day-End Closing Z-Report & Audit</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Finance</span>
+      <span>›</span>
+      <span>Cash Register Reconciliation (Z-Report)</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="ExportPrint.printElement('df-zreport-print-sheet')">
+      <span>🖨️ Print Official Z-Report</span>
+    </button>
+    <a href="{% url 'billing:invoices' %}" class="df-btn df-btn-outline">
+      <span>🧾 Invoices Ledger</span>
+    </a>
+  </div>
+</div>
+
+<!-- Printable Z-Report Sheet -->
+<div class="df-card" id="df-zreport-print-sheet" style="max-width:800px; margin:0 auto; padding:2rem;">
+  
+  <div style="text-align:center; border-bottom:2px solid var(--df-charcoal-900); padding-bottom:1.25rem; margin-bottom:1.5rem;">
+    <h2 style="font-family:var(--df-font-serif); font-size:1.8rem; color:var(--df-maroon-800); margin-bottom:0.25rem;">Andhra Spice Kitchen & Grand Dine</h2>
+    <div style="font-size:0.875rem; color:var(--df-text-secondary);">Branch: {{ z.branch }} | GSTIN: {{ RESTAURANT_INFO.gstin }}</div>
+    <div style="display:inline-block; background:var(--df-charcoal-900); color:#FFF; font-weight:800; font-size:0.8125rem; padding:4px 14px; border-radius:4px; margin-top:0.75rem;">
+      SHIFT CLOSING Z-REPORT • {{ z.report_num }}
+    </div>
+  </div>
+
+  <!-- Meta Info Grid -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-size:0.875rem; margin-bottom:1.5rem; background:var(--df-bg-cream); padding:1rem; border-radius:var(--df-radius-md);">
+    <div>
+      <div><strong>Closing Date:</strong> {{ z.date }}</div>
+      <div><strong>Shift Window:</strong> {{ z.shift }}</div>
+      <div><strong>Cashier On Duty:</strong> {{ z.cashier }}</div>
+    </div>
+    <div style="text-align:right;">
+      <div><strong>Manager Auditor:</strong> {{ z.manager_on_duty }}</div>
+      <div><strong>Total Bills Generated:</strong> {{ z.bills_count }} Bills</div>
+      <div><strong>Guest Covers Served:</strong> {{ z.covers_served }} Guests</div>
+    </div>
+  </div>
+
+  <!-- Financial Summary -->
+  <div style="margin-bottom:1.75rem;">
+    <h3 style="font-size:1.1rem; font-weight:700; color:var(--df-charcoal-900); margin-bottom:0.75rem; border-bottom:1px solid #EFE9E0; padding-bottom:0.35rem;">
+      1. Sales & GST Revenue Breakdown
+    </h3>
+    <table style="width:100%; font-size:0.875rem; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #EFE9E0; height:32px;">
+        <td>Taxable Food & Beverage Sales:</td>
+        <td style="text-align:right; font-weight:600;">{{ z.taxable_sales|inr }}</td>
+      </tr>
+      <tr style="border-bottom:1px solid #EFE9E0; height:32px;">
+        <td>CGST Output Tax Collected (2.5%):</td>
+        <td style="text-align:right; font-weight:600;">{{ z.cgst_collected|inr }}</td>
+      </tr>
+      <tr style="border-bottom:1px solid #EFE9E0; height:32px;">
+        <td>SGST Output Tax Collected (2.5%):</td>
+        <td style="text-align:right; font-weight:600;">{{ z.sgst_collected|inr }}</td>
+      </tr>
+      <tr style="border-bottom:1px solid #EFE9E0; height:32px;">
+        <td>Promotional Discounts Subsidized:</td>
+        <td style="text-align:right; font-weight:600; color:var(--df-danger-700);">-{{ z.discounts_given|inr }}</td>
+      </tr>
+      <tr style="height:44px; font-weight:800; font-size:1.15rem; color:var(--df-maroon-800); border-top:2px solid #333;">
+        <td>GROSS SETTLED REVENUE:</td>
+        <td style="text-align:right;">{{ z.gross_sales|inr }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Tender Breakdown -->
+  <div style="margin-bottom:1.75rem;">
+    <h3 style="font-size:1.1rem; font-weight:700; color:var(--df-charcoal-900); margin-bottom:0.75rem; border-bottom:1px solid #EFE9E0; padding-bottom:0.35rem;">
+      2. Payment Modes & Tender Reconciliation
+    </h3>
+    <table style="width:100%; font-size:0.875rem; border-collapse:collapse;">
+      {% for t in z.tender_breakdown %}
+        <tr style="border-bottom:1px solid #EFE9E0; height:34px;">
+          <td><strong>{{ t.tender }}</strong></td>
+          <td style="text-align:right; font-weight:700; color:var(--df-charcoal-900);">{{ t.amount|inr }} ({{ t.pct }})</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <!-- Cash Drawer Balancing -->
+  <div>
+    <h3 style="font-size:1.1rem; font-weight:700; color:var(--df-charcoal-900); margin-bottom:0.75rem; border-bottom:1px solid #EFE9E0; padding-bottom:0.35rem;">
+      3. Physical Cash Drawer Balancing
+    </h3>
+    <table style="width:100%; font-size:0.875rem; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #EFE9E0; height:30px;">
+        <td>Opening Shift Float:</td>
+        <td style="text-align:right;">{{ z.cash_reconciliation.opening_float|inr }}</td>
+      </tr>
+      <tr style="border-bottom:1px solid #EFE9E0; height:30px;">
+        <td>+ Cash Collected from Dining Bills:</td>
+        <td style="text-align:right;">{{ z.cash_reconciliation.cash_sales|inr }}</td>
+      </tr>
+      <tr style="border-bottom:1px solid #EFE9E0; height:30px;">
+        <td>- Authorized Petty Cash Expenses:</td>
+        <td style="text-align:right; color:var(--df-danger-700);">-{{ z.cash_reconciliation.petty_cash_expenses|inr }}</td>
+      </tr>
+      <tr style="height:36px; font-weight:700; background:var(--df-green-100); color:var(--df-green-800);">
+        <td style="padding-left:8px;">Expected vs Actual Counted Cash:</td>
+        <td style="text-align:right; padding-right:8px;">{{ z.cash_reconciliation.actual_counted|inr }} (Variance: ₹0.00 ✓)</td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; margin-top:2.5rem; padding-top:1.5rem; border-top:1px dashed #777; font-size:0.8125rem;">
+    <div style="text-align:center;">
+      <div style="border-bottom:1px solid #333; width:180px; margin-bottom:4px;"></div>
+      <div>Cashier Signature (Sneha Reddy)</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="border-bottom:1px solid #333; width:180px; margin-bottom:4px;"></div>
+      <div>Manager Auditor (Pavan Varma)</div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

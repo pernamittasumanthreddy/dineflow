@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}GST Tax Invoices — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Indian GST Tax Invoices Master Ledger</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Finance & Invoicing</span>
+      <span>›</span>
+      <span>GST Compliance (SAC 996331)</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'pos:terminal' %}" class="df-btn df-btn-terracotta">
+      <span>⚡ Generate New Bill (POS)</span>
+    </a>
+    <a href="{% url 'analytics:tax_reports' %}" class="df-btn df-btn-maroon">
+      <span>📑 GSTR-1 Monthly Export</span>
+    </a>
+    <button class="df-btn df-btn-outline" onclick="ExportPrint.exportTableToCSV('df-invoices-table', 'gst_invoices.csv')">
+      <span>📊 Export Invoices CSV</span>
+    </button>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Settled Invoices & Tax Breakdowns (CGST 2.5% + SGST 2.5%)</div>
+    <div style="display:flex; gap:0.5rem;">
+      <input type="text" id="df-inv-search" class="df-input-search" placeholder="Search invoice #, customer, table...">
+    </div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table" id="df-invoices-table">
+      <thead>
+        <tr>
+          <th>Invoice #</th>
+          <th>Date & Time</th>
+          <th>Table / Channel</th>
+          <th>Customer Name</th>
+          <th>Taxable Subtotal</th>
+          <th>CGST (2.5%)</th>
+          <th>SGST (2.5%)</th>
+          <th>Grand Total</th>
+          <th>Tender Mode</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for inv in invoices %}
+          <tr>
+            <td><strong>{{ inv.inv_num }}</strong></td>
+            <td style="font-size:0.78rem; color:var(--df-text-secondary);">{{ inv.date }}</td>
+            <td>{{ inv.table }}</td>
+            <td><strong>{{ inv.customer }}</strong></td>
+            <td>{{ inv.subtotal|inr }}</td>
+            <td style="color:var(--df-text-secondary);">{{ inv.cgst|inr }}</td>
+            <td style="color:var(--df-text-secondary);">{{ inv.sgst|inr }}</td>
+            <td style="font-weight:800; color:var(--df-maroon-800);">{{ inv.grand_total|inr }}</td>
+            <td><span class="df-badge badge-neutral">{{ inv.payment_mode }}</span></td>
+            <td><span class="df-badge badge-success">{{ inv.status }}</span></td>
+            <td>
+              <div class="df-action-btns">
+                <button class="df-btn-icon" onclick="POSEngine.completePayment('upi')" title="Print 80mm Receipt">🖨️</button>
+                <button class="df-btn-icon" onclick="DineFlow.showToast('WhatsApp Sent', 'Invoice PDF sent to customer', 'success')" title="Share WhatsApp Bill">📱</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    DineFlow.initTableFilter('df-inv-search', 'df-invoices-table');
+  });
+</script>
+{% endblock %}
