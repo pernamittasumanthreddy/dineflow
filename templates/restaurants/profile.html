@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Restaurant Corporate Profile — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Restaurant Corporate Profile & Legal Entity</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Administration</span>
+      <span>›</span>
+      <span>Corporate Identity & Regulatory Entities</span>
+    </div>
+  </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="df-alert {% if message.tags %}df-alert-{{ message.tags }}{% endif %}" style="margin-bottom:1rem; padding:0.75rem 1rem; border-radius:var(--df-radius-md); background:var(--df-bg-surface); border:1px solid var(--df-border);">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+  
+  <!-- Corporate Entity Profile -->
+  <div class="df-card">
+    <div class="df-card-header">
+      <div class="df-card-title">Corporate Entity Details</div>
+    </div>
+    <div class="df-card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="save_profile">
+        
+        <div class="df-form-group">
+          <label class="df-form-label">Brand Name</label>
+          {{ form.name }}
+        </div>
+        
+        <div class="df-form-group">
+          <label class="df-form-label">Legal Entity Name</label>
+          {{ form.legal_entity_name }}
+        </div>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="df-form-group">
+            <label class="df-form-label">Master GSTIN (15 Digits)</label>
+            {{ form.gstin }}
+          </div>
+          <div class="df-form-group">
+            <label class="df-form-label">FSSAI License # (14 Digits)</label>
+            {{ form.fssai_number }}
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="df-form-group">
+            <label class="df-form-label">Official Email</label>
+            {{ form.email }}
+          </div>
+          <div class="df-form-group">
+            <label class="df-form-label">Phone</label>
+            {{ form.phone }}
+          </div>
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label">Address Line 1</label>
+          {{ form.address_line1 }}
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+          <div class="df-form-group">
+            <label class="df-form-label">City</label>
+            {{ form.city }}
+          </div>
+          <div class="df-form-group">
+            <label class="df-form-label">State</label>
+            {{ form.state }}
+          </div>
+          <div class="df-form-group">
+            <label class="df-form-label">PIN Code</label>
+            {{ form.pincode }}
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="df-form-group">
+            <label class="df-form-label">Opening Time</label>
+            {{ form.opening_time }}
+          </div>
+          <div class="df-form-group">
+            <label class="df-form-label">Closing Time</label>
+            {{ form.closing_time }}
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem;">
+          <button type="submit" class="df-btn df-btn-terracotta">
+            <span>💾 Save Corporate Profile</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Operational Tax & System Settings -->
+  <div class="df-card">
+    <div class="df-card-header">
+      <div class="df-card-title">Operational Settings & Tax Parameters</div>
+    </div>
+    <div class="df-card-body">
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="save_settings">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="df-form-group">
+            <label class="df-form-label">Default CGST %</label>
+            {{ settings_form.default_cgst_percent }}
+          </div>
+          <div class="df-form-group">
+            <label class="df-form-label">Default SGST %</label>
+            {{ settings_form.default_sgst_percent }}
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="df-form-group">
+            <label class="df-form-label">Service Charge %</label>
+            {{ settings_form.default_service_charge_percent }}
+          </div>
+          <div class="df-form-group">
+            <label class="df-form-label">Invoice Prefix</label>
+            {{ settings_form.invoice_prefix }}
+          </div>
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label">Low Stock Threshold</label>
+          {{ settings_form.low_stock_alert_threshold }}
+        </div>
+
+        <div class="df-form-group">
+          <label class="df-form-label">Bill Footer Message</label>
+          {{ settings_form.bill_footer_message }}
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:1rem;">
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+            {{ settings_form.is_tax_inclusive }}
+            <span>Prices are Tax-Inclusive</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+            {{ settings_form.enable_table_reservations }}
+            <span>Enable Table Reservations Module</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+            {{ settings_form.enable_kds }}
+            <span>Enable Kitchen Display System (KDS)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+            {{ settings_form.enable_delivery_dispatch }}
+            <span>Enable Delivery Dispatch Logistics</span>
+          </label>
+        </div>
+
+        <div style="margin-top:1.5rem;">
+          <button type="submit" class="df-btn df-btn-terracotta">
+            <span>⚙️ Update Operational Settings</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
