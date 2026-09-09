@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Roles & Permissions — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Roles & RBAC Access Matrix</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Administration</span>
+      <span>›</span>
+      <span>Security & Permissions Matrix</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('Save Permissions', 'RBAC matrix changes deployed successfully.', 'success')">
+      <span>💾 Save Permission Policies</span>
+    </button>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Role-Based Access Control (RBAC) Module Privileges</div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table">
+      <thead>
+        <tr>
+          <th>ERP Module</th>
+          <th>Restaurant Owner</th>
+          <th>General Manager</th>
+          <th>Kitchen Staff</th>
+          <th>Waiter / Captain</th>
+          <th>Cashier</th>
+          <th>HR Manager</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in matrix %}
+          <tr>
+            <td><strong>{{ m.module }}</strong></td>
+            <td><span class="df-badge badge-success">{{ m.owner }}</span></td>
+            <td><span class="df-badge {% if m.manager == 'No Access' %}badge-danger{% else %}badge-success{% endif %}">{{ m.manager }}</span></td>
+            <td><span class="df-badge {% if m.kitchen == 'No Access' %}badge-danger{% elif m.kitchen == 'Full Access' %}badge-success{% else %}badge-warning{% endif %}">{{ m.kitchen }}</span></td>
+            <td><span class="df-badge {% if m.waiter == 'No Access' %}badge-danger{% else %}badge-warning{% endif %}">{{ m.waiter }}</span></td>
+            <td><span class="df-badge {% if m.cashier == 'No Access' %}badge-danger{% elif m.cashier == 'Full Access' %}badge-success{% else %}badge-warning{% endif %}">{{ m.cashier }}</span></td>
+            <td><span class="df-badge {% if m.hr == 'No Access' %}badge-danger{% else %}badge-success{% endif %}">{{ m.hr }}</span></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
