@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Multi-Branch Business Intelligence — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Multi-Branch Business Intelligence & Profit Ledger</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Enterprise BI</span>
+      <span>›</span>
+      <span>Branch P&L Matrix</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'analytics:ml_demand' %}" class="df-btn df-btn-maroon">
+      <span>🧠 AI Demand Forecasting</span>
+    </a>
+    <button class="df-btn df-btn-outline" onclick="ExportPrint.exportTableToCSV('df-bi-table', 'chain_bi_reports.csv')">
+      <span>📊 Export Chain BI CSV</span>
+    </button>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Chain Outlets Profit & Loss (P&L) Ledger</div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table" id="df-bi-table">
+      <thead>
+        <tr>
+          <th>Restaurant Branch Outlet</th>
+          <th>Gross Billing (₹)</th>
+          <th>COGS (Food Cost)</th>
+          <th>Food Cost %</th>
+          <th>Labor & Staff Cost</th>
+          <th>Operating Net Profit</th>
+          <th>Net Margin %</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in branch_bi %}
+          <tr>
+            <td><strong>{{ b.branch }}</strong></td>
+            <td style="font-weight:700; color:var(--df-maroon-800);">{{ b.gross_sales|inr }}</td>
+            <td>{{ b.cogs|inr }}</td>
+            <td><span class="df-badge badge-warning">{{ b.food_cost_pct }}</span></td>
+            <td>{{ b.labor_cost|inr }}</td>
+            <td style="font-weight:800; color:var(--df-green-800);">{{ b.operating_profit|inr }}</td>
+            <td><span class="df-badge badge-success">{{ b.margin }}</span></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
