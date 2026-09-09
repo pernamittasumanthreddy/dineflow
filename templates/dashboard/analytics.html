@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Business Intelligence & AI Forecast — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Multi-Branch Business Intelligence & AI Forecast</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Enterprise BI</span>
+      <span>›</span>
+      <span style="color:var(--df-maroon-800); font-weight:700;">Consolidated Chain Analytics</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'analytics:ml_demand' %}" class="df-btn df-btn-maroon">
+      <span>🧠 AI Machine Learning Predictor</span>
+    </a>
+    <a href="{% url 'analytics:tax_reports' %}" class="df-btn df-btn-terracotta">
+      <span>📑 Export GSTR-1 & 3B</span>
+    </a>
+    <button class="df-btn df-btn-outline" onclick="ExportPrint.exportTableToCSV('df-bi-summary-table', 'dineflow_branch_bi.csv')">
+      <span>📊 Export CSV</span>
+    </button>
+  </div>
+</div>
+
+<!-- Analytics KPIs -->
+<div class="df-kpi-grid">
+  {% for kpi in kpis %}
+    <div class="df-kpi-card">
+      <div class="df-kpi-top">
+        <div class="df-kpi-label">{{ kpi.label }}</div>
+        <div class="df-kpi-icon {{ kpi.icon }}">{{ kpi.emoji }}</div>
+      </div>
+      <div class="df-kpi-value">{{ kpi.value }}</div>
+      <div class="df-kpi-bottom">
+        <span class="df-trend-pill {% if kpi.trend_up %}df-trend-up{% else %}df-trend-down{% endif %}">
+          {{ kpi.trend }}
+        </span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Revenue Curve & Hourly Heatmap Row -->
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Chain Revenue Growth & Projected Run Rate</div>
+    <div class="df-badge badge-success">ML Real-Time Regression</div>
+  </div>
+  <div class="df-card-body">
+    <canvas id="df-analytics-rev-chart" style="width:100%; height:280px;"></canvas>
+  </div>
+</div>
+
+<!-- Hourly Guest Footfall Heatmap Card -->
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Hourly Guest Footfall & Peak Density Heatmap</div>
+    <span class="df-badge badge-warning">High Weekend Lunch & Dinner Rush</span>
+  </div>
+  <div class="df-card-body">
+    <div id="df-hourly-heatmap-container">
+      <!-- Injected via AnalyticsEngine -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    AnalyticsEngine.renderRevenueChart('df-analytics-rev-chart');
+    AnalyticsEngine.renderHourlyHeatmap('df-hourly-heatmap-container');
+  });
+</script>
+{% endblock %}
