@@ -1,1 +1,2 @@
 PR #42: feat(pos): add pos terminal schema migrations and shift ledger fields
+PR #44: feat(pos): add itemized and equal split bill calculation engine
