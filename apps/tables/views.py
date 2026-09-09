@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['waiter', 'manager', 'owner', 'super_admin'])
 def floor_plan(request):
     """
     Visual Table Layout & Floor Plan Management.
@@ -9,6 +11,7 @@ def floor_plan(request):
     }
     return render(request, 'tables/floor_plan.html', context)
 
+@role_required(['waiter', 'manager', 'owner', 'customer', 'super_admin'])
 def reservations(request):
     """
     Table Reservations & Guest Waitlist Management.

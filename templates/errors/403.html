@@ -1,22 +1,51 @@
-{% extends 'base_public.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}403 — Access Restricted | DineFlow ERP{% endblock %}
+{% block title %}403 Access Denied — DineFlow ERP{% endblock %}
 
 {% block content %}
-<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1.5rem; text-align: center;">
-  <div style="background: rgba(28, 28, 34, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--df-radius-xl); max-width: 500px; padding: 3rem 2rem; backdrop-filter: blur(16px);">
-    <div style="font-size: 4.5rem; font-family: var(--df-font-serif); font-weight: 800; color: var(--df-maroon-600); line-height: 1; margin-bottom: 0.75rem;">
-      403
-    </div>
-    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔒</div>
-    <h1 style="font-size: 1.5rem; font-weight: 700; color: #FFF; margin-bottom: 0.75rem;">Staff & Role Restricted Access</h1>
-    <p style="color: #A6A6B8; font-size: 0.9375rem; line-height: 1.6; margin-bottom: 2rem;">
-      Your active role (<strong>{{ CURRENT_USER.role_title }}</strong>) does not have RBAC privileges to access this resource. Switch role from the top bar to inspect this module.
+<div style="min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;">
+  <div class="df-card" style="max-width: 580px; width: 100%; text-align: center; padding: 3rem 2rem; border: 1px solid var(--df-border-medium); box-shadow: var(--df-shadow-lg);">
+    
+    <div style="font-size: 3.5rem; margin-bottom: 1rem; line-height: 1;">🛡️</div>
+    
+    <span class="df-badge" style="background: rgba(122, 26, 36, 0.15); color: var(--df-maroon-800); border: 1px solid var(--df-maroon-800); font-weight: 700; font-size: 0.8125rem; margin-bottom: 1rem;">
+      HTTP 403 • ACCESS FORBIDDEN
+    </span>
+
+    <h1 style="font-family: var(--df-font-serif); font-size: 1.85rem; font-weight: 700; color: var(--df-charcoal-900); margin-bottom: 0.75rem;">
+      Restricted Enterprise Module
+    </h1>
+
+    <p style="color: var(--df-text-secondary); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.75rem;">
+      Your active account (<strong>{{ CURRENT_USER.name }}</strong>) with role <strong style="color: var(--df-terracotta-700);">{{ CURRENT_USER.role_title }}</strong> does not have permission to view or execute operations in this module.
     </p>
-    <div style="display: flex; gap: 1rem; justify-content: center;">
-      <a href="{% url 'dashboard:owner' %}" class="df-btn df-btn-terracotta">Switch to Owner View 👑</a>
+
+    <!-- Role Security Info Box -->
+    <div style="background: var(--df-bg-surface-subtle); border-radius: var(--df-radius-md); padding: 1rem; margin-bottom: 2rem; text-align: left; font-size: 0.8125rem;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+        <span style="color: var(--df-text-muted);">Current Active Role:</span>
+        <strong style="color: var(--df-charcoal-900);">{{ CURRENT_USER.role_title }}</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+        <span style="color: var(--df-text-muted);">Active Staff ID:</span>
+        <span style="color: var(--df-charcoal-900); font-family: monospace;">{{ CURRENT_USER.employee_code }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--df-text-muted);">Assigned Branch:</span>
+        <span style="color: var(--df-charcoal-900);">{{ CURRENT_USER.branch }}</span>
+      </div>
     </div>
+
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a href="/dashboard/{{ CURRENT_ROLE }}/" class="df-btn df-btn-terracotta">
+        <span>← Return to My Authorized Dashboard</span>
+      </a>
+      <a href="{% url 'accounts:logout' %}" class="df-btn df-btn-maroon">
+        <span>🚪 Sign Out</span>
+      </a>
+    </div>
+
   </div>
 </div>
 {% endblock %}

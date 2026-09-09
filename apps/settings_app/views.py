@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['super_admin', 'owner'])
 def branches(request):
     """
     Multi-Branch Outlet Management.
@@ -17,6 +19,7 @@ def branches(request):
     }
     return render(request, 'settings/branches.html', context)
 
+@role_required(['super_admin', 'owner'])
 def roles_permissions(request):
     """
     Role-Based Access Control (RBAC) Permissions Matrix.
@@ -35,6 +38,7 @@ def roles_permissions(request):
     }
     return render(request, 'settings/roles_permissions.html', context)
 
+@role_required(['super_admin', 'owner'])
 def audit_logs(request):
     """
     Immutable Security & Action Audit Trail.
@@ -51,6 +55,7 @@ def audit_logs(request):
     }
     return render(request, 'settings/audit_logs.html', context)
 
+@role_required(['super_admin'])
 def backup_restore(request):
     """
     Database Backup & Disaster Recovery.
@@ -66,6 +71,7 @@ def backup_restore(request):
     }
     return render(request, 'settings/backup_restore.html', context)
 
+@role_required(['super_admin', 'owner'])
 def general(request):
     """
     General System & Hardware Configuration.

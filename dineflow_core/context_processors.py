@@ -1,87 +1,40 @@
 """
 DineFlow - Global Context Processors
-Provides system-wide metadata, multi-role switching, active branch context,
-Indian currency formatting, GST rates, and notification badges across all templates.
+Provides real authenticated user context, active branch, role metadata, and notifications.
 """
+from apps.accounts.models import Role
 
 def dineflow_global_context(request):
-    # Simulated active role stored in session (default: 'owner')
-    current_role = request.session.get('dineflow_active_role', 'owner')
+    user = getattr(request, 'user', None)
+    
+    current_role_code = 'owner'
+    role_title = 'Restaurant Owner'
+    user_name = 'Vikramaditya Rao'
+    user_email = 'owner@dineflow.in'
+    user_initials = 'VR'
     active_branch = request.session.get('dineflow_active_branch', 'Indiranagar Main (Bangalore)')
-    
-    roles = [
-        {
-            'key': 'super_admin',
-            'name': 'Super Admin',
-            'icon': 'shield-lock',
-            'desc': 'Multi-Tenant & System Administration',
-            'badge': 'SaaS Root'
-        },
-        {
-            'key': 'owner',
-            'name': 'Restaurant Owner',
-            'icon': 'briefcase',
-            'desc': 'Chain Executive & Financials',
-            'badge': 'Executive'
-        },
-        {
-            'key': 'manager',
-            'name': 'Restaurant Manager',
-            'icon': 'people',
-            'desc': 'Daily Shift & Floor Operations',
-            'badge': 'Operations'
-        },
-        {
-            'key': 'kitchen',
-            'name': 'Kitchen Staff / Chef',
-            'icon': 'fire',
-            'desc': 'KDS & Prep Queue Management',
-            'badge': 'Live KDS'
-        },
-        {
-            'key': 'waiter',
-            'name': 'Waiter / Captain',
-            'icon': 'cup-hot',
-            'desc': 'Table Ordering & Service',
-            'badge': 'POS Captain'
-        },
-        {
-            'key': 'cashier',
-            'name': 'Cashier',
-            'icon': 'cash-stack',
-            'desc': 'POS Settlement & GST Billing',
-            'badge': 'Billing'
-        },
-        {
-            'key': 'inventory',
-            'name': 'Inventory Manager',
-            'icon': 'box-seam',
-            'desc': 'Raw Materials, Stock & POs',
-            'badge': 'Stock'
-        },
-        {
-            'key': 'hr',
-            'name': 'HR Manager',
-            'icon': 'person-badge',
-            'desc': 'Attendance, Shifts & Payroll',
-            'badge': 'HRMS'
-        },
-        {
-            'key': 'customer',
-            'name': 'Customer',
-            'icon': 'emoji-smile',
-            'desc': 'Digital Menu, Bookings & Rewards',
-            'badge': 'Guest'
-        },
-        {
-            'key': 'analytics',
-            'name': 'Analytics & BI',
-            'icon': 'graph-up-arrow',
-            'desc': 'Business Intelligence & AI Forecast',
-            'badge': 'BI Insights'
-        },
-    ]
-    
+    employee_code = 'OWN-001'
+    phone = '+91 98450 11002'
+
+    if user and user.is_authenticated:
+        try:
+            profile = user.userprofile
+            current_role_code = profile.role.code
+            role_title = profile.role.name
+            user_name = user.get_full_name() or user.username
+            user_email = user.email
+            user_initials = profile.avatar_initials or (user.first_name[:1] + user.last_name[:1] if user.last_name else user.username[:2]).upper()
+            active_branch = profile.branch or active_branch
+            employee_code = profile.employee_code
+            phone = profile.phone
+        except Exception:
+            if user.is_superuser:
+                current_role_code = 'super_admin'
+                role_title = 'Super Admin'
+                user_name = user.get_full_name() or user.username
+                user_email = user.email
+                user_initials = 'SA'
+
     branches = [
         {'id': 1, 'name': 'Indiranagar Main (Bangalore)', 'city': 'Bangalore', 'gstin': '29AABCS1429B1Z5', 'tables': 28, 'fssai': '11223334000121'},
         {'id': 2, 'name': 'Banjara Hills Flagship (Hyderabad)', 'city': 'Hyderabad', 'gstin': '36AABCS1429B1Z8', 'tables': 36, 'fssai': '13622014000889'},
@@ -91,13 +44,14 @@ def dineflow_global_context(request):
     ]
 
     current_user_profile = {
-        'name': 'Pavan Kumar Varma',
-        'email': 'pavan.varma@dineflow.in',
-        'phone': '+91 98490 12345',
-        'role_title': next((r['name'] for r in roles if r['key'] == current_role), 'Restaurant Owner'),
-        'role_key': current_role,
-        'avatar_initials': 'PK',
+        'name': user_name,
+        'email': user_email,
+        'phone': phone,
+        'role_title': role_title,
+        'role_key': current_role_code,
+        'avatar_initials': user_initials,
         'branch': active_branch,
+        'employee_code': employee_code,
     }
 
     restaurant_info = {
@@ -112,7 +66,7 @@ def dineflow_global_context(request):
         'igst_rate': 5.0,
         'support_phone': '1800-425-3463',
         'support_email': 'support@dineflow.in',
-        'version': 'v4.8.0 Enterprise'
+        'version': 'v4.8.0 Enterprise RBAC'
     }
 
     pending_notifications = [
@@ -123,8 +77,8 @@ def dineflow_global_context(request):
     ]
 
     return {
-        'CURRENT_ROLE': current_role,
-        'ALL_ROLES': roles,
+        'CURRENT_ROLE': current_role_code,
+        'USER_ROLE': current_role_code,
         'BRANCHES': branches,
         'ACTIVE_BRANCH': active_branch,
         'CURRENT_USER': current_user_profile,

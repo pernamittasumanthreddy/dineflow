@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['manager', 'cashier', 'owner', 'super_admin'])
 def fleet(request):
     """
     In-House Delivery Fleet & Rider Dispatcher.

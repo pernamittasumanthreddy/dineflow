@@ -52,7 +52,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.accounts.middleware.RBACAuthMiddleware',
 ]
+
+LOGIN_URL = '/accounts/role-select/'
+LOGIN_REDIRECT_URL = '/dashboard/owner/'
+LOGOUT_REDIRECT_URL = '/accounts/role-select/'
+
 
 ROOT_URLCONF = 'dineflow_core.urls'
 

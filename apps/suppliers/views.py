@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['inventory', 'manager', 'owner', 'super_admin'])
 def supplier_list(request):
     """
     Vendor & Supplier Master Directory.

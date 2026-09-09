@@ -5,7 +5,7 @@
     <div class="df-brand-logo">DF</div>
     <div>
       <div class="df-brand-title">DineFlow</div>
-      <div class="df-brand-subtitle">Restaurant ERP v4.8</div>
+      <div class="df-brand-subtitle">{{ CURRENT_USER.role_title }}</div>
     </div>
   </div>
 
@@ -18,319 +18,480 @@
     <span class="df-badge badge-warning" style="font-size: 0.65rem;">Active</span>
   </div>
 
-  <!-- Module Navigation List -->
-  <nav style="flex: 1; padding: 0.75rem 0 2rem;">
+  <!-- Dynamic Role-Specific Navigation Menu -->
+  <nav style="flex: 1; padding: 0.75rem 0 2rem; overflow-y: auto;">
     
-    <!-- 1. Dashboards Group -->
-    <div class="df-nav-section-title">Role Dashboards (10)</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:super_admin' %}" class="df-nav-link {% if request.resolver_match.url_name == 'super_admin' %}active{% endif %}">
-          <span>🛡️</span>
-          <span>Super Admin</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:owner' %}" class="df-nav-link {% if request.resolver_match.url_name == 'owner' %}active{% endif %}">
-          <span>👑</span>
-          <span>Restaurant Owner</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:manager' %}" class="df-nav-link {% if request.resolver_match.url_name == 'manager' %}active{% endif %}">
-          <span>👔</span>
-          <span>General Manager</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:kitchen' %}" class="df-nav-link {% if request.resolver_match.url_name == 'kitchen' %}active{% endif %}">
-          <span>👨‍🍳</span>
-          <span>Kitchen Staff</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:waiter' %}" class="df-nav-link {% if request.resolver_match.url_name == 'waiter' %}active{% endif %}">
-          <span>🤵</span>
-          <span>Waiter / Captain</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:cashier' %}" class="df-nav-link {% if request.resolver_match.url_name == 'cashier' %}active{% endif %}">
-          <span>💵</span>
-          <span>Cashier</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:inventory' %}" class="df-nav-link {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}">
-          <span>📦</span>
-          <span>Inventory Manager</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:hr' %}" class="df-nav-link {% if request.resolver_match.url_name == 'hr' %}active{% endif %}">
-          <span>👥</span>
-          <span>HR Manager</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:customer' %}" class="df-nav-link {% if request.resolver_match.url_name == 'customer' %}active{% endif %}">
-          <span>⭐</span>
-          <span>Customer Portal</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'dashboard:analytics' %}" class="df-nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
-          <span>📈</span>
-          <span>Analytics & BI</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 1. SUPER ADMIN ==================== -->
+    {% if CURRENT_ROLE == 'super_admin' %}
+      <div class="df-nav-section-title">SaaS Management</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:super_admin' %}" class="df-nav-link {% if request.resolver_match.url_name == 'super_admin' %}active{% endif %}">
+            <span>🛡️</span>
+            <span>Super Admin Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'settings_app:branches' %}" class="df-nav-link {% if request.resolver_match.url_name == 'branches' %}active{% endif %}">
+            <span>🏢</span>
+            <span>Branch Outlets</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'settings_app:roles_permissions' %}" class="df-nav-link {% if request.resolver_match.url_name == 'roles_permissions' %}active{% endif %}">
+            <span>🔐</span>
+            <span>Roles & RBAC Matrix</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'settings_app:audit_logs' %}" class="df-nav-link {% if request.resolver_match.url_name == 'audit_logs' %}active{% endif %}">
+            <span>🕵️</span>
+            <span>Security Audit Logs</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'settings_app:backup_restore' %}" class="df-nav-link {% if request.resolver_match.url_name == 'backup_restore' %}active{% endif %}">
+            <span>💾</span>
+            <span>Database Backup</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'settings_app:general' %}" class="df-nav-link {% if request.resolver_match.url_name == 'general' %}active{% endif %}">
+            <span>⚙️</span>
+            <span>Global Settings</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'analytics:tax_reports' %}" class="df-nav-link {% if request.resolver_match.url_name == 'tax_reports' %}active{% endif %}">
+            <span>📑</span>
+            <span>GST Tax Reports</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 2. Front of House & POS -->
-    <div class="df-nav-section-title">Front of House (FOH)</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'pos:terminal' %}" class="df-nav-link {% if request.resolver_match.app_name == 'pos' %}active{% endif %}">
-          <span>💻</span>
-          <span>Live POS Terminal</span>
-          <span class="df-nav-badge" style="background:var(--df-terracotta-700); color:#FFF;">Fast POS</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'tables:floor_plan' %}" class="df-nav-link {% if request.resolver_match.url_name == 'floor_plan' %}active{% endif %}">
-          <span>🪑</span>
-          <span>Table & Floor Plan</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'tables:reservations' %}" class="df-nav-link {% if request.resolver_match.url_name == 'reservations' %}active{% endif %}">
-          <span>📅</span>
-          <span>Table Reservations</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'kds:live' %}" class="df-nav-link {% if request.resolver_match.app_name == 'kds' %}active{% endif %}">
-          <span>🔥</span>
-          <span>Kitchen Display (KDS)</span>
-          <span class="df-nav-badge" style="background:var(--df-green-800); color:#FFF;">Live</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 2. RESTAURANT OWNER ==================== -->
+    {% elif CURRENT_ROLE == 'owner' %}
+      <div class="df-nav-section-title">Executive Command</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:owner' %}" class="df-nav-link {% if request.resolver_match.url_name == 'owner' %}active{% endif %}">
+            <span>👑</span>
+            <span>Owner Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'settings_app:branches' %}" class="df-nav-link {% if request.resolver_match.url_name == 'branches' %}active{% endif %}">
+            <span>🏢</span>
+            <span>Multi-Branch Chain</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'orders:live_orders' %}" class="df-nav-link {% if request.resolver_match.url_name == 'live_orders' %}active{% endif %}">
+            <span>🛎️</span>
+            <span>Live Omnichannel Orders</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'tables:floor_plan' %}" class="df-nav-link {% if request.resolver_match.url_name == 'floor_plan' %}active{% endif %}">
+            <span>🪑</span>
+            <span>Table Layout & Plan</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'menu:recipe_costing' %}" class="df-nav-link {% if request.resolver_match.url_name == 'recipe_costing' %}active{% endif %}">
+            <span>🍲</span>
+            <span>Menu & Recipe Costing</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'inventory:stock_ledger' %}" class="df-nav-link {% if request.resolver_match.url_name == 'stock_ledger' %}active{% endif %}">
+            <span>📦</span>
+            <span>Raw Material Inventory</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'suppliers:list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'list' %}active{% endif %}">
+            <span>🚚</span>
+            <span>Suppliers & Vendors</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'billing:invoices' %}" class="df-nav-link {% if request.resolver_match.url_name == 'invoices' %}active{% endif %}">
+            <span>🧾</span>
+            <span>GST Invoices & Revenue</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'expenses:ledger' %}" class="df-nav-link {% if request.resolver_match.url_name == 'ledger' %}active{% endif %}">
+            <span>💸</span>
+            <span>Expense Ledger</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'analytics:business_bi' %}" class="df-nav-link {% if request.resolver_match.url_name == 'business_bi' %}active{% endif %}">
+            <span>📊</span>
+            <span>Multi-Branch BI Reports</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'crm:customer_list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'customer_list' %}active{% endif %}">
+            <span>👥</span>
+            <span>Customer Loyalty Base</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 3. Menu, Recipes & Costing -->
-    <div class="df-nav-section-title">Menu & Kitchen Engineering</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'menu:item_list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'item_list' %}active{% endif %}">
-          <span>📜</span>
-          <span>Menu Master Items</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'menu:categories' %}" class="df-nav-link {% if request.resolver_match.url_name == 'categories' %}active{% endif %}">
-          <span>🏷️</span>
-          <span>Categories & Modifiers</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'menu:recipe_costing' %}" class="df-nav-link {% if request.resolver_match.url_name == 'recipe_costing' %}active{% endif %}">
-          <span>🍲</span>
-          <span>Recipe Costing & Margins</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 3. GENERAL MANAGER ==================== -->
+    {% elif CURRENT_ROLE == 'manager' %}
+      <div class="df-nav-section-title">Floor Operations</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:manager' %}" class="df-nav-link {% if request.resolver_match.url_name == 'manager' %}active{% endif %}">
+            <span>👔</span>
+            <span>Manager Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'tables:floor_plan' %}" class="df-nav-link {% if request.resolver_match.url_name == 'floor_plan' %}active{% endif %}">
+            <span>🪑</span>
+            <span>Interactive Floor Plan</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'tables:reservations' %}" class="df-nav-link {% if request.resolver_match.url_name == 'reservations' %}active{% endif %}">
+            <span>📅</span>
+            <span>Table Reservations</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'orders:live_orders' %}" class="df-nav-link {% if request.resolver_match.url_name == 'live_orders' %}active{% endif %}">
+            <span>🛎️</span>
+            <span>Live Order Queue</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'pos:terminal' %}" class="df-nav-link {% if request.resolver_match.app_name == 'pos' %}active{% endif %}">
+            <span>💻</span>
+            <span>Fast Touch POS</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'kds:live' %}" class="df-nav-link {% if request.resolver_match.app_name == 'kds' %}active{% endif %}">
+            <span>🔥</span>
+            <span>Kitchen KDS Screen</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'hr:attendance' %}" class="df-nav-link {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
+            <span>⏰</span>
+            <span>Staff Attendance</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'hr:shifts' %}" class="df-nav-link {% if request.resolver_match.url_name == 'shifts' %}active{% endif %}">
+            <span>📋</span>
+            <span>Shift Scheduling</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'inventory:stock_ledger' %}" class="df-nav-link {% if request.resolver_match.url_name == 'stock_ledger' %}active{% endif %}">
+            <span>📦</span>
+            <span>Raw Stock Balance</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'billing:day_end_zreport' %}" class="df-nav-link {% if request.resolver_match.url_name == 'day_end_zreport' or request.resolver_match.url_name == 'z_report' %}active{% endif %}">
+            <span>📊</span>
+            <span>Daily Z-Report Close</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'delivery:fleet' %}" class="df-nav-link {% if request.resolver_match.url_name == 'fleet' %}active{% endif %}">
+            <span>🛵</span>
+            <span>Delivery Fleet</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 4. Omnichannel Orders -->
-    <div class="df-nav-section-title">Orders & Delivery</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'orders:live_orders' %}" class="df-nav-link {% if request.resolver_match.url_name == 'live_orders' %}active{% endif %}">
-          <span>🛍️</span>
-          <span>Omnichannel Orders</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'delivery:fleet' %}" class="df-nav-link {% if request.resolver_match.app_name == 'delivery' %}active{% endif %}">
-          <span>🛵</span>
-          <span>Delivery Fleet & Riders</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 4. KITCHEN STAFF ==================== -->
+    {% elif CURRENT_ROLE == 'kitchen' %}
+      <div class="df-nav-section-title">Kitchen Stations</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:kitchen' %}" class="df-nav-link {% if request.resolver_match.url_name == 'kitchen' %}active{% endif %}">
+            <span>👨‍🍳</span>
+            <span>Kitchen Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'kds:live' %}" class="df-nav-link {% if request.resolver_match.app_name == 'kds' %}active{% endif %}">
+            <span>🔥</span>
+            <span>Live KDS Cooking Queue</span>
+            <span class="df-nav-badge" style="background:var(--df-danger-600); color:#FFF;">Live KOT</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'orders:live_orders' %}" class="df-nav-link {% if request.resolver_match.url_name == 'live_orders' %}active{% endif %}">
+            <span>🛎️</span>
+            <span>Order Tracker</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'menu:item_list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'item_list' %}active{% endif %}">
+            <span>📖</span>
+            <span>Recipe & Ingredient Reference</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'inventory:waste_log' %}" class="df-nav-link {% if request.resolver_match.url_name == 'waste_log' %}active{% endif %}">
+            <span>🗑️</span>
+            <span>Kitchen Spoilage / Waste Log</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 5. Back of House & Inventory -->
-    <div class="df-nav-section-title">Inventory & Supply Chain</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'inventory:stock_ledger' %}" class="df-nav-link {% if request.resolver_match.url_name == 'stock_ledger' %}active{% endif %}">
-          <span>📊</span>
-          <span>Raw Material Stock</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'inventory:purchase_orders' %}" class="df-nav-link {% if request.resolver_match.url_name == 'purchase_orders' %}active{% endif %}">
-          <span>📝</span>
-          <span>Purchase Orders & GRN</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'suppliers:list' %}" class="df-nav-link {% if request.resolver_match.app_name == 'suppliers' %}active{% endif %}">
-          <span>🏭</span>
-          <span>Suppliers & Vendors</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'inventory:waste_log' %}" class="df-nav-link {% if request.resolver_match.url_name == 'waste_log' %}active{% endif %}">
-          <span>🗑️</span>
-          <span>Waste & Spoilage Log</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 5. WAITER / CAPTAIN ==================== -->
+    {% elif CURRENT_ROLE == 'waiter' %}
+      <div class="df-nav-section-title">Floor Service</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:waiter' %}" class="df-nav-link {% if request.resolver_match.url_name == 'waiter' %}active{% endif %}">
+            <span>🤵</span>
+            <span>Waiter Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'tables:floor_plan' %}" class="df-nav-link {% if request.resolver_match.url_name == 'floor_plan' %}active{% endif %}">
+            <span>🪑</span>
+            <span>Assigned Tables & Layout</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'tables:reservations' %}" class="df-nav-link {% if request.resolver_match.url_name == 'reservations' %}active{% endif %}">
+            <span>📅</span>
+            <span>Table Reservations</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'pos:terminal' %}" class="df-nav-link {% if request.resolver_match.app_name == 'pos' %}active{% endif %}">
+            <span>📱</span>
+            <span>Touch POS Order Taking</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'orders:live_orders' %}" class="df-nav-link {% if request.resolver_match.url_name == 'live_orders' %}active{% endif %}">
+            <span>🛎️</span>
+            <span>Order Tracking & KOTs</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'crm:reviews_feedback' %}" class="df-nav-link {% if request.resolver_match.url_name == 'reviews_feedback' %}active{% endif %}">
+            <span>⭐</span>
+            <span>Guest Feedback</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 6. Finance & Indian GST Billing -->
-    <div class="df-nav-section-title">Finance, GST & Billing</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'billing:invoices' %}" class="df-nav-link {% if request.resolver_match.url_name == 'invoices' %}active{% endif %}">
-          <span>🧾</span>
-          <span>GST Tax Invoices</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'tax_mgmt:gst_slabs' %}" class="df-nav-link {% if request.resolver_match.url_name == 'gst_slabs' %}active{% endif %}">
-          <span>⚖️</span>
-          <span>GST Rates & SAC Codes</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'expenses:ledger' %}" class="df-nav-link {% if request.resolver_match.app_name == 'expenses' %}active{% endif %}">
-          <span>💸</span>
-          <span>Expense & Petty Cash</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'billing:day_end_zreport' %}" class="df-nav-link {% if request.resolver_match.url_name == 'day_end_zreport' %}active{% endif %}">
-          <span>🌙</span>
-          <span>Day-End Z-Report</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 6. CASHIER ==================== -->
+    {% elif CURRENT_ROLE == 'cashier' %}
+      <div class="df-nav-section-title">POS & Billing</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:cashier' %}" class="df-nav-link {% if request.resolver_match.url_name == 'cashier' %}active{% endif %}">
+            <span>💵</span>
+            <span>Cashier Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'pos:terminal' %}" class="df-nav-link {% if request.resolver_match.app_name == 'pos' %}active{% endif %}">
+            <span>💻</span>
+            <span>Touch POS Terminal</span>
+            <span class="df-nav-badge" style="background:var(--df-terracotta-700); color:#FFF;">Fast POS</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'billing:invoices' %}" class="df-nav-link {% if request.resolver_match.url_name == 'invoices' %}active{% endif %}">
+            <span>🧾</span>
+            <span>Invoices & Settlement</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'billing:day_end_zreport' %}" class="df-nav-link {% if request.resolver_match.url_name == 'day_end_zreport' or request.resolver_match.url_name == 'z_report' %}active{% endif %}">
+            <span>📊</span>
+            <span>Daily Z-Report Close</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'tax_mgmt:gst_slabs' %}" class="df-nav-link {% if request.resolver_match.url_name == 'gst_slabs' %}active{% endif %}">
+            <span>🏛️</span>
+            <span>GST Tax Slabs</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 7. Human Resources & Payroll -->
-    <div class="df-nav-section-title">Human Resources (HRMS)</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'hr:employee_list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'employee_list' %}active{% endif %}">
-          <span>📇</span>
-          <span>Staff Directory</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'hr:attendance' %}" class="df-nav-link {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
-          <span>⏱️</span>
-          <span>Biometric Attendance</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'hr:shifts' %}" class="df-nav-link {% if request.resolver_match.url_name == 'shifts' %}active{% endif %}">
-          <span>🔄</span>
-          <span>Shift Rosters</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'hr:payroll' %}" class="df-nav-link {% if request.resolver_match.url_name == 'payroll' %}active{% endif %}">
-          <span>💰</span>
-          <span>Indian Payroll & Payslips</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 7. INVENTORY MANAGER ==================== -->
+    {% elif CURRENT_ROLE == 'inventory' %}
+      <div class="df-nav-section-title">Supply Chain</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:inventory' %}" class="df-nav-link {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}">
+            <span>📦</span>
+            <span>Inventory Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'inventory:stock_ledger' %}" class="df-nav-link {% if request.resolver_match.url_name == 'stock_ledger' %}active{% endif %}">
+            <span>📋</span>
+            <span>Raw Stock Ledger</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'inventory:purchase_orders' %}" class="df-nav-link {% if request.resolver_match.url_name == 'purchase_orders' %}active{% endif %}">
+            <span>📝</span>
+            <span>Purchase Orders & GRN</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'inventory:waste_log' %}" class="df-nav-link {% if request.resolver_match.url_name == 'waste_log' %}active{% endif %}">
+            <span>🗑️</span>
+            <span>Wastage & Spoilage Log</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'suppliers:list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'list' %}active{% endif %}">
+            <span>🚚</span>
+            <span>Supplier Directory</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'menu:recipe_costing' %}" class="df-nav-link {% if request.resolver_match.url_name == 'recipe_costing' %}active{% endif %}">
+            <span>🍲</span>
+            <span>Recipe Yield Breakdown</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 8. CRM, Loyalty & Feedback -->
-    <div class="df-nav-section-title">CRM & Loyalty</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'crm:customer_list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'customer_list' %}active{% endif %}">
-          <span>🤝</span>
-          <span>Customer Directory</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'crm:loyalty_points' %}" class="df-nav-link {% if request.resolver_match.url_name == 'loyalty_points' %}active{% endif %}">
-          <span>🎁</span>
-          <span>Loyalty & Rewards</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'crm:offers_coupons' %}" class="df-nav-link {% if request.resolver_match.url_name == 'offers_coupons' %}active{% endif %}">
-          <span>🎟️</span>
-          <span>Offers & Promo Codes</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'crm:reviews_feedback' %}" class="df-nav-link {% if request.resolver_match.url_name == 'reviews_feedback' %}active{% endif %}">
-          <span>💬</span>
-          <span>Reviews & Sentiment</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 8. HR MANAGER ==================== -->
+    {% elif CURRENT_ROLE == 'hr' %}
+      <div class="df-nav-section-title">Human Resources</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:hr' %}" class="df-nav-link {% if request.resolver_match.url_name == 'hr' %}active{% endif %}">
+            <span>👥</span>
+            <span>HR Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'hr:employee_list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'employee_list' %}active{% endif %}">
+            <span>🧑‍💼</span>
+            <span>Staff Directory & KYC</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'hr:attendance' %}" class="df-nav-link {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
+            <span>⏰</span>
+            <span>Biometric Attendance</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'hr:shifts' %}" class="df-nav-link {% if request.resolver_match.url_name == 'shifts' %}active{% endif %}">
+            <span>📋</span>
+            <span>Shift Scheduling</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'hr:payroll' %}" class="df-nav-link {% if request.resolver_match.url_name == 'payroll' %}active{% endif %}">
+            <span>💰</span>
+            <span>Statutory Payroll (PF/ESI)</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 9. Analytics & AI Demand Prediction -->
-    <div class="df-nav-section-title">Analytics & Machine Learning</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'analytics:business_bi' %}" class="df-nav-link {% if request.resolver_match.url_name == 'business_bi' %}active{% endif %}">
-          <span>📊</span>
-          <span>Multi-Branch BI Reports</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'analytics:ml_demand' %}" class="df-nav-link {% if request.resolver_match.url_name == 'ml_demand' %}active{% endif %}">
-          <span>🧠</span>
-          <span>AI Demand Forecasting</span>
-          <span class="df-nav-badge" style="background:#5B21B6; color:#FFF;">ML</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'analytics:tax_reports' %}" class="df-nav-link {% if request.resolver_match.url_name == 'tax_reports' %}active{% endif %}">
-          <span>📑</span>
-          <span>GSTR-1 & GSTR-3B Exports</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 9. CUSTOMER PORTAL ==================== -->
+    {% elif CURRENT_ROLE == 'customer' %}
+      <div class="df-nav-section-title">Guest Experience</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:customer' %}" class="df-nav-link {% if request.resolver_match.url_name == 'customer' %}active{% endif %}">
+            <span>⭐</span>
+            <span>Customer Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'menu:item_list' %}" class="df-nav-link {% if request.resolver_match.url_name == 'item_list' %}active{% endif %}">
+            <span>📖</span>
+            <span>Digital Dining Menu</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'tables:reservations' %}" class="df-nav-link {% if request.resolver_match.url_name == 'reservations' %}active{% endif %}">
+            <span>📅</span>
+            <span>Table Reservation</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'orders:live_orders' %}" class="df-nav-link {% if request.resolver_match.url_name == 'live_orders' %}active{% endif %}">
+            <span>🛎️</span>
+            <span>My Active Orders</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'crm:loyalty_points' %}" class="df-nav-link {% if request.resolver_match.url_name == 'loyalty_points' %}active{% endif %}">
+            <span>🪙</span>
+            <span>DineClub Loyalty Points</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'crm:offers_coupons' %}" class="df-nav-link {% if request.resolver_match.url_name == 'offers_coupons' %}active{% endif %}">
+            <span>🏷️</span>
+            <span>Coupons & Offers</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'crm:reviews_feedback' %}" class="df-nav-link {% if request.resolver_match.url_name == 'reviews_feedback' %}active{% endif %}">
+            <span>✍️</span>
+            <span>Rate & Review</span>
+          </a>
+        </li>
+      </ul>
 
-    <!-- 10. System Administration & Backup -->
-    <div class="df-nav-section-title">Administration</div>
-    <ul class="df-nav-list">
-      <li class="df-nav-item">
-        <a href="{% url 'settings_app:branches' %}" class="df-nav-link {% if request.resolver_match.url_name == 'branches' %}active{% endif %}">
-          <span>🏢</span>
-          <span>Branch Management</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'settings_app:roles_permissions' %}" class="df-nav-link {% if request.resolver_match.url_name == 'roles_permissions' %}active{% endif %}">
-          <span>🔐</span>
-          <span>Roles & Permissions</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'settings_app:audit_logs' %}" class="df-nav-link {% if request.resolver_match.url_name == 'audit_logs' %}active{% endif %}">
-          <span>🕵️</span>
-          <span>Audit Logs & Security</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'settings_app:backup_restore' %}" class="df-nav-link {% if request.resolver_match.url_name == 'backup_restore' %}active{% endif %}">
-          <span>💾</span>
-          <span>Database Backup & Restore</span>
-        </a>
-      </li>
-      <li class="df-nav-item">
-        <a href="{% url 'settings_app:general' %}" class="df-nav-link {% if request.resolver_match.url_name == 'general' %}active{% endif %}">
-          <span>⚙️</span>
-          <span>System Settings</span>
-        </a>
-      </li>
-    </ul>
+    <!-- ==================== 10. ANALYTICS & BI ==================== -->
+    {% elif CURRENT_ROLE == 'analytics' %}
+      <div class="df-nav-section-title">BI Intelligence</div>
+      <ul class="df-nav-list">
+        <li class="df-nav-item">
+          <a href="{% url 'dashboard:analytics' %}" class="df-nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
+            <span>📈</span>
+            <span>Analytics Dashboard</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'analytics:business_bi' %}" class="df-nav-link {% if request.resolver_match.url_name == 'business_bi' %}active{% endif %}">
+            <span>📊</span>
+            <span>Multi-Branch BI Reports</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'analytics:ml_demand' %}" class="df-nav-link {% if request.resolver_match.url_name == 'ml_demand' %}active{% endif %}">
+            <span>🧠</span>
+            <span>AI Demand Forecasting</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'analytics:tax_reports' %}" class="df-nav-link {% if request.resolver_match.url_name == 'tax_reports' %}active{% endif %}">
+            <span>📑</span>
+            <span>GSTR-1 & 3B Tax Reports</span>
+          </a>
+        </li>
+        <li class="df-nav-item">
+          <a href="{% url 'expenses:ledger' %}" class="df-nav-link {% if request.resolver_match.url_name == 'ledger' %}active{% endif %}">
+            <span>💸</span>
+            <span>Expense Breakdown</span>
+          </a>
+        </li>
+      </ul>
+
+    {% endif %}
 
   </nav>
 
@@ -338,21 +499,18 @@
   <div style="padding: 1rem; border-top: 1px solid #2B2B33; background: rgba(18, 18, 22, 0.95); margin-top: auto;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
       <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--df-terracotta-700); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">
+        <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--df-terracotta-700); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.78rem;">
           {{ CURRENT_USER.avatar_initials }}
         </div>
         <div style="line-height: 1.2;">
-          <div style="font-weight: 700; font-size: 0.78rem; color: #FFF;">{{ CURRENT_USER.name }}</div>
+          <div style="font-weight: 700; font-size: 0.8125rem; color: #FFF;">{{ CURRENT_USER.name }}</div>
           <div style="font-size: 0.68rem; color: var(--df-saffron-400);">{{ CURRENT_USER.role_title }}</div>
         </div>
       </div>
     </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-      <a href="{% url 'accounts:login' %}" class="df-btn df-btn-outline df-btn-sm" style="color: #FFF; border-color: rgba(255,255,255,0.2); font-size: 0.72rem; padding: 0.35rem 0.5rem; justify-content: center;">
-        <span>🔐 Login</span>
-      </a>
-      <a href="{% url 'accounts:logout' %}" class="df-btn df-btn-maroon df-btn-sm" style="font-size: 0.72rem; padding: 0.35rem 0.5rem; justify-content: center;">
-        <span>🚪 Sign Out</span>
+    <div>
+      <a href="{% url 'accounts:logout' %}" class="df-btn df-btn-maroon df-btn-sm" style="width: 100%; justify-content: center; font-size: 0.75rem; font-weight: 700;">
+        <span>🚪 Sign Out / Logout</span>
       </a>
     </div>
   </div>

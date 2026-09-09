@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['owner', 'cashier', 'super_admin'])
 def gst_slabs(request):
     """
     Indian GST Rates, SAC Slabs & Tax Configurations.

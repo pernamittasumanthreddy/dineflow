@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['hr', 'manager', 'owner', 'super_admin'])
 def employee_list(request):
     """
     Staff Directory & Employee Master.
@@ -17,6 +19,7 @@ def employee_list(request):
     }
     return render(request, 'hr/employee_list.html', context)
 
+@role_required(['hr', 'manager', 'owner', 'super_admin'])
 def attendance(request):
     """
     Biometric Attendance & Punch Log.
@@ -33,6 +36,7 @@ def attendance(request):
     }
     return render(request, 'hr/attendance.html', context)
 
+@role_required(['hr', 'manager', 'owner', 'super_admin'])
 def shifts(request):
     """
     Shift Rosters & Scheduling.
@@ -48,6 +52,7 @@ def shifts(request):
     }
     return render(request, 'hr/shifts.html', context)
 
+@role_required(['hr', 'owner', 'super_admin'])
 def payroll(request):
     """
     Indian Payroll Processing (Basic, HRA, PF 12%, ESIC 0.75%, PT, TDS) & Payslips.

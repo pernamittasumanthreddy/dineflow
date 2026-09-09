@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['owner', 'manager', 'kitchen', 'waiter', 'customer', 'super_admin'])
 def item_list(request):
     """
     Menu Master Catalog (Dishes, Dietary tags, Prices, Taxes).
@@ -22,6 +24,7 @@ def item_list(request):
     }
     return render(request, 'menu/item_list.html', context)
 
+@role_required(['owner', 'manager', 'super_admin'])
 def categories(request):
     """
     Category & Modifier Add-on Management.
@@ -41,6 +44,7 @@ def categories(request):
     }
     return render(request, 'menu/categories.html', context)
 
+@role_required(['owner', 'manager', 'inventory', 'super_admin'])
 def recipe_costing(request):
     """
     Recipe Costing, Ingredient Depletion & Margin Engineering.

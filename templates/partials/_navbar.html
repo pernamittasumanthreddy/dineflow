@@ -1,52 +1,28 @@
 {% load static %}
 <header class="df-navbar">
-  <!-- Mobile Sidebar Toggle & Branch Selector -->
+  <!-- Mobile Sidebar Toggle & Branch Indicator -->
   <div style="display: flex; align-items: center; gap: 1rem;">
     <button class="df-btn df-btn-outline df-btn-sm" id="df-sidebar-toggle" style="display: none; @media(max-width:992px){display:flex;}">
       ☰
     </button>
     
-    <!-- Branch Selector Dropdown -->
-    <div style="display: flex; align-items: center; gap: 0.5rem;">
+    <!-- Branch Display -->
+    <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--df-bg-cream); border: 1px solid var(--df-border-medium); padding: 0.35rem 0.75rem; border-radius: var(--df-radius-md);">
       <span style="font-size: 1.1rem;">📍</span>
-      <select class="df-select" style="font-weight: 600; background-color: var(--df-bg-cream); border-color: var(--df-border-medium);" onchange="DineFlow.switchBranch(this.value)">
-        {% for b in BRANCHES %}
-          <option value="{{ b.name }}" {% if b.name == ACTIVE_BRANCH %}selected{% endif %}>
-            {{ b.name }} (GSTIN: {{ b.gstin }})
-          </option>
-        {% endfor %}
-      </select>
+      <span style="font-weight: 700; font-size: 0.8125rem; color: var(--df-charcoal-900);">{{ ACTIVE_BRANCH }}</span>
     </div>
   </div>
 
-  <!-- Navbar Center Quick Status -->
+  <!-- Center Role Status Badge -->
   <div style="display: flex; align-items: center; gap: 0.75rem;">
-    <a href="{% url 'pos:terminal' %}" class="df-btn df-btn-terracotta df-btn-sm">
-      <span>⚡ Quick POS</span>
-    </a>
-    <a href="{% url 'kds:live' %}" class="df-btn df-btn-maroon df-btn-sm">
-      <span>🔥 KDS Screen</span>
-    </a>
-    <a href="{% url 'tables:floor_plan' %}" class="df-btn df-btn-outline df-btn-sm">
-      <span>🪑 Floor Plan</span>
-    </a>
+    <span class="df-badge badge-warning" style="font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.75rem;">
+      {{ CURRENT_USER.role_title|upper }} PORTAL
+    </span>
   </div>
 
-  <!-- Right Actions: Role Switcher, Notifications, User Profile & Login/Signout -->
+  <!-- Right Actions: Notifications, User Profile & Direct Logout -->
   <div style="display: flex; align-items: center; gap: 0.75rem;">
     
-    <!-- Role Switcher -->
-    <div style="display: flex; align-items: center; gap: 0.35rem;">
-      <span style="font-size: 0.75rem; font-weight: 700; color: var(--df-text-secondary); text-transform: uppercase;">Role:</span>
-      <select class="df-select" style="padding: 0.35rem 1.75rem 0.35rem 0.65rem; font-size: 0.8125rem; font-weight: 700; color: var(--df-maroon-800); border-color: var(--df-maroon-800);" onchange="DineFlow.switchRole(this.value)">
-        {% for r in ALL_ROLES %}
-          <option value="{{ r.key }}" {% if r.key == CURRENT_ROLE %}selected{% endif %}>
-            {{ r.name }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
-
     <!-- Notification Trigger -->
     <button class="df-btn-icon" onclick="DineFlow.openDrawer('df-notifications-drawer')" style="position: relative;" title="Notifications">
       🔔
@@ -57,52 +33,21 @@
       {% endif %}
     </button>
 
-    <!-- User Profile Dropdown & Auth Controls -->
-    <div style="position: relative; display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem; border-left: 1px solid var(--df-border-light);">
-      <div onclick="toggleUserMenu()" style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.5rem; border-radius: var(--df-radius-md); transition: background 0.2s;" title="User Profile & Menu">
-        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--df-maroon-700), var(--df-terracotta-600)); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; box-shadow: var(--df-shadow-xs);">
-          {{ CURRENT_USER.avatar_initials }}
-        </div>
-        <div style="line-height: 1.2; text-align: left;" class="df-hide-mobile">
-          <div style="font-weight: 700; font-size: 0.8125rem; color: var(--df-charcoal-900);">{{ CURRENT_USER.name }}</div>
-          <div style="font-size: 0.7rem; color: var(--df-text-secondary);">{{ CURRENT_USER.role_title }}</div>
-        </div>
-        <span style="font-size: 0.7rem; color: var(--df-text-muted);">▾</span>
+    <!-- User Profile Badge -->
+    <div style="display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem; border-left: 1px solid var(--df-border-light);">
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--df-maroon-700), var(--df-terracotta-600)); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; box-shadow: var(--df-shadow-xs);">
+        {{ CURRENT_USER.avatar_initials }}
       </div>
-
-      <!-- User Dropdown Popup -->
-      <div id="df-user-dropdown-menu" style="display: none; position: absolute; top: 120%; right: 0; width: 240px; background: var(--df-bg-surface); border: 1px solid var(--df-border-medium); border-radius: var(--df-radius-md); box-shadow: var(--df-shadow-lg); z-index: 1000; padding: 0.75rem;">
-        <div style="padding-bottom: 0.75rem; border-bottom: 1px solid var(--df-border-light); margin-bottom: 0.5rem;">
-          <div style="font-weight: 700; font-size: 0.875rem; color: var(--df-charcoal-900);">{{ CURRENT_USER.name }}</div>
-          <div style="font-size: 0.75rem; color: var(--df-terracotta-700); font-weight: 600;">{{ CURRENT_USER.role_title }}</div>
-          <div style="font-size: 0.72rem; color: var(--df-text-muted); margin-top: 0.2rem;">📍 {{ ACTIVE_BRANCH }}</div>
-        </div>
-        
-        <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-          <a href="{% url 'accounts:login' %}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.8125rem; color: var(--df-charcoal-800); text-decoration: none; border-radius: var(--df-radius-sm); transition: background 0.15s;" onmouseover="this.style.background='var(--df-bg-surface-subtle)'" onmouseout="this.style.background='transparent'">
-            <span>🔐</span>
-            <span>Switch Account / Login</span>
-          </a>
-          <a href="{% url 'settings_app:general' %}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.8125rem; color: var(--df-charcoal-800); text-decoration: none; border-radius: var(--df-radius-sm); transition: background 0.15s;" onmouseover="this.style.background='var(--df-bg-surface-subtle)'" onmouseout="this.style.background='transparent'">
-            <span>⚙️</span>
-            <span>ERP Settings</span>
-          </a>
-          <div style="height: 1px; background: var(--df-border-light); margin: 0.25rem 0;"></div>
-          <a href="{% url 'accounts:logout' %}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.8125rem; color: var(--df-danger-600); font-weight: 600; text-decoration: none; border-radius: var(--df-radius-sm); transition: background 0.15s;" onmouseover="this.style.background='rgba(194, 67, 18, 0.08)'" onmouseout="this.style.background='transparent'">
-            <span>🚪</span>
-            <span>Sign Out</span>
-          </a>
-        </div>
+      <div style="line-height: 1.2; text-align: left;" class="df-hide-mobile">
+        <div style="font-weight: 700; font-size: 0.8125rem; color: var(--df-charcoal-900);">{{ CURRENT_USER.name }}</div>
+        <div style="font-size: 0.7rem; color: var(--df-terracotta-700); font-weight: 600;">{{ CURRENT_USER.role_title }}</div>
       </div>
-
-      <!-- Quick Direct Action Buttons -->
-      <a href="{% url 'accounts:login' %}" class="df-btn df-btn-outline df-btn-sm" style="padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 700; color: var(--df-charcoal-800); border-color: var(--df-border-medium);" title="Login with another role/account">
-        <span>🔐 Login</span>
-      </a>
-      <a href="{% url 'accounts:logout' %}" class="df-btn df-btn-maroon df-btn-sm" style="padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 700;" title="Sign out of ERP">
-        <span>🚪 Sign Out</span>
-      </a>
     </div>
+
+    <!-- Direct Sign Out Button -->
+    <a href="{% url 'accounts:logout' %}" class="df-btn df-btn-maroon df-btn-sm" style="font-weight: 700; font-size: 0.75rem; padding: 0.4rem 0.85rem;" title="Sign out of ERP">
+      <span>🚪 Sign Out</span>
+    </a>
 
   </div>
 </header>
@@ -128,23 +73,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  function toggleUserMenu() {
-    const menu = document.getElementById('df-user-dropdown-menu');
-    if (menu) {
-      menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
-    }
-  }
-
-  // Close user menu on clicking outside
-  document.addEventListener('click', function(e) {
-    const menu = document.getElementById('df-user-dropdown-menu');
-    if (menu && menu.style.display === 'block') {
-      const isInside = e.target.closest('#df-user-dropdown-menu') || e.target.closest('[onclick="toggleUserMenu()"]');
-      if (!isInside) {
-        menu.style.display = 'none';
-      }
-    }
-  });
-</script>

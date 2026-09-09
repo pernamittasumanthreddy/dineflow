@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['inventory', 'manager', 'owner', 'super_admin'])
 def stock_ledger(request):
     """
     Raw Material Stock Inventory Ledger (Kg, Litres, Bags, Packets).
@@ -18,6 +20,7 @@ def stock_ledger(request):
     }
     return render(request, 'inventory/stock_ledger.html', context)
 
+@role_required(['inventory', 'manager', 'owner', 'super_admin'])
 def purchase_orders(request):
     """
     Purchase Orders (PO), Inwarding & Goods Receipt Notes (GRN).
@@ -33,6 +36,7 @@ def purchase_orders(request):
     }
     return render(request, 'inventory/purchase_orders.html', context)
 
+@role_required(['inventory', 'kitchen', 'manager', 'owner', 'super_admin'])
 def waste_log(request):
     """
     Kitchen Spoilage & Ingredient Waste Tracker.

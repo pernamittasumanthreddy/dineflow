@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['cashier', 'manager', 'owner', 'super_admin'])
 def invoices(request):
     """
     Indian GST Tax Invoices Master Ledger.
@@ -17,6 +19,7 @@ def invoices(request):
     }
     return render(request, 'billing/invoices.html', context)
 
+@role_required(['cashier', 'manager', 'owner', 'super_admin'])
 def day_end_zreport(request):
     """
     Day-End Shift Closing Z-Report & Cash Drawer Balancing.

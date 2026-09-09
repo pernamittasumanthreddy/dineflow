@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['super_admin'])
 def super_admin_dashboard(request):
     """Role 1: Super Admin (SaaS Multi-Tenant Management)"""
     context = {
@@ -20,6 +22,7 @@ def super_admin_dashboard(request):
     }
     return render(request, 'dashboard/super_admin.html', context)
 
+@role_required(['owner', 'super_admin'])
 def owner_dashboard(request):
     """Role 2: Restaurant Owner (Executive Chain Financials)"""
     context = {
@@ -45,6 +48,7 @@ def owner_dashboard(request):
     }
     return render(request, 'dashboard/owner.html', context)
 
+@role_required(['manager', 'owner', 'super_admin'])
 def manager_dashboard(request):
     """Role 3: Restaurant Manager (Floor Operations & Handovers)"""
     context = {
@@ -64,6 +68,7 @@ def manager_dashboard(request):
     }
     return render(request, 'dashboard/manager.html', context)
 
+@role_required(['kitchen', 'manager', 'owner', 'super_admin'])
 def kitchen_dashboard(request):
     """Role 4: Kitchen Staff / Chef (KDS Station Manager)"""
     context = {
@@ -77,6 +82,7 @@ def kitchen_dashboard(request):
     }
     return render(request, 'dashboard/kitchen.html', context)
 
+@role_required(['waiter', 'manager', 'owner', 'super_admin'])
 def waiter_dashboard(request):
     """Role 5: Waiter / Captain (Captain Terminal & Tables)"""
     context = {
@@ -90,6 +96,7 @@ def waiter_dashboard(request):
     }
     return render(request, 'dashboard/waiter.html', context)
 
+@role_required(['cashier', 'manager', 'owner', 'super_admin'])
 def cashier_dashboard(request):
     """Role 6: Cashier (Billing, Settlement & Cash Balancing)"""
     context = {
@@ -109,6 +116,7 @@ def cashier_dashboard(request):
     }
     return render(request, 'dashboard/cashier.html', context)
 
+@role_required(['inventory', 'manager', 'owner', 'super_admin'])
 def inventory_dashboard(request):
     """Role 7: Inventory Manager (Stock, POs & Waste)"""
     context = {
@@ -128,6 +136,7 @@ def inventory_dashboard(request):
     }
     return render(request, 'dashboard/inventory.html', context)
 
+@role_required(['hr', 'owner', 'super_admin'])
 def hr_dashboard(request):
     """Role 8: HR Manager (Staff, Attendance & Payroll)"""
     context = {
@@ -147,6 +156,7 @@ def hr_dashboard(request):
     }
     return render(request, 'dashboard/hr.html', context)
 
+@role_required(['customer', 'owner', 'super_admin'])
 def customer_dashboard(request):
     """Role 9: Customer Portal (Menu, Bookings & Rewards)"""
     context = {
@@ -160,6 +170,7 @@ def customer_dashboard(request):
     }
     return render(request, 'dashboard/customer.html', context)
 
+@role_required(['analytics', 'owner', 'super_admin'])
 def analytics_dashboard(request):
     """Role 10: Analytics & BI (Multi-Branch Intelligence & AI Forecast)"""
     context = {

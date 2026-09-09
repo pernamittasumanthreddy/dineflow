@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['owner', 'manager', 'super_admin'])
 def customer_list(request):
     """
     Customer Relationship Management (CRM) Directory.
@@ -16,6 +18,7 @@ def customer_list(request):
     }
     return render(request, 'crm/customer_list.html', context)
 
+@role_required(['customer', 'owner', 'manager', 'cashier', 'super_admin'])
 def loyalty_points(request):
     """
     DineClub Loyalty Points & Rewards System.
@@ -31,6 +34,7 @@ def loyalty_points(request):
     }
     return render(request, 'crm/loyalty_points.html', context)
 
+@role_required(['customer', 'owner', 'manager', 'cashier', 'super_admin'])
 def offers_coupons(request):
     """
     Promotions, Happy Hours & Coupon Rules.
@@ -46,6 +50,7 @@ def offers_coupons(request):
     }
     return render(request, 'crm/offers_coupons.html', context)
 
+@role_required(['customer', 'waiter', 'manager', 'owner', 'super_admin'])
 def reviews_feedback(request):
     """
     Table QR Feedback, Ratings & Sentiment Analysis.

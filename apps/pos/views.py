@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['cashier', 'waiter', 'manager', 'owner', 'super_admin'])
 def terminal(request):
     """
     High-Speed Touch POS Terminal for Waiters, Cashiers, and Managers.

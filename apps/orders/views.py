@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['waiter', 'kitchen', 'manager', 'cashier', 'owner', 'customer', 'super_admin'])
 def live_orders(request):
     """
     Omnichannel Order Management (Dine-in, Takeaway, Delivery, Swiggy, Zomato).

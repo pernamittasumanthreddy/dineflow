@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['owner', 'manager', 'analytics', 'super_admin'])
 def ledger(request):
     """
     Daily Petty Cash & Expense Ledger.

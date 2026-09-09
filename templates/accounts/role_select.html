@@ -1,0 +1,67 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block title %}Choose Access Role — DineFlow Restaurant ERP{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; padding: 2.5rem 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  
+  <div style="width: 100%; max-width: 980px; margin: 0 auto;">
+    
+    <!-- Header Brand & Title -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="df-brand-logo" style="margin: 0 auto 1rem; width: 56px; height: 56px; font-size: 1.6rem; box-shadow: var(--df-shadow-md);">DF</div>
+      <h1 style="font-family: var(--df-font-serif); font-size: 2.2rem; font-weight: 700; color: #FFF; margin-bottom: 0.5rem; letter-spacing: -0.02em;">
+        Choose how you want to access DineFlow
+      </h1>
+      <p style="color: #A6A6B8; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.5;">
+        Select your designated operational or executive role to enter the secure authentication portal.
+      </p>
+    </div>
+
+    <!-- Signed Out / Auth Notice Alerts -->
+    {% if signed_out %}
+    <div style="background: rgba(30, 122, 53, 0.25); border: 1px solid var(--df-green-600); border-radius: var(--df-radius-md); padding: 0.85rem 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem; color: #86EFAC; font-size: 0.875rem;">
+      <span style="font-size: 1.25rem;">✓</span>
+      <span>You have been signed out securely. Select your role to sign back in.</span>
+    </div>
+    {% elif next_url %}
+    <div style="background: rgba(194, 67, 18, 0.2); border: 1px solid var(--df-terracotta-600); border-radius: var(--df-radius-md); padding: 0.85rem 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem; color: var(--df-saffron-300); font-size: 0.875rem;">
+      <span style="font-size: 1.25rem;">🔒</span>
+      <span>Authentication Required: Please select your designated role and sign in to continue.</span>
+    </div>
+    {% endif %}
+
+    <!-- 10 Enterprise Roles Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+      {% for r in roles %}
+      <div style="background: rgba(28, 28, 34, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--df-radius-lg); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; backdrop-filter: blur(12px);" onmouseover="this.style.transform='translateY(-3px)'; this.style.borderColor='var(--df-terracotta-600)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.4)';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255, 255, 255, 0.08)'; this.style.boxShadow='none';">
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+            <span style="font-size: 2rem;">{{ r.icon }}</span>
+            <span class="df-badge" style="background: rgba(255, 255, 255, 0.08); color: var(--df-saffron-400); font-size: 0.72rem; font-weight: 700;">{{ r.code|upper }}</span>
+          </div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: #FFF; margin-bottom: 0.4rem;">{{ r.name }}</h3>
+          <p style="font-size: 0.8125rem; color: #9A9AB0; line-height: 1.45; margin-bottom: 1.25rem;">
+            {{ r.description }}
+          </p>
+        </div>
+
+        <a href="{% url 'accounts:login_role' r.code %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" class="df-btn df-btn-terracotta" style="width: 100%; justify-content: center; font-size: 0.8125rem; font-weight: 700;">
+          <span>Sign In as {{ r.name }} →</span>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Security & Compliance Footer -->
+    <div style="text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 1.5rem; color: #78788C; font-size: 0.8125rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
+      <span>🔒 256-Bit SSL Encrypted Session</span>
+      <span>🛡️ Strict Role-Based Access Control (RBAC)</span>
+      <span>🏛️ Indian FSSAI & GST Compliance Ready</span>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

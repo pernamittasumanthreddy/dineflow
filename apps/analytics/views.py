@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from apps.accounts.decorators import role_required
 
+@role_required(['analytics', 'owner', 'super_admin'])
 def business_bi(request):
     """
     Multi-Branch Business Intelligence & Revenue Analytics.
@@ -16,6 +18,7 @@ def business_bi(request):
     }
     return render(request, 'analytics/business_bi.html', context)
 
+@role_required(['analytics', 'owner', 'super_admin', 'manager'])
 def ml_demand(request):
     """
     AI Machine Learning Demand Forecast & Ingredient Depletion Predictor.
@@ -32,6 +35,7 @@ def ml_demand(request):
     }
     return render(request, 'analytics/ml_demand.html', context)
 
+@role_required(['analytics', 'owner', 'super_admin'])
 def tax_reports(request):
     """
     GSTR-1 & GSTR-3B Tax Filing Export Summaries.
