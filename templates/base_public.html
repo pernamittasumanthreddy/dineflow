@@ -1,0 +1,40 @@
+{% load static %}
+{% load dineflow_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}DineFlow — Next-Gen Indian Restaurant ERP & Cloud Kitchen Suite{% endblock %}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- DineFlow Design System -->
+  <link rel="stylesheet" href="{% static 'css/dineflow-tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dineflow-base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dineflow-components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dineflow-landing.css' %}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="df-landing-body">
+  <!-- Subtle Ambient Spice & Steam Particle Canvas -->
+  <canvas id="df-spice-canvas"></canvas>
+
+  <!-- Public Content Wrapper -->
+  <div class="df-landing-content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="df-toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="{% static 'js/dineflow-core.js' %}"></script>
+  <script src="{% static 'js/landing-animation.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
