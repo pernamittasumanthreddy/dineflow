@@ -1,0 +1,44 @@
+# Python & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environments
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Django & Database
+*.log
+local_settings.py
+db.sqlite3
+*.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+backups/
+
+# Build & Dist
+build/
+dist/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage & Linter cache
+.coverage
+htmlcov/
+.pytest_cache/
+.ruff_cache/
