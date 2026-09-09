@@ -1,0 +1,75 @@
+{% load static %}
+<header class="df-navbar">
+  <!-- Mobile Sidebar Toggle & Branch Indicator -->
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <button class="df-btn df-btn-outline df-btn-sm" id="df-sidebar-toggle" style="display: none; @media(max-width:992px){display:flex;}">
+      ☰
+    </button>
+    
+    <!-- Branch Display -->
+    <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--df-bg-cream); border: 1px solid var(--df-border-medium); padding: 0.35rem 0.75rem; border-radius: var(--df-radius-md);">
+      <span style="font-size: 1.1rem;">📍</span>
+      <span style="font-weight: 700; font-size: 0.8125rem; color: var(--df-charcoal-900);">{{ ACTIVE_BRANCH }}</span>
+    </div>
+  </div>
+
+  <!-- Center Role Status Badge -->
+  <div style="display: flex; align-items: center; gap: 0.75rem;">
+    <span class="df-badge badge-warning" style="font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.75rem;">
+      {{ CURRENT_USER.role_title|upper }} PORTAL
+    </span>
+  </div>
+
+  <!-- Right Actions: Notifications, User Profile & Direct Logout -->
+  <div style="display: flex; align-items: center; gap: 0.75rem;">
+    
+    <!-- Notification Trigger -->
+    <button class="df-btn-icon" onclick="DineFlow.openDrawer('df-notifications-drawer')" style="position: relative;" title="Notifications">
+      🔔
+      {% if UNREAD_NOTIFICATIONS_COUNT > 0 %}
+        <span style="position: absolute; top: -3px; right: -3px; width: 18px; height: 18px; background: var(--df-danger-600); color: #FFF; border-radius: 50%; font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">
+          {{ UNREAD_NOTIFICATIONS_COUNT }}
+        </span>
+      {% endif %}
+    </button>
+
+    <!-- User Profile Badge -->
+    <div style="display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem; border-left: 1px solid var(--df-border-light);">
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--df-maroon-700), var(--df-terracotta-600)); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; box-shadow: var(--df-shadow-xs);">
+        {{ CURRENT_USER.avatar_initials }}
+      </div>
+      <div style="line-height: 1.2; text-align: left;" class="df-hide-mobile">
+        <div style="font-weight: 700; font-size: 0.8125rem; color: var(--df-charcoal-900);">{{ CURRENT_USER.name }}</div>
+        <div style="font-size: 0.7rem; color: var(--df-terracotta-700); font-weight: 600;">{{ CURRENT_USER.role_title }}</div>
+      </div>
+    </div>
+
+    <!-- Direct Sign Out Button -->
+    <a href="{% url 'accounts:logout' %}" class="df-btn df-btn-maroon df-btn-sm" style="font-weight: 700; font-size: 0.75rem; padding: 0.4rem 0.85rem;" title="Sign out of ERP">
+      <span>🚪 Sign Out</span>
+    </a>
+
+  </div>
+</header>
+
+<!-- Notifications Slide-out Drawer -->
+<div class="df-drawer-backdrop" id="df-notifications-drawer-backdrop" onclick="DineFlow.closeDrawer('df-notifications-drawer')"></div>
+<div class="df-drawer" id="df-notifications-drawer">
+  <div class="df-drawer-header">
+    <div style="font-weight: 700; font-size: 1.1rem; color: var(--df-charcoal-900);">Operational Alerts & Notifications</div>
+    <button class="df-modal-close" onclick="DineFlow.closeDrawer('df-notifications-drawer')">✕</button>
+  </div>
+  <div class="df-drawer-body">
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      {% for n in NOTIFICATIONS %}
+        <div style="padding: 1rem; background: var(--df-bg-surface-subtle); border-left: 4px solid {% if n.type == 'danger' %}var(--df-danger-600){% elif n.type == 'warning' %}var(--df-saffron-600){% elif n.type == 'success' %}var(--df-green-700){% else %}var(--df-terracotta-600){% endif %}; border-radius: var(--df-radius-md); box-shadow: var(--df-shadow-xs);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <strong style="font-size: 0.875rem; color: var(--df-charcoal-900);">{{ n.title }}</strong>
+            <span style="font-size: 0.72rem; color: var(--df-text-muted);">{{ n.time }}</span>
+          </div>
+          <div style="font-size: 0.8125rem; color: var(--df-text-secondary); line-height: 1.4;">{{ n.text }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+{% load static %}
+{% load dineflow_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}DineFlow — Enterprise Restaurant ERP{% endblock %}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- DineFlow Design System (Strict Zero-Blue Palette) -->
+  <link rel="stylesheet" href="{% static 'css/dineflow-tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dineflow-base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dineflow-components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dineflow-pos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dineflow-kds.css' %}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <div class="df-app-wrapper">
+    <!-- Sidebar Navigation -->
+    {% include 'partials/_sidebar.html' %}
+
+    <!-- Main Content Area -->
+    <div class="df-main-content">
+      <!-- Top Navbar -->
+      {% include 'partials/_navbar.html' %}
+
+      <!-- Dynamic Page Content -->
+      <main class="df-page-container" id="df-main-page-container">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <!-- Reusable Modals -->
+  {% include 'partials/_modals.html' %}
+
+  <!-- Toast Notification Container -->
+  <div class="df-toast-container" id="df-toast-container"></div>
+
+  <!-- Core JavaScript Framework -->
+  <script src="{% static 'js/dineflow-core.js' %}"></script>
+  <script src="{% static 'js/pos-engine.js' %}"></script>
+  <script src="{% static 'js/kds-engine.js' %}"></script>
+  <script src="{% static 'js/table-engine.js' %}"></script>
+  <script src="{% static 'js/analytics-engine.js' %}"></script>
+  <script src="{% static 'js/export-print.js' %}"></script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

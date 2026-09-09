@@ -1,0 +1,84 @@
+{% load static %}
+<!-- 1. POS Settlement Modal with UPI Dynamic QR Code -->
+<div class="df-modal-backdrop" id="df-settlement-modal">
+  <div class="df-modal-dialog" style="max-width: 540px;">
+    <div class="df-modal-header">
+      <div class="df-modal-title">Settle Order & Generate Invoice</div>
+      <button class="df-modal-close" onclick="DineFlow.closeModal('df-settlement-modal')">✕</button>
+    </div>
+    <div class="df-modal-body">
+      <div style="text-align: center; margin-bottom: 1.5rem; background: var(--df-bg-cream); padding: 1rem; border-radius: var(--df-radius-lg);">
+        <div style="font-size: 0.8125rem; color: var(--df-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Total Amount Due (Inc. GST)</div>
+        <div id="df-settle-amount" style="font-size: 2.2rem; font-weight: 800; color: var(--df-maroon-800); margin: 0.25rem 0;">₹0.00</div>
+        <div style="font-size: 0.75rem; color: var(--df-text-muted);">Includes CGST 2.5% + SGST 2.5%</div>
+      </div>
+
+      <!-- Payment Tender Selection -->
+      <div style="margin-bottom: 1.25rem;">
+        <label class="df-form-label">Select Payment Method</label>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;">
+          <button type="button" class="df-btn df-btn-outline" style="flex-direction: column; padding: 0.75rem; height: auto;" onclick="POSEngine.completePayment('cash')">
+            <span style="font-size: 1.5rem;">💵</span>
+            <span style="font-size: 0.8125rem; font-weight: 700; margin-top: 4px;">Cash</span>
+          </button>
+          <button type="button" class="df-btn df-btn-outline" style="flex-direction: column; padding: 0.75rem; height: auto;" onclick="POSEngine.completePayment('card')">
+            <span style="font-size: 1.5rem;">💳</span>
+            <span style="font-size: 0.8125rem; font-weight: 700; margin-top: 4px;">Card (POS)</span>
+          </button>
+          <button type="button" class="df-btn df-btn-terracotta" style="flex-direction: column; padding: 0.75rem; height: auto;" onclick="POSEngine.completePayment('upi')">
+            <span style="font-size: 1.5rem;">📱</span>
+            <span style="font-size: 0.8125rem; font-weight: 700; margin-top: 4px;">UPI QR</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- UPI QR Code Simulator -->
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.25rem; border: 1px solid var(--df-border-medium); border-radius: var(--df-radius-lg); background: #FFF;">
+        <div style="font-weight: 700; font-size: 0.875rem; color: var(--df-charcoal-900); margin-bottom: 0.5rem;">Dynamic UPI Payment QR</div>
+        <canvas id="df-upi-qr-canvas" width="160" height="160" style="border: 1px solid #EFE9E0; border-radius: 8px;"></canvas>
+        <div style="font-size: 0.75rem; color: var(--df-text-muted); margin-top: 0.5rem; text-align: center;">
+          Scan using <strong>PhonePe, Google Pay, Paytm, CRED</strong><br>
+          VPA: <code style="color:var(--df-terracotta-700);">dineflow.andhraspice@icici</code>
+        </div>
+      </div>
+    </div>
+    <div class="df-modal-footer">
+      <button class="df-btn df-btn-outline" onclick="DineFlow.closeModal('df-settlement-modal')">Cancel</button>
+      <button class="df-btn df-btn-success" onclick="POSEngine.completePayment('upi')">Confirm UPI Settlement ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. GST Tax Invoice Modal Preview -->
+<div class="df-modal-backdrop" id="df-tax-invoice-modal">
+  <div class="df-modal-dialog" style="max-width: 580px;">
+    <div class="df-modal-header">
+      <div class="df-modal-title">Tax Invoice Preview</div>
+      <button class="df-modal-close" onclick="DineFlow.closeModal('df-tax-invoice-modal')">✕</button>
+    </div>
+    <div class="df-modal-body" id="df-invoice-preview-container">
+      <!-- Injected via JavaScript -->
+    </div>
+    <div class="df-modal-footer">
+      <button class="df-btn df-btn-outline" onclick="DineFlow.closeModal('df-tax-invoice-modal')">Close</button>
+      <button class="df-btn df-btn-maroon" onclick="ExportPrint.printElement('df-invoice-preview-container')">Print Receipt (80mm) 🖨️</button>
+      <button class="df-btn df-btn-terracotta" onclick="ExportPrint.printElement('df-invoice-preview-container')">Print A4 GST Invoice 📄</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Table Action Modal -->
+<div class="df-modal-backdrop" id="df-table-action-modal">
+  <div class="df-modal-dialog" style="max-width: 480px;">
+    <div class="df-modal-header">
+      <div class="df-modal-title" id="df-table-modal-title">Table Details</div>
+      <button class="df-modal-close" onclick="DineFlow.closeModal('df-table-action-modal')">✕</button>
+    </div>
+    <div class="df-modal-body" id="df-table-modal-body">
+      <!-- Injected via JavaScript -->
+    </div>
+    <div class="df-modal-footer">
+      <button class="df-btn df-btn-outline" onclick="DineFlow.closeModal('df-table-action-modal')">Close</button>
+    </div>
+  </div>
+</div>
