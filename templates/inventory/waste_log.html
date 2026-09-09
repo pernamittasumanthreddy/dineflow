@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Kitchen Spoilage & Waste Log — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Kitchen Spoilage & Food Waste Log</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Supply Chain</span>
+      <span>›</span>
+      <span>Waste Variance Analysis</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-maroon" onclick="DineFlow.showToast('Log Waste', 'Opening kitchen waste entry form...', 'info')">
+      <span>+ Record Food Spoilage</span>
+    </button>
+    <a href="{% url 'inventory:stock_ledger' %}" class="df-btn df-btn-outline">
+      <span>📦 Raw Materials Stock</span>
+    </a>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Daily Kitchen Waste & Variance Log</div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table">
+      <thead>
+        <tr>
+          <th>Waste Log ID</th>
+          <th>Timestamp</th>
+          <th>Wasted Item / Batch</th>
+          <th>Quantity Lost</th>
+          <th>Estimated Loss Cost</th>
+          <th>Reason for Spoilage</th>
+          <th>Logged By (Chef)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in waste_records %}
+          <tr>
+            <td><code>{{ w.id }}</code></td>
+            <td>{{ w.date }}</td>
+            <td><strong>{{ w.item }}</strong></td>
+            <td style="font-weight:700; color:var(--df-danger-700);">{{ w.qty }}</td>
+            <td style="font-weight:700; color:var(--df-maroon-800);">{{ w.cost|inr }}</td>
+            <td style="font-size:0.8125rem; color:var(--df-text-secondary);">{{ w.reason }}</td>
+            <td>{{ w.chef }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

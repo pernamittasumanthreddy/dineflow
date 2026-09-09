@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Suppliers & Vendors — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Suppliers & Vendor Registry</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Supply Chain</span>
+      <span>›</span>
+      <span>Vendor Master Directory</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('Add Supplier', 'Opening vendor onboarding modal...', 'info')">
+      <span>+ Onboard New Vendor</span>
+    </button>
+    <a href="{% url 'inventory:purchase_orders' %}" class="df-btn df-btn-outline">
+      <span>📝 Purchase Orders</span>
+    </a>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Authorized Restaurant Supply Partners</div>
+    <div style="display:flex; gap:0.5rem;">
+      <input type="text" id="df-supplier-search" class="df-input-search" placeholder="Search vendor name, GSTIN, city...">
+      <button class="df-btn df-btn-outline df-btn-sm" onclick="ExportPrint.exportTableToCSV('df-suppliers-table', 'suppliers.csv')">Export CSV</button>
+    </div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table" id="df-suppliers-table">
+      <thead>
+        <tr>
+          <th>Vendor Code</th>
+          <th>Supplier Company Legal Name</th>
+          <th>Supply Category</th>
+          <th>Contact Person</th>
+          <th>Mobile (+91)</th>
+          <th>GSTIN</th>
+          <th>Payment Terms</th>
+          <th>Rating</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in suppliers %}
+          <tr>
+            <td><code>{{ s.code }}</code></td>
+            <td><strong>{{ s.name }}</strong></td>
+            <td>{{ s.category }}</td>
+            <td>{{ s.contact_person }}</td>
+            <td>{{ s.phone }}</td>
+            <td style="font-family:var(--df-font-mono);">{{ s.gstin }}</td>
+            <td><span class="df-badge badge-neutral">{{ s.payment_terms }}</span></td>
+            <td style="color:var(--df-gold-800); font-weight:700;">{{ s.rating }}</td>
+            <td><span class="df-badge badge-success">{{ s.status }}</span></td>
+            <td>
+              <div class="df-action-btns">
+                <a href="{% url 'inventory:purchase_orders' %}" class="df-btn-icon" title="Create Purchase Order">📝</a>
+                <button class="df-btn-icon" onclick="DineFlow.showToast('Vendor Details', 'Opening details for {{ s.name }}', 'info')">👁️</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    DineFlow.initTableFilter('df-supplier-search', 'df-suppliers-table');
+  });
+</script>
+{% endblock %}
