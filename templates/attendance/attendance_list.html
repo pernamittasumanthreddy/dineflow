@@ -47,10 +47,10 @@
                         {{ a.employee.department.name }}
                     </td>
                     <td style="padding: 0.85rem 1rem; text-align: center; font-family: monospace; font-size: 0.85rem; color: var(--text-primary);">
-                        {{ a.punch_in|time:"H:i:s"|default:"—" }}
+                        {{ a.check_in|time:"H:i:s"|default:"—" }}
                     </td>
                     <td style="padding: 0.85rem 1rem; text-align: center; font-family: monospace; font-size: 0.85rem; color: var(--text-primary);">
-                        {{ a.punch_out|time:"H:i:s"|default:"—" }}
+                        {{ a.check_out|time:"H:i:s"|default:"—" }}
                     </td>
                     <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700; color: var(--accent-gold);">
                         {{ a.total_hours }} hrs

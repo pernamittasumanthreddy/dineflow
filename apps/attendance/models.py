@@ -47,3 +47,15 @@ class AttendanceRecord(TimeStampedModel):
 
     def __str__(self):
         return f"{self.employee.employee_id} - {self.date} [{self.get_status_display()}]"
+
+    @property
+    def total_hours(self):
+        if self.check_in and self.check_out:
+            import datetime
+            d = datetime.date(2026, 1, 1)
+            t1 = datetime.datetime.combine(d, self.check_in)
+            t2 = datetime.datetime.combine(d, self.check_out)
+            return round((t2 - t1).total_seconds() / 3600.0, 1)
+        elif self.check_in:
+            return Decimal('4.0')
+        return Decimal('0.0')

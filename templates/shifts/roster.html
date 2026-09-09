@@ -48,14 +48,10 @@
                         {{ r.shift.start_time|time:"H:i" }} - {{ r.shift.end_time|time:"H:i" }}
                     </td>
                     <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
-                        {{ r.station_assigned|default:"General Floor" }}
+                        {{ r.notes|default:"General Floor" }}
                     </td>
                     <td style="padding: 0.85rem 1.25rem; text-align: right;">
-                        {% if r.is_off %}
-                            <span class="badge badge-warning">WEEKLY OFF</span>
-                        {% else %}
-                            <span class="badge badge-success">SCHEDULED</span>
-                        {% endif %}
+                        <span class="badge badge-success">{{ r.get_status_display }}</span>
                     </td>
                 </tr>
                 {% empty %}
