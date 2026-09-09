@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Indian Payroll & Payslips — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Indian Payroll, Statutory Deductions & Payslips</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>HRMS Suite</span>
+      <span>›</span>
+      <span>Payroll Month: {{ month }}</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('Payroll Dispatched', 'Bank NEFT/IMPS payout sheet generated for {{ month }}.', 'success')">
+      <span>💰 Approve & Run Payroll</span>
+    </button>
+    <button class="df-btn df-btn-outline" onclick="ExportPrint.exportTableToCSV('df-payroll-table', 'payroll_{{ month }}.csv')">
+      <span>📊 Export Bank Sheet</span>
+    </button>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Salary Structures & Statutory Compliance (PF + ESIC + PT + TDS)</div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table" id="df-payroll-table">
+      <thead>
+        <tr>
+          <th>Staff ID</th>
+          <th>Employee Name</th>
+          <th>Basic Pay</th>
+          <th>HRA</th>
+          <th>Special Allow.</th>
+          <th>Gross Pay</th>
+          <th>EPF (12%)</th>
+          <th>ESIC (0.75%)</th>
+          <th>PT (₹)</th>
+          <th>TDS</th>
+          <th>Net Payout</th>
+          <th>Payslip</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in payroll_runs %}
+          <tr>
+            <td><code>{{ p.emp_id }}</code></td>
+            <td><strong>{{ p.name }}</strong></td>
+            <td>{{ p.basic|inr }}</td>
+            <td>{{ p.hra|inr }}</td>
+            <td>{{ p.special|inr }}</td>
+            <td style="font-weight:700;">{{ p.gross|inr }}</td>
+            <td style="color:var(--df-danger-700);">-{{ p.pf|inr }}</td>
+            <td style="color:var(--df-danger-700);">-{{ p.esic|inr }}</td>
+            <td>-{{ p.pt|inr }}</td>
+            <td>-{{ p.tds|inr }}</td>
+            <td style="font-weight:800; color:var(--df-green-800); font-size:1rem;">{{ p.net_salary|inr }}</td>
+            <td>
+              <button class="df-btn df-btn-outline df-btn-sm" onclick="DineFlow.showToast('Payslip Download', 'Generated PDF payslip for {{ p.name }}', 'info')">
+                📄 Payslip
+              </button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
