@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Restaurant Owner Command Center — DineFlow ERP{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Executive Command Dashboard</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Executive Overview</span>
+      <span>›</span>
+      <span style="color:var(--df-maroon-800); font-weight:600;">{{ ACTIVE_BRANCH }}</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem; align-items:center;">
+    <a href="{% url 'pos:terminal' %}" class="df-btn df-btn-terracotta">
+      <span>⚡ Open POS Terminal</span>
+    </a>
+    <a href="{% url 'billing:invoices' %}" class="df-btn df-btn-maroon">
+      <span>🧾 GST Tax Invoices</span>
+    </a>
+    <button class="df-btn df-btn-outline" onclick="ExportPrint.printElement('df-main-page-container')">
+      <span>🖨️ Print Report</span>
+    </button>
+  </div>
+</div>
+
+<!-- KPI Metric Cards Grid -->
+<div class="df-kpi-grid">
+  {% for kpi in kpis %}
+    <div class="df-kpi-card">
+      <div class="df-kpi-top">
+        <div class="df-kpi-label">{{ kpi.label }}</div>
+        <div class="df-kpi-icon {{ kpi.icon }}">{{ kpi.emoji }}</div>
+      </div>
+      <div class="df-kpi-value">{{ kpi.value }}</div>
+      <div class="df-kpi-bottom">
+        <span class="df-trend-pill {% if kpi.trend_up %}df-trend-up{% else %}df-trend-down{% endif %}">
+          {% if kpi.trend_up %}↑{% else %}↓{% endif %} {{ kpi.trend }}
+        </span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Sales Revenue & Category Breakdown Charts Row -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.75rem;">
+  <!-- Weekly Revenue Curve -->
+  <div class="df-card">
+    <div class="df-card-header">
+      <div class="df-card-title">Weekly Sales Revenue & Net Margin Trend (₹ INR)</div>
+      <div class="df-badge badge-success">Live Sync</div>
+    </div>
+    <div class="df-card-body">
+      <canvas id="df-owner-revenue-chart" style="width:100%; height:280px;"></canvas>
+    </div>
+  </div>
+
+  <!-- Category Sales Donut -->
+  <div class="df-card">
+    <div class="df-card-header">
+      <div class="df-card-title">Sales by Cuisines</div>
+      <div class="df-badge badge-warning">Week Total</div>
+    </div>
+    <div class="df-card-body" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <canvas id="df-owner-donut-chart" width="240" height="240"></canvas>
+      <div style="font-size:0.75rem; color:var(--df-text-secondary); margin-top:0.75rem; display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:center;">
+        <span><span style="color:#C24312;">■</span> Biryani (38%)</span>
+        <span><span style="color:#7A1A24;">■</span> Tandoor (26%)</span>
+        <span><span style="color:#E67E22;">■</span> Curries (18%)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Multi-Branch Performance & Top Profitable Dishes Grid -->
+<div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;">
+  
+  <!-- Multi-Branch Table -->
+  <div class="df-card">
+    <div class="df-card-header">
+      <div class="df-card-title">Multi-Branch Real-Time Operations</div>
+      <a href="{% url 'settings_app:branches' %}" class="df-btn df-btn-outline df-btn-sm">Manage Outlets →</a>
+    </div>
+    <div class="df-table-responsive">
+      <table class="df-table">
+        <thead>
+          <tr>
+            <th>Branch Outlet</th>
+            <th>Today's Sales</th>
+            <th>Orders</th>
+            <th>AOV</th>
+            <th>Turnaround</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in branch_performance %}
+            <tr>
+              <td><strong>{{ b.branch }}</strong></td>
+              <td style="font-weight:700; color:var(--df-maroon-800);">{{ b.sales }}</td>
+              <td>{{ b.orders }}</td>
+              <td>{{ b.aov }}</td>
+              <td>{{ b.turnover }}</td>
+              <td><span class="df-badge badge-success">{{ b.status }}</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Top Dishes Table -->
+  <div class="df-card">
+    <div class="df-card-header">
+      <div class="df-card-title">Top Profitable Menu Dishes</div>
+      <a href="{% url 'menu:recipe_costing' %}" class="df-btn df-btn-outline df-btn-sm">Recipe Margins →</a>
+    </div>
+    <div class="df-table-responsive">
+      <table class="df-table">
+        <thead>
+          <tr>
+            <th>Dish Name</th>
+            <th>Sold</th>
+            <th>Revenue</th>
+            <th>Margin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for dish in top_dishes %}
+            <tr>
+              <td>
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                  <span class="df-diet-mark {{ dish.diet|diet_badge }}"></span>
+                  <strong>{{ dish.name }}</strong>
+                </div>
+              </td>
+              <td>{{ dish.sold }}</td>
+              <td style="font-weight:700; color:var(--df-maroon-800);">{{ dish.revenue }}</td>
+              <td><span class="df-badge badge-success">{{ dish.margin }}</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    AnalyticsEngine.renderRevenueChart('df-owner-revenue-chart');
+    AnalyticsEngine.renderCategoryDonut('df-owner-donut-chart');
+  });
+</script>
+{% endblock %}
