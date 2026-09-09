@@ -15,7 +15,10 @@ def role_required(*allowed_roles):
                 return redirect('accounts:login')
             if request.user.is_superuser or request.user.role in allowed_roles:
                 return view_func(request, *args, **kwargs)
-            messages.error(request, "You do not have permission to access this resource.")
+            try:
+                messages.error(request, "You do not have permission to access this resource.")
+            except Exception:
+                pass
             raise PermissionDenied("Access Denied: Insufficient Role Privileges")
         return _wrapped_view
     return decorator
@@ -31,7 +34,10 @@ def module_permission_required(module_name):
                 return redirect('accounts:login')
             if request.user.has_module_permission(module_name):
                 return view_func(request, *args, **kwargs)
-            messages.error(request, f"Access to '{module_name.title()}' module is restricted for your role.")
+            try:
+                messages.error(request, f"Access to '{module_name.title()}' module is restricted for your role.")
+            except Exception:
+                pass
             raise PermissionDenied(f"Access Denied for module '{module_name}'")
         return _wrapped_view
     return decorator
