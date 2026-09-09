@@ -1,0 +1,537 @@
+{% extends 'base_public.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}DineFlow — Enterprise Indian Restaurant ERP & Cloud Kitchen Suite{% endblock %}
+
+{% block content %}
+<!-- Top Navigation -->
+<header class="df-landing-nav">
+  <div style="display: flex; align-items: center; gap: 0.85rem;">
+    <div class="df-brand-logo">DF</div>
+    <div>
+      <div style="font-family: var(--df-font-serif); font-size: 1.45rem; font-weight: 700; color: #FFF; line-height: 1.1;">DineFlow</div>
+      <div style="font-size: 0.72rem; color: var(--df-saffron-400); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700;">Restaurant ERP</div>
+    </div>
+  </div>
+
+  <ul class="df-nav-links">
+    <li><a href="#roles">Role Experiences</a></li>
+    <li><a href="#modules">35+ Modules</a></li>
+    <li><a href="#gst">Indian GST Engine</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <a href="{% url 'accounts:role_select' %}" class="df-btn df-btn-outline" style="color: #FFF; border-color: rgba(255,255,255,0.2);">Choose Role</a>
+    <a href="{% url 'accounts:role_select' %}" class="df-btn df-btn-terracotta">Sign In to ERP 🔐</a>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="df-hero-section">
+  <div class="df-hero-container">
+    <div class="df-hero-badge">
+      <span>✨</span> Next-Gen Indian Hospitality OS • Made for Multi-Chain Excellence
+    </div>
+    <h1 class="df-hero-title">
+      The Operating System for Modern <span>Indian Restaurants</span> & Kitchen Chains
+    </h1>
+    <p class="df-hero-subtitle">
+      Unify Front of House, Touch POS, Kitchen Displays (KDS), Raw Material Inventory, Indian GST Invoicing, HRMS Payroll, and AI Demand Forecasting into one integrated enterprise product.
+    </p>
+
+    <div class="df-hero-cta-group">
+      <a href="{% url 'dashboard:owner' %}" class="df-btn df-btn-terracotta df-btn-lg">
+        Explore ERP Dashboard 👑
+      </a>
+      <a href="{% url 'pos:terminal' %}" class="df-btn df-btn-outline df-btn-lg" style="color: #FFF; border-color: rgba(255,255,255,0.3);">
+        Live POS & Billing Terminal 💻
+      </a>
+      <a href="{% url 'kds:live' %}" class="df-btn df-btn-maroon df-btn-lg">
+        Live Kitchen Display (KDS) 🔥
+      </a>
+    </div>
+
+    <!-- Live Platform Impact Stats -->
+    <div class="df-hero-stats">
+      <div>
+        <div class="df-stat-num">₹185 Cr+</div>
+        <div class="df-stat-label">Annual Gross Billing Processed</div>
+      </div>
+      <div>
+        <div class="df-stat-num">35+</div>
+        <div class="df-stat-label">Integrated ERP Modules</div>
+      </div>
+      <div>
+        <div class="df-stat-num">10</div>
+        <div class="df-stat-label">Dedicated User Roles</div>
+      </div>
+      <div>
+        <div class="df-stat-num">99.99%</div>
+        <div class="df-stat-label">Uptime & Peak SLA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 Dedicated Role Experiences Section -->
+<section class="df-section" id="roles" style="background: rgba(18, 18, 22, 0.7);">
+  <div class="df-section-container">
+    <div class="df-section-header">
+      <div class="df-section-tag">Role-Based Architecture</div>
+      <h2 class="df-section-title">Built for Every Member of Your Restaurant Team</h2>
+      <p class="df-section-desc">
+        DineFlow provides tailored, purpose-built dashboards designed for the operational demands of each role—from the tandoor chef to the multi-chain executive.
+      </p>
+    </div>
+
+    <div class="df-roles-grid">
+      <!-- 1. Super Admin -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">🛡️</span>
+          <span class="df-role-badge-tag">SaaS Root</span>
+        </div>
+        <div class="df-role-title">Super Admin</div>
+        <div class="df-role-desc">Multi-tenant management, subscription billing, system health, server audit logs and automated global database backups.</div>
+        <ul class="df-role-features">
+          <li>Multi-Tenant Provisioning</li>
+          <li>System Audit & Security Logs</li>
+          <li>Global Automated Backups</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:super_admin' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 2. Restaurant Owner -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">👑</span>
+          <span class="df-role-badge-tag">Executive</span>
+        </div>
+        <div class="df-role-title">Restaurant Owner</div>
+        <div class="df-role-desc">Executive command center with today's gross sales, net profit, table turnaround times, multi-branch comparisons, and dish profitability.</div>
+        <ul class="df-role-features">
+          <li>Gross Sales & Net Profit BI</li>
+          <li>Multi-Branch Performance Heatmaps</li>
+          <li>Real-time COGS & Food Margin Control</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:owner' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 3. General Manager -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">👔</span>
+          <span class="df-role-badge-tag">Operations</span>
+        </div>
+        <div class="df-role-title">General Manager</div>
+        <div class="df-role-desc">Live floor occupancy, shift handovers, kitchen prep bottlenecks, staff on duty, table reservations, and day-end closing audits.</div>
+        <ul class="df-role-features">
+          <li>Active Floor & Table Occupancy</li>
+          <li>Kitchen Delay Alerts & Staff Rosters</li>
+          <li>Shift Handover & Cash Reconciliation</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:manager' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 4. Kitchen Staff / Chef -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">👨‍🍳</span>
+          <span class="df-role-badge-tag">Live KDS</span>
+        </div>
+        <div class="df-role-title">Kitchen Staff / Chef</div>
+        <div class="df-role-desc">High-contrast dark KDS Kanban with real-time preparation countdown timers, station routing (Tandoor, Curry, Biryani), and allergen alerts.</div>
+        <ul class="df-role-features">
+          <li>Real-Time Prep Countdown Timers</li>
+          <li>Station Routing & Allergen Warnings</li>
+          <li>One-Touch Order Bump Bar</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:kitchen' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 5. Waiter / Captain -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">🤵</span>
+          <span class="df-role-badge-tag">Service</span>
+        </div>
+        <div class="df-role-title">Waiter / Captain</div>
+        <div class="df-role-desc">Mobile-first ordering terminal, interactive floor map, instant KOT firing, seat-wise order notes, and bill settlement requests.</div>
+        <ul class="df-role-features">
+          <li>Touch Floor Plan & Table Grid</li>
+          <li>Instant Wireless KOT Dispatch</li>
+          <li>Special Dietary Notes & Modifiers</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:waiter' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 6. Cashier -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">💵</span>
+          <span class="df-role-badge-tag">Billing</span>
+        </div>
+        <div class="df-role-title">Cashier</div>
+        <div class="df-role-desc">High-speed billing terminal, pending KOT settlement, dynamic UPI QR generation, card swipes, split bills, and daily Z-Report closing.</div>
+        <ul class="df-role-features">
+          <li>Dynamic UPI QR Generation Modal</li>
+          <li>80mm Thermal Receipt Printing</li>
+          <li>Cash Drawer & Tender Balancing</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:cashier' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 7. Inventory Manager -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">📦</span>
+          <span class="df-role-badge-tag">Stock</span>
+        </div>
+        <div class="df-role-title">Inventory Manager</div>
+        <div class="df-role-desc">Raw ingredient stock ledger (Basmati rice, Paneer, Ghee, Spices), automated low-stock warnings, purchase orders, GRN, and waste logs.</div>
+        <ul class="df-role-features">
+          <li>Raw Ingredient Stock Depletion</li>
+          <li>Purchase Orders & GRN Inwarding</li>
+          <li>Daily Kitchen Waste & Spoilage Logs</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:inventory' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 8. HR Manager -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">👥</span>
+          <span class="df-role-badge-tag">HRMS</span>
+        </div>
+        <div class="df-role-title">HR Manager</div>
+        <div class="df-role-desc">Staff directory, biometric attendance sync, shift scheduling, leave approval, Indian payroll engine with PF, ESI, TDS, and payslip generation.</div>
+        <ul class="df-role-features">
+          <li>Biometric Device Punch Logs</li>
+          <li>Morning, Evening & Split Rosters</li>
+          <li>Indian Payroll (PF, ESI, TDS Deductions)</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:hr' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 9. Customer Portal -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">⭐</span>
+          <span class="df-role-badge-tag">Guest</span>
+        </div>
+        <div class="df-role-title">Customer Portal</div>
+        <div class="df-role-desc">Digital QR menu with dietary filters (Jain, Veg, Non-Veg), table booking, order status tracker, DineClub loyalty points wallet, and reviews.</div>
+        <ul class="df-role-features">
+          <li>Interactive Digital QR Menu</li>
+          <li>Online Table Reservation & Waitlist</li>
+          <li>DineClub Rewards & Digital Bill History</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:customer' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+
+      <!-- 10. Analytics & BI -->
+      <div class="df-role-card">
+        <div class="df-role-card-top">
+          <span style="font-size: 1.8rem;">📈</span>
+          <span class="df-role-badge-tag">BI & ML</span>
+        </div>
+        <div class="df-role-title">Analytics & BI</div>
+        <div class="df-role-desc">Multi-dimensional analytics, dish sales velocity, hourly footfall heatmaps, menu engineering matrix, and AI-powered demand forecasting.</div>
+        <ul class="df-role-features">
+          <li>Hourly Footfall & Turnover Heatmaps</li>
+          <li>Menu Engineering (Stars, Dogs, Puzzles)</li>
+          <li>AI Weekend Demand Predictor</li>
+        </ul>
+        <div style="margin-top: 1.25rem;">
+          <a href="{% url 'dashboard:analytics' %}" class="df-btn df-btn-outline df-btn-sm" style="width: 100%; color: #FFF; border-color: rgba(255,255,255,0.2);">Open Dashboard →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 35+ Integrated Modules Section -->
+<section class="df-section" id="modules">
+  <div class="df-section-container">
+    <div class="df-section-header">
+      <div class="df-section-tag">Enterprise Ecosystem</div>
+      <h2 class="df-section-title">35+ Enterprise Modules. Zero Gaps.</h2>
+      <p class="df-section-desc">
+        A complete, unified system engineered specifically for Indian restaurant operations, compliance, supply chains, and multi-branch management.
+      </p>
+    </div>
+
+    <div class="df-modules-grid">
+      {% for m in modules_showcase %}
+        <div class="df-module-pill-card">
+          <div style="font-size: 1.5rem;">{{ m.icon }}</div>
+          <div>
+            <div class="df-module-num">MODULE {{ m.num }}</div>
+            <div class="df-module-name">{{ m.name }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Indian GST & Compliance Spotlight -->
+<section class="df-section" id="gst" style="background: rgba(18, 18, 22, 0.85); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+  <div class="df-section-container">
+    <div style="display: grid; grid-template-columns: 1fr 1.1fr; gap: 3.5rem; align-items: center;">
+      <div>
+        <div class="df-section-tag">Indian Tax & Compliance Ready</div>
+        <h2 class="df-section-title" style="text-align: left; margin-bottom: 1.25rem;">
+          Built for 100% Indian GST & FSSAI Compliance
+        </h2>
+        <p style="color: #B5B5C4; font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">
+          Say goodbye to complex tax spreadsheets. DineFlow automatically splits CGST and SGST on AC/Non-AC restaurant dining (5% rate with no ITC), handles 18% outdoor catering/alcohol slabs, and generates GSTR-1 and GSTR-3B ready export summaries.
+        </p>
+        <ul class="df-price-features" style="margin-bottom: 2rem;">
+          <li>Automated CGST (2.5%) + SGST (2.5%) & IGST (5.0% / 18.0%) Computation</li>
+          <li>FSSAI License & GSTIN Embedded on All Customer Receipts</li>
+          <li>SAC Code 996331 (Restaurant Service) & 996332 (Takeaway & Delivery) Tagging</li>
+          <li>One-Click Monthly GSTR-1 & GSTR-3B Excel & JSON Tax Reports</li>
+          <li>Dynamic UPI QR Code Generation with NPCI & ICICI/HDFC Bank VPAs</li>
+        </ul>
+        <a href="{% url 'billing:invoices' %}" class="df-btn df-btn-terracotta">
+          View GST Invoicing System 🧾
+        </a>
+      </div>
+
+      <!-- Sample Invoice Preview Card -->
+      <div style="background: #FFF; color: #1E1E24; padding: 2rem; border-radius: var(--df-radius-xl); box-shadow: 0 20px 40px rgba(0,0,0,0.5); font-family: var(--df-font-sans);">
+        <div style="text-align: center; border-bottom: 2px dashed #333; padding-bottom: 1rem; margin-bottom: 1rem;">
+          <h3 style="font-family: var(--df-font-serif); font-size: 1.6rem; color: var(--df-maroon-800); margin-bottom: 0.25rem;">Andhra Spice Kitchen & Grand Dine</h3>
+          <div style="font-size: 0.8125rem; color: #555;">Indiranagar 100ft Road, Bangalore - 560038</div>
+          <div style="font-size: 0.8125rem; font-weight: 700; color: #222; margin-top: 0.25rem;">GSTIN: 29AABCS1429B1Z5 | FSSAI: 11223334000121</div>
+          <div style="display: inline-block; background: var(--df-maroon-800); color: #FFF; padding: 2px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; margin-top: 0.5rem;">TAX INVOICE</div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; margin-bottom: 0.75rem;">
+          <div><strong>Bill #:</strong> INV-892401<br><strong>Table:</strong> T-04 (AC Hall)</div>
+          <div style="text-align: right;"><strong>Date:</strong> 09/09/2026, 14:35<br><strong>Server:</strong> Ravi Teja</div>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem; margin-bottom: 1rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid #333; text-align: left;">
+              <th style="padding: 4px 0;">Item</th>
+              <th style="text-align: center;">Qty</th>
+              <th style="text-align: right;">Rate</th>
+              <th style="text-align: right;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px dashed #DDD;"><td style="padding: 6px 0;">Hyderabadi Chicken Biryani</td><td style="text-align: center;">2</td><td style="text-align: right;">₹340.00</td><td style="text-align: right;">₹680.00</td></tr>
+            <tr style="border-bottom: 1px dashed #DDD;"><td style="padding: 6px 0;">Paneer Butter Masala</td><td style="text-align: center;">1</td><td style="text-align: right;">₹260.00</td><td style="text-align: right;">₹260.00</td></tr>
+            <tr style="border-bottom: 1px dashed #DDD;"><td style="padding: 6px 0;">Butter Garlic Naan</td><td style="text-align: center;">4</td><td style="text-align: right;">₹65.00</td><td style="text-align: right;">₹260.00</td></tr>
+          </tbody>
+        </table>
+        <div style="border-top: 1px dashed #333; padding-top: 0.75rem; font-size: 0.875rem;">
+          <div style="display: flex; justify-content: space-between;"><span>Taxable Subtotal:</span><span>₹1,200.00</span></div>
+          <div style="display: flex; justify-content: space-between; color: #666; font-size: 0.8125rem;"><span>CGST (2.5%):</span><span>₹30.00</span></div>
+          <div style="display: flex; justify-content: space-between; color: #666; font-size: 0.8125rem;"><span>SGST (2.5%):</span><span>₹30.00</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 1.35rem; font-weight: 800; color: var(--df-maroon-800); border-top: 2px solid #333; margin-top: 0.5rem; padding-top: 0.5rem;">
+            <span>GRAND TOTAL:</span><span>₹1,260.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="df-section" id="pricing">
+  <div class="df-section-container">
+    <div class="df-section-header">
+      <div class="df-section-tag">Predictable INR Pricing</div>
+      <h2 class="df-section-title">Invest in Growth, Not Bloat</h2>
+      <p class="df-section-desc">
+        Transparent pricing tailored for Indian restaurants, cloud kitchens, and hospitality groups.
+      </p>
+    </div>
+
+    <div class="df-pricing-grid">
+      {% for plan in pricing_plans %}
+        <div class="df-price-card {% if plan.featured %}featured{% endif %}">
+          {% if plan.featured %}
+            <div class="df-featured-ribbon">Most Popular Enterprise</div>
+          {% endif %}
+          <div>
+            <div class="df-price-title">{{ plan.name }}</div>
+            <div style="font-size: 0.8125rem; color: #A6A6B8; margin-top: 0.25rem;">{{ plan.tagline }}</div>
+          </div>
+          <div>
+            <div class="df-price-amount">{{ plan.price }}</div>
+            <div class="df-price-period">{{ plan.period }}</div>
+          </div>
+          <ul class="df-price-features">
+            {% for f in plan.features %}
+              <li>{{ f }}</li>
+            {% endfor %}
+          </ul>
+          <a href="{% url 'accounts:register' %}" class="df-btn {{ plan.button_class }} df-btn-lg" style="margin-top: auto; width: 100%;">
+            {{ plan.button_text }}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="df-section" id="testimonials" style="background: rgba(18, 18, 22, 0.7);">
+  <div class="df-section-container">
+    <div class="df-section-header">
+      <div class="df-section-tag">Trusted by Industry Leaders</div>
+      <h2 class="df-section-title">What Indian Restaurateurs Say</h2>
+      <p class="df-section-desc">
+        From Hyderabad biryani legends to coastal tiffin chains, see how DineFlow powers operational excellence.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
+      {% for t in testimonials %}
+        <div style="background: rgba(28, 28, 34, 0.75); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--df-radius-lg); padding: 2rem; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="color: var(--df-saffron-400); font-size: 1.25rem; margin-bottom: 1rem;">★★★★★</div>
+            <p style="color: #EDE8E1; font-size: 0.95rem; line-height: 1.6; font-style: italic; margin-bottom: 1.5rem;">
+              "{{ t.quote }}"
+            </p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.85rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--df-maroon-700), var(--df-terracotta-600)); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center;">
+              {{ t.avatar }}
+            </div>
+            <div>
+              <div style="font-weight: 700; color: #FFF; font-size: 0.9375rem;">{{ t.name }}</div>
+              <div style="font-size: 0.75rem; color: var(--df-saffron-400);">{{ t.role }} • {{ t.restaurant }}</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Interactive FAQ Section -->
+<section class="df-section" id="faq">
+  <div class="df-section-container">
+    <div class="df-section-header">
+      <div class="df-section-tag">Frequently Asked Questions</div>
+      <h2 class="df-section-title">Everything You Need to Know</h2>
+    </div>
+
+    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem;">
+      <details style="background: rgba(28, 28, 34, 0.75); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--df-radius-md); padding: 1.25rem; cursor: pointer;">
+        <summary style="font-weight: 700; font-size: 1.05rem; color: #FFF;">Does DineFlow support both AC and Non-AC GST tax slabs?</summary>
+        <p style="margin-top: 0.75rem; color: #B5B5C4; font-size: 0.875rem; line-height: 1.6;">
+          Yes! DineFlow includes pre-configured Indian GST tax engines that automatically apply 5% GST (2.5% CGST + 2.5% SGST) for restaurant food service, 18% for alcoholic beverages/outdoor catering, and supports exemption codes for raw grocery items.
+        </p>
+      </details>
+
+      <details style="background: rgba(28, 28, 34, 0.75); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--df-radius-md); padding: 1.25rem; cursor: pointer;">
+        <summary style="font-weight: 700; font-size: 1.05rem; color: #FFF;">Can we use our existing ESC/POS thermal receipt printers?</summary>
+        <p style="margin-top: 0.75rem; color: #B5B5C4; font-size: 0.875rem; line-height: 1.6;">
+          Absolutely. DineFlow supports all standard 80mm and 58mm thermal printers (USB, Ethernet, Bluetooth, and Wi-Fi) from Epson, TVS-E, NGX, Everycom, and Star Micronics with customized Indian KOT & Tax Invoice formatting.
+        </p>
+      </details>
+
+      <details style="background: rgba(28, 28, 34, 0.75); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--df-radius-md); padding: 1.25rem; cursor: pointer;">
+        <summary style="font-weight: 700; font-size: 1.05rem; color: #FFF;">How does the raw material inventory depletion work?</summary>
+        <p style="margin-top: 0.75rem; color: #B5B5C4; font-size: 0.875rem; line-height: 1.6;">
+          Whenever a dish is ordered (e.g., Chicken Biryani), DineFlow's recipe mapping automatically depletes the exact raw ingredients (e.g., 250g Chicken, 180g Basmati Rice, 30g Ghee, Spices) from that branch's inventory in real time, alerting the manager before stock runs out.
+        </p>
+      </details>
+
+      <details style="background: rgba(28, 28, 34, 0.75); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--df-radius-md); padding: 1.25rem; cursor: pointer;">
+        <summary style="font-weight: 700; font-size: 1.05rem; color: #FFF;">Can I switch between roles seamlessly in the ERP?</summary>
+        <p style="margin-top: 0.75rem; color: #B5B5C4; font-size: 0.875rem; line-height: 1.6;">
+          Yes! The top navigation bar and sidebar in DineFlow contain an instant Role Switcher dropdown and user profile controls allowing authorized staff to navigate between all 10 role dashboards with one click.
+        </p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="df-landing-footer">
+  <div class="df-footer-grid">
+    <div class="df-footer-col">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <div class="df-brand-logo" style="width: 36px; height: 36px; font-size: 1.1rem;">DF</div>
+        <div style="font-family: var(--df-font-serif); font-size: 1.3rem; font-weight: 700; color: #FFF;">DineFlow ERP</div>
+      </div>
+      <p style="line-height: 1.6; margin-bottom: 1.25rem; max-width: 340px;">
+        Enterprise-grade Restaurant ERP, POS & Cloud Kitchen Management System tailored for India's food service industry.
+      </p>
+      <div style="font-size: 0.8125rem; color: var(--df-saffron-400);">
+        📞 1800-425-3463 | ✉️ enterprise@dineflow.in
+      </div>
+    </div>
+
+    <div class="df-footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="{% url 'dashboard:owner' %}">Owner Dashboard</a></li>
+        <li><a href="{% url 'pos:terminal' %}">Touch POS Terminal</a></li>
+        <li><a href="{% url 'kds:live' %}">Kitchen Display (KDS)</a></li>
+        <li><a href="{% url 'tables:floor_plan' %}">Table Management</a></li>
+        <li><a href="{% url 'inventory:stock_ledger' %}">Raw Material Inventory</a></li>
+      </ul>
+    </div>
+
+    <div class="df-footer-col">
+      <h4>Compliance</h4>
+      <ul>
+        <li><a href="{% url 'billing:invoices' %}">Indian GST Invoicing</a></li>
+        <li><a href="{% url 'tax_mgmt:gst_slabs' %}">SAC 996331 Rates</a></li>
+        <li><a href="{% url 'analytics:tax_reports' %}">GSTR-1 / 3B Reports</a></li>
+        <li><a href="{% url 'hr:payroll' %}">PF, ESI & TDS Payroll</a></li>
+        <li><a href="{% url 'settings_app:audit_logs' %}">Audit Logs</a></li>
+      </ul>
+    </div>
+
+    <div class="df-footer-col">
+      <h4>Hubs & Locations</h4>
+      <ul>
+        <li><a href="#">Bangalore (Indiranagar)</a></li>
+        <li><a href="#">Hyderabad (Banjara Hills)</a></li>
+        <li><a href="#">New Delhi (Connaught Place)</a></li>
+        <li><a href="#">Chennai (Anna Nagar)</a></li>
+        <li><a href="#">Hitec City Cloud Kitchen</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="df-footer-bottom">
+    <div>© 2026 DineFlow Hospitality Technologies Pvt. Ltd. All rights reserved.</div>
+    <div style="display: flex; gap: 1.5rem;">
+      <a href="{% url 'settings_app:general' %}">Terms of Service</a>
+      <a href="{% url 'settings_app:general' %}">Privacy Policy</a>
+      <a href="{% url 'settings_app:backup_restore' %}">Security & Backups</a>
+    </div>
+  </div>
+</footer>
+{% endblock %}
