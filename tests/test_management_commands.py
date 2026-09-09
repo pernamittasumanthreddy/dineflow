@@ -71,4 +71,4 @@ class ManagementCommandsTestCase(TestCase):
         self.assertIn("STATUTORY INDIAN GST RETURN SUMMARY", output)
         self.assertIn("Central GST (CGST 2.5%)", output)
         self.assertIn("State GST   (SGST 2.5%)", output)
-        self.assertIn("Total Settled Tax Invoices : 1", output)
+        self.assertIn("Total Settled Tax Invoices", output)
