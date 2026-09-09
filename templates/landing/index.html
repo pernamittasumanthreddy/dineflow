@@ -26,7 +26,7 @@
 
   <div style="display: flex; align-items: center; gap: 1rem;">
     <a href="{% url 'accounts:login' %}" class="df-btn df-btn-outline" style="color: #FFF; border-color: rgba(255,255,255,0.2);">Log In</a>
-    <a href="{% url 'dashboard:owner' %}" class="df-btn df-btn-terracotta">Launch ERP Demo 🚀</a>
+    <a href="{% url 'accounts:login' %}" class="df-btn df-btn-terracotta">Sign In to ERP 🔐</a>
   </div>
 </header>
 
@@ -466,9 +466,9 @@
       </details>
 
       <details style="background: rgba(28, 28, 34, 0.75); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--df-radius-md); padding: 1.25rem; cursor: pointer;">
-        <summary style="font-weight: 700; font-size: 1.05rem; color: #FFF;">Can I switch between roles during this live demo?</summary>
+        <summary style="font-weight: 700; font-size: 1.05rem; color: #FFF;">Can I switch between roles seamlessly in the ERP?</summary>
         <p style="margin-top: 0.75rem; color: #B5B5C4; font-size: 0.875rem; line-height: 1.6;">
-          Yes! The top navigation bar in DineFlow contains an instant Role Switcher dropdown allowing you to explore all 10 role dashboards (Super Admin, Owner, Manager, Kitchen, Waiter, Cashier, Inventory, HR, Customer, Analytics) with one click.
+          Yes! The top navigation bar and sidebar in DineFlow contain an instant Role Switcher dropdown and user profile controls allowing authorized staff to navigate between all 10 role dashboards with one click.
         </p>
       </details>
     </div>

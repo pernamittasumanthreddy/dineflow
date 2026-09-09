@@ -5,13 +5,21 @@ import json
 
 def login_view(request):
     """
-    Role-aware authentication page with preset quick-login buttons for all 10 roles.
+    Role-aware authentication page with quick role access.
     """
     if request.method == 'POST':
         role = request.POST.get('role', 'owner')
         request.session['dineflow_active_role'] = role
         return redirect(f'/dashboard/{role}/')
-    return render(request, 'accounts/login.html')
+    signed_out = request.GET.get('signed_out', False)
+    return render(request, 'accounts/login.html', {'signed_out': signed_out})
+
+def logout_view(request):
+    """
+    Sign out user, flush active session, and redirect to login page.
+    """
+    request.session.flush()
+    return redirect('/accounts/login/?signed_out=1')
 
 def register_view(request):
     """
@@ -45,7 +53,7 @@ def profile_view(request):
 @csrf_exempt
 def switch_role_api(request):
     """
-    Interactive AJAX role switcher for demo and evaluation.
+    Interactive AJAX role switcher for ERP user roles.
     """
     if request.method == 'POST':
         try:

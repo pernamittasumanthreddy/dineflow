@@ -131,3 +131,10 @@ class DineFlowERPTests(TestCase):
         self.assertEqual(diet_badge('nonveg'), 'nonveg-mark')
         self.assertEqual(diet_badge('egg'), 'egg-mark')
         self.assertEqual(diet_badge('jain'), 'jain-mark')
+
+    def test_logout_view(self):
+        """Test sign out endpoint clears session and redirects to login with confirmation."""
+        response = self.client.get(reverse('accounts:logout'))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/accounts/login/?signed_out=1', response.url)
+

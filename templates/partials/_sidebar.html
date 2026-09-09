@@ -333,4 +333,27 @@
     </ul>
 
   </nav>
+
+  <!-- Sidebar Auth Footer -->
+  <div style="padding: 1rem; border-top: 1px solid #2B2B33; background: rgba(18, 18, 22, 0.95); margin-top: auto;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--df-terracotta-700); color: #FFF; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">
+          {{ CURRENT_USER.avatar_initials }}
+        </div>
+        <div style="line-height: 1.2;">
+          <div style="font-weight: 700; font-size: 0.78rem; color: #FFF;">{{ CURRENT_USER.name }}</div>
+          <div style="font-size: 0.68rem; color: var(--df-saffron-400);">{{ CURRENT_USER.role_title }}</div>
+        </div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+      <a href="{% url 'accounts:login' %}" class="df-btn df-btn-outline df-btn-sm" style="color: #FFF; border-color: rgba(255,255,255,0.2); font-size: 0.72rem; padding: 0.35rem 0.5rem; justify-content: center;">
+        <span>🔐 Login</span>
+      </a>
+      <a href="{% url 'accounts:logout' %}" class="df-btn df-btn-maroon df-btn-sm" style="font-size: 0.72rem; padding: 0.35rem 0.5rem; justify-content: center;">
+        <span>🚪 Sign Out</span>
+      </a>
+    </div>
+  </div>
 </aside>
