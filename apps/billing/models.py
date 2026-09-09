@@ -4,8 +4,15 @@ from decimal import Decimal
 from apps.core.models import TimeStampedModel
 from apps.core.utils import round_inr
 
+class InvoiceQuerySet(models.QuerySet):
+    def with_details(self):
+        """Pre-fetches order, branch, customer, cashier, and itemized lines."""
+        return self.select_related('order', 'branch', 'customer', 'cashier').prefetch_related('items')
+
 class Invoice(TimeStampedModel):
     """Statutory Indian GST Tax Invoice entity."""
+    objects = InvoiceQuerySet.as_manager()
+
     invoice_number = models.CharField('Invoice #', max_length=50, unique=True, db_index=True)
     order = models.OneToOneField('orders.Order', on_delete=models.CASCADE, related_name='invoice')
     branch = models.ForeignKey('branches.Branch', on_delete=models.CASCADE, related_name='invoices')
