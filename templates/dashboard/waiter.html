@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Waiter & Captain Terminal — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Captain & Waiter Ordering Terminal</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Front of House</span>
+      <span>›</span>
+      <span style="color:var(--df-terracotta-700); font-weight:700;">Active Captain: Ravi Teja</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'pos:terminal' %}" class="df-btn df-btn-terracotta">
+      <span>⚡ Quick Order Punch (POS)</span>
+    </a>
+    <a href="{% url 'tables:reservations' %}" class="df-btn df-btn-outline">
+      <span>📅 Check Reservations</span>
+    </a>
+  </div>
+</div>
+
+<!-- Waiter KPIs -->
+<div class="df-kpi-grid">
+  {% for kpi in kpis %}
+    <div class="df-kpi-card">
+      <div class="df-kpi-top">
+        <div class="df-kpi-label">{{ kpi.label }}</div>
+        <div class="df-kpi-icon {{ kpi.icon }}">{{ kpi.emoji }}</div>
+      </div>
+      <div class="df-kpi-value">{{ kpi.value }}</div>
+      <div class="df-kpi-bottom">
+        <span class="df-trend-pill df-trend-up">{{ kpi.trend }}</span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Interactive Floor Map for Waiter -->
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">My Tables & Instant Service Status</div>
+    <div style="display:flex; gap:0.5rem;">
+      <button class="df-btn df-btn-outline df-btn-sm df-zone-tab active" data-zone="all">All Zones</button>
+      <button class="df-btn df-btn-outline df-btn-sm df-zone-tab" data-zone="ac_dining">AC Hall</button>
+      <button class="df-btn df-btn-outline df-btn-sm df-zone-tab" data-zone="terrace">Terrace</button>
+      <button class="df-btn df-btn-outline df-btn-sm df-zone-tab" data-zone="pdr">PDR (Private)</button>
+    </div>
+  </div>
+  <div class="df-card-body">
+    <div id="df-floor-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:1.1rem;">
+      <!-- Injected via TableEngine -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    TableEngine.init();
+  });
+</script>
+{% endblock %}
