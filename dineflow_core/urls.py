@@ -26,6 +26,8 @@ urlpatterns = [
     path('tax-mgmt/', include('apps.tax_mgmt.urls', namespace='tax_mgmt')),
     path('analytics/', include('apps.analytics.urls', namespace='analytics')),
     path('settings/', include('apps.settings_app.urls', namespace='settings_app')),
+    path('restaurants/', include('apps.restaurants.urls', namespace='restaurants')),
+    path('branches/', include('apps.branches.urls', namespace='branches')),
 ]
 
 handler404 = 'apps.accounts.views.custom_404_view'
