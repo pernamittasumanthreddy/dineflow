@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}System Settings — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>System Settings & Hardware Integration</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Administration</span>
+      <span>›</span>
+      <span>ERP Global Parameters</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('Settings Saved', 'System configurations updated successfully.', 'success')">
+      <span>💾 Save All Configurations</span>
+    </button>
+  </div>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+  
+  <!-- General Restaurant Identity -->
+  <div class="df-card">
+    <div class="df-card-header">
+      <div class="df-card-title">Brand & Legal Entity</div>
+    </div>
+    <div class="df-card-body">
+      <div class="df-form-group">
+        <label class="df-form-label">Restaurant Brand Name</label>
+        <input type="text" class="df-form-control" value="Andhra Spice Kitchen & Grand Dine">
+      </div>
+      <div class="df-form-group">
+        <label class="df-form-label">Company Legal Name (Invoice Header)</label>
+        <input type="text" class="df-form-control" value="DineFlow Hospitality Private Limited">
+      </div>
+      <div class="df-form-group">
+        <label class="df-form-label">Master GSTIN</label>
+        <input type="text" class="df-form-control" value="36AABCS1429B1Z8">
+      </div>
+      <div class="df-form-group">
+        <label class="df-form-label">Central FSSAI License #</label>
+        <input type="text" class="df-form-control" value="10020042001234">
+      </div>
+    </div>
+  </div>
+
+  <!-- Hardware & ESC/POS Thermal Printers -->
+  <div class="df-card">
+    <div class="df-card-header">
+      <div class="df-card-title">ESC/POS Thermal Receipt Printers</div>
+    </div>
+    <div class="df-card-body">
+      <div class="df-form-group">
+        <label class="df-form-label">Billing Counter Printer (Receipts & Invoices)</label>
+        <select class="df-select df-form-control">
+          <option selected>Epson TM-T82III (Ethernet / IP: 192.168.1.200:9100)</option>
+          <option>TVS RP-3200 Star USB</option>
+          <option>Everycom 80mm Bluetooth</option>
+        </select>
+      </div>
+      <div class="df-form-group">
+        <label class="df-form-label">Tandoor Station KOT Printer</label>
+        <select class="df-select df-form-control">
+          <option selected>NGX BTP-80 IP: 192.168.1.201:9100</option>
+          <option>Disabled (Use KDS Screen)</option>
+        </select>
+      </div>
+      <div class="df-form-group">
+        <label class="df-form-label">Biryani Station KOT Printer</label>
+        <select class="df-select df-form-control">
+          <option selected>NGX BTP-80 IP: 192.168.1.202:9100</option>
+          <option>Disabled (Use KDS Screen)</option>
+        </select>
+      </div>
+      <div class="df-form-group">
+        <label class="df-form-label">Thermal Slip Paper Width</label>
+        <select class="df-select df-form-control">
+          <option selected>80mm (Standard 48 Columns)</option>
+          <option>58mm (Compact 32 Columns)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
