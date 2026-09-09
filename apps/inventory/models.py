@@ -24,8 +24,18 @@ class IngredientCategory(TimeStampedModel):
     def __str__(self):
         return self.name
 
+class IngredientQuerySet(models.QuerySet):
+    def with_category(self):
+        """Optimizes queries by joining category and branch."""
+        return self.select_related('category', 'branch')
+
+    def low_stock(self):
+        """Returns ingredients where current stock is at or below minimum reorder level."""
+        return self.filter(current_stock__lte=models.F('minimum_stock_level'))
+
 class Ingredient(TimeStampedModel, SoftDeleteModel):
     """Raw ingredient or material stocked at a branch."""
+    objects = IngredientQuerySet.as_manager()
     branch = models.ForeignKey(
         'branches.Branch',
         on_delete=models.CASCADE,
