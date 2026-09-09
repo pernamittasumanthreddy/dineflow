@@ -5,3 +5,4 @@ PR #65: feat(hr): add Indian standard salary structure with PF, ESI, and Profess
 PR #69: feat(crm): add Silver, Gold, and Platinum tier point accumulation and redemption logic
 PR #77: feat(settings): add thermal receipt printer and KOT station network routing
 PR #85: fix(auth): update views, settings, and test suite for swapped core.User model compatibility
+PR #86: perf(security): enable CSRF strict protection, session security, and db query optimization
