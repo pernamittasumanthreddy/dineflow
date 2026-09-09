@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}{{ title }} — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>{{ title }}</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <a href="{% url 'branches:list' %}">Branches</a>
+      <span>›</span>
+      <span>{{ title }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="df-card" style="max-width:800px; margin:0 auto;">
+  <div class="df-card-header">
+    <div class="df-card-title">Outlet Configuration & Hierarchy</div>
+  </div>
+  <div class="df-card-body">
+    <form method="post">
+      {% csrf_token %}
+      
+      <div style="display:grid; grid-template-columns:2fr 1fr; gap:1rem;">
+        <div class="df-form-group">
+          <label class="df-form-label">Branch Name</label>
+          {{ form.name }}
+        </div>
+        <div class="df-form-group">
+          <label class="df-form-label">Branch Code</label>
+          {{ form.code }}
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="df-form-group">
+          <label class="df-form-label">Assigned Store Manager</label>
+          {{ form.manager }}
+        </div>
+        <div class="df-form-group">
+          <label class="df-form-label">Contact Phone</label>
+          {{ form.phone }}
+        </div>
+      </div>
+
+      <div class="df-form-group">
+        <label class="df-form-label">Official Branch Email</label>
+        {{ form.email }}
+      </div>
+
+      <div class="df-form-group">
+        <label class="df-form-label">Physical Street Address</label>
+        {{ form.address }}
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+        <div class="df-form-group">
+          <label class="df-form-label">City</label>
+          {{ form.city }}
+        </div>
+        <div class="df-form-group">
+          <label class="df-form-label">State</label>
+          {{ form.state }}
+        </div>
+        <div class="df-form-group">
+          <label class="df-form-label">PIN Code</label>
+          {{ form.pincode }}
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+        <div class="df-form-group">
+          <label class="df-form-label">Opening Time</label>
+          {{ form.opening_time }}
+        </div>
+        <div class="df-form-group">
+          <label class="df-form-label">Closing Time</label>
+          {{ form.closing_time }}
+        </div>
+        <div class="df-form-group">
+          <label class="df-form-label">Total Seating Capacity</label>
+          {{ form.total_seating_capacity }}
+        </div>
+      </div>
+
+      <div class="df-form-group" style="margin-top:1rem;">
+        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+          {{ form.is_active }}
+          <span>Outlet is Operational (Active)</span>
+        </label>
+      </div>
+
+      <div style="display:flex; gap:1rem; margin-top:2rem;">
+        <button type="submit" class="df-btn df-btn-terracotta">
+          <span>💾 Save Branch</span>
+        </button>
+        <a href="{% url 'branches:list' %}" class="df-btn df-btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

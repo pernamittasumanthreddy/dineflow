@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Branch Management — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Multi-Branch Outlet Management</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Administration</span>
+      <span>›</span>
+      <span>Restaurant Outlets & Kitchen Hubs</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'branches:create' %}" class="df-btn df-btn-terracotta">
+      <span>+ Provision New Branch Outlet</span>
+    </a>
+  </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="df-alert {% if message.tags %}df-alert-{{ message.tags }}{% endif %}" style="margin-bottom:1rem; padding:0.75rem 1rem; border-radius:var(--df-radius-md); background:var(--df-bg-surface); border:1px solid var(--df-border);">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Registered Restaurant Outlets & Cloud Kitchen Hubs</div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table">
+      <thead>
+        <tr>
+          <th>Outlet Name</th>
+          <th>Branch Code</th>
+          <th>City Location</th>
+          <th>Contact Phone</th>
+          <th>Table Capacity</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in branches %}
+          <tr>
+            <td><strong>{{ b.name }}</strong></td>
+            <td><code>{{ b.code }}</code></td>
+            <td>{{ b.city }}, {{ b.state }}</td>
+            <td>{{ b.phone }}</td>
+            <td>
+              {% if b.total_seating_capacity > 0 %}
+                <span class="df-badge badge-neutral">{{ b.total_seating_capacity }} Seats</span>
+              {% else %}
+                <span class="df-badge badge-info">Cloud Kitchen</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if b.is_active %}
+                <span class="df-badge badge-success">Active</span>
+              {% else %}
+                <span class="df-badge badge-danger">Inactive</span>
+              {% endif %}
+            </td>
+            <td style="display:flex; gap:0.5rem;">
+              <a href="{% url 'branches:edit' b.id %}" class="df-btn df-btn-sm df-btn-outline">Edit</a>
+              <a href="{% url 'branches:switch' b.id %}" class="df-btn df-btn-sm df-btn-secondary">Switch Context</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" style="text-align:center; padding:2rem;">
+              <p>No restaurant branch outlets provisioned yet.</p>
+              <a href="{% url 'branches:create' %}" class="df-btn df-btn-terracotta" style="margin-top:0.5rem; display:inline-block;">+ Add First Branch</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

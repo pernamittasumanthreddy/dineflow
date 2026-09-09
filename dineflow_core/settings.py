@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'apps.tax_mgmt',
     'apps.analytics',
     'apps.settings_app',
+    'apps.restaurants',
+    'apps.branches',
 ]
 
 MIDDLEWARE = [
