@@ -1,30 +1,54 @@
-"""DineFlow Global Template Context Processors."""
-from django.conf import settings
+"""Global Enterprise Context Processor for DineFlow Templates."""
+from django.utils import timezone
+from apps.restaurants.models import Restaurant
+from apps.branches.models import Branch
+from apps.orders.models import Order, OrderStatus
+from apps.inventory.models import Ingredient
+from apps.notifications.models import Notification
 
 def dineflow_global_context(request):
-    """Provides global ERP context variables across all Django templates."""
+    """
+    Supplies global ERP state to all templates:
+    - Active restaurant and branch details
+    - Live pending kitchen order count
+    - Current low-stock warning count
+    - Unread notification count
+    - Server current time in Asia/Kolkata
+    """
     context = {
-        'APP_NAME': 'DineFlow ERP',
-        'APP_VERSION': '2.4.0-Enterprise',
-        'CURRENCY_SYMBOL': getattr(settings, 'DEFAULT_CURRENCY_SYMBOL', '₹'),
-        'CURRENCY_CODE': getattr(settings, 'DEFAULT_CURRENCY', 'INR'),
-        'TIME_ZONE_NAME': getattr(settings, 'TIME_ZONE', 'Asia/Kolkata'),
+        'current_server_time': timezone.localtime(),
+        'app_name': 'DineFlow Enterprise ERP',
+        'active_branch': None,
+        'pending_kds_count': 0,
+        'low_stock_count': 0,
+        'unread_notif_count': 0,
     }
-    
+
     if request.user.is_authenticated:
-        context['current_user'] = request.user
-        context['user_role'] = getattr(request.user, 'role', 'GUEST')
-        context['user_branch'] = getattr(request.user, 'branch', None)
-        try:
-            from apps.notifications.models import Notification
-            context['unread_notifications_count'] = Notification.objects.filter(
-                recipient=request.user, is_read=False
+        branch = getattr(request.user, 'branch', None)
+        if not branch:
+            branch = Branch.objects.first()
+        context['active_branch'] = branch
+
+        # Live operational counters
+        if branch:
+            context['pending_kds_count'] = Order.objects.filter(
+                branch=branch,
+                status__in=[OrderStatus.NEW, OrderStatus.CONFIRMED, OrderStatus.PREPARING]
             ).count()
-        except Exception:
-            context['unread_notifications_count'] = 0
-    else:
-        context['current_user'] = None
-        context['user_role'] = 'ANONYMOUS'
-        context['unread_notifications_count'] = 0
+            context['low_stock_count'] = Ingredient.objects.filter(
+                branch=branch,
+                current_stock__lte=models_F('minimum_stock_level')
+            ).count()
+
+        context['unread_notif_count'] = Notification.objects.filter(
+            recipient=request.user,
+            is_read=False
+        ).count()
 
     return context
+
+def models_F(field_name):
+    """Helper to avoid top-level import cycles if needed."""
+    from django.db.models import F
+    return F(field_name)
