@@ -25,6 +25,7 @@ urlpatterns = [
     path('delivery/', include('apps.delivery.urls', namespace='delivery')),
     path('expenses/', include('apps.expenses.urls', namespace='expenses')),
     path('tax-mgmt/', include('apps.tax_mgmt.urls', namespace='tax_mgmt')),
+    path('tax/', include('apps.tax_mgmt.urls')),
     path('analytics/', include('apps.analytics.urls', namespace='analytics')),
     path('settings/', include('apps.settings_app.urls', namespace='settings_app')),
 ]
