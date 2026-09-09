@@ -3,3 +3,4 @@ PR #44: feat(pos): add itemized and equal split bill calculation engine
 PR #55: feat(inventory): add kitchen wastage logging and ingredient spoilage cost estimation
 PR #65: feat(hr): add Indian standard salary structure with PF, ESI, and Professional Tax calculations
 PR #69: feat(crm): add Silver, Gold, and Platinum tier point accumulation and redemption logic
+PR #77: feat(settings): add thermal receipt printer and KOT station network routing
