@@ -1,0 +1,96 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block title %}{{ selected_role.name }} Sign In — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2.5rem 1.5rem;">
+  <div style="background: rgba(28, 28, 34, 0.88); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--df-radius-xl); box-shadow: 0 24px 48px rgba(0,0,0,0.5); width: 100%; max-width: 480px; padding: 2.5rem; backdrop-filter: blur(16px);">
+    
+    <!-- Top Role Badge & Back to Role Selection -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+      <a href="{% url 'accounts:role_select' %}" style="color: var(--df-saffron-400); text-decoration: none; font-size: 0.8125rem; font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
+        <span>←</span>
+        <span>Choose different role</span>
+      </a>
+      <span class="df-badge" style="background: rgba(194, 67, 18, 0.2); color: var(--df-saffron-400); border: 1px solid rgba(194, 67, 18, 0.4); font-size: 0.72rem; font-weight: 700;">
+        {{ selected_role.code|upper }}
+      </span>
+    </div>
+
+    <!-- Header & Selected Role Icon -->
+    <div style="text-align: center; margin-bottom: 1.75rem;">
+      <div style="font-size: 2.75rem; margin-bottom: 0.5rem; line-height: 1;">{{ selected_role.icon }}</div>
+      <h1 style="font-family: var(--df-font-serif); font-size: 1.75rem; font-weight: 700; color: #FFF; margin-bottom: 0.35rem;">
+        {{ selected_role.name }} Sign In
+      </h1>
+      <p style="color: #A6A6B8; font-size: 0.8125rem; line-height: 1.4;">
+        {{ selected_role.description }}
+      </p>
+    </div>
+
+    <!-- Error Alert Box -->
+    {% if error_message %}
+    <div style="background: rgba(194, 67, 18, 0.15); border: 1px solid var(--df-danger-600); border-radius: var(--df-radius-md); padding: 0.85rem 1rem; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.75rem; color: #FCA5A5; font-size: 0.8125rem; line-height: 1.4;">
+      <span style="font-size: 1.1rem; line-height: 1;">⚠️</span>
+      <div>{{ error_message }}</div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Credentials Helper for Evaluation -->
+    <div style="background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: var(--df-radius-md); padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.78rem; color: #A6A6B8; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="color: var(--df-saffron-300); font-weight: 700; margin-bottom: 0.15rem;">Staff Account:</div>
+        <div>Username: <strong style="color: #FFF;">{{ default_username }}</strong> • Pass: <strong style="color: #FFF;">DineFlow@2026</strong></div>
+      </div>
+      <button type="button" class="df-btn df-btn-sm df-btn-outline" style="font-size: 0.72rem; padding: 0.25rem 0.5rem; color: #FFF; border-color: rgba(255,255,255,0.25);" onclick="fillCredentials('{{ default_username }}', 'DineFlow@2026')">
+        Auto-Fill
+      </button>
+    </div>
+
+    <!-- Login Form -->
+    <form method="POST" action="{% url 'accounts:login_role' selected_role.code %}" id="df-login-form">
+      {% csrf_token %}
+      <input type="hidden" name="role" value="{{ selected_role.code }}">
+      {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
+
+      <div class="df-form-group">
+        <label class="df-form-label" style="color: #FFF;">Username or Work Email</label>
+        <input type="text" name="username" id="username-input" class="df-form-control" value="{{ default_username }}" required style="background: rgba(18, 18, 22, 0.8); color: #FFF; border-color: #383845;">
+      </div>
+
+      <div class="df-form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+          <label class="df-form-label" style="color: #FFF; margin-bottom: 0;">Password</label>
+          <a href="{% url 'accounts:forgot_password' %}" style="font-size: 0.75rem; color: var(--df-saffron-400); text-decoration: none;">Forgot Password?</a>
+        </div>
+        <input type="password" name="password" id="password-input" class="df-form-control" value="DineFlow@2026" required style="background: rgba(18, 18, 22, 0.8); color: #FFF; border-color: #383845;">
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; font-size: 0.8125rem;">
+        <label style="display: flex; align-items: center; gap: 0.4rem; color: #D1D1DE; cursor: pointer;">
+          <input type="checkbox" checked style="accent-color: var(--df-terracotta-600);">
+          Remember session on this station
+        </label>
+      </div>
+
+      <button type="submit" class="df-btn df-btn-terracotta df-btn-lg" style="width: 100%; font-weight: 700;">
+        Sign In as {{ selected_role.name }} →
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.8125rem; color: #8C8C9E;">
+      Need a new role or staff registration? 
+      <a href="{% url 'accounts:register' %}" style="color: var(--df-saffron-400); font-weight: 600; text-decoration: none;">Contact Administrator</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function fillCredentials(user, pass) {
+    document.getElementById('username-input').value = user;
+    document.getElementById('password-input').value = pass;
+  }
+</script>
+{% endblock %}

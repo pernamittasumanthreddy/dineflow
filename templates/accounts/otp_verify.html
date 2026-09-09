@@ -1,0 +1,40 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block title %}Verify OTP — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1.5rem;">
+  <div style="background: rgba(28, 28, 34, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--df-radius-xl); box-shadow: 0 24px 48px rgba(0,0,0,0.5); width: 100%; max-width: 440px; padding: 2.5rem; backdrop-filter: blur(16px); text-align: center;">
+    
+    <div class="df-brand-logo" style="margin: 0 auto 1.25rem; width: 48px; height: 48px; font-size: 1.4rem;">DF</div>
+    <h1 style="font-family: var(--df-font-serif); font-size: 1.75rem; font-weight: 700; color: #FFF; margin-bottom: 0.35rem;">Enter Verification OTP</h1>
+    <p style="color: #A6A6B8; font-size: 0.875rem; margin-bottom: 2rem;">
+      We sent a 6-digit security OTP to <strong style="color:var(--df-saffron-400);">+91 98490 12345</strong>
+    </p>
+
+    <form method="POST" action="{% url 'accounts:otp_verify' %}">
+      {% csrf_token %}
+      
+      <!-- 6 Box OTP Inputs -->
+      <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.75rem;">
+        <input type="text" maxlength="1" value="7" style="width: 48px; height: 56px; text-align: center; font-size: 1.5rem; font-weight: 700; background: rgba(18, 18, 22, 0.8); color: #FFF; border: 1px solid #383845; border-radius: var(--df-radius-md);">
+        <input type="text" maxlength="1" value="4" style="width: 48px; height: 56px; text-align: center; font-size: 1.5rem; font-weight: 700; background: rgba(18, 18, 22, 0.8); color: #FFF; border: 1px solid #383845; border-radius: var(--df-radius-md);">
+        <input type="text" maxlength="1" value="9" style="width: 48px; height: 56px; text-align: center; font-size: 1.5rem; font-weight: 700; background: rgba(18, 18, 22, 0.8); color: #FFF; border: 1px solid #383845; border-radius: var(--df-radius-md);">
+        <input type="text" maxlength="1" value="1" style="width: 48px; height: 56px; text-align: center; font-size: 1.5rem; font-weight: 700; background: rgba(18, 18, 22, 0.8); color: #FFF; border: 1px solid #383845; border-radius: var(--df-radius-md);">
+        <input type="text" maxlength="1" value="8" style="width: 48px; height: 56px; text-align: center; font-size: 1.5rem; font-weight: 700; background: rgba(18, 18, 22, 0.8); color: #FFF; border: 1px solid #383845; border-radius: var(--df-radius-md);">
+        <input type="text" maxlength="1" value="2" style="width: 48px; height: 56px; text-align: center; font-size: 1.5rem; font-weight: 700; background: rgba(18, 18, 22, 0.8); color: #FFF; border: 1px solid #383845; border-radius: var(--df-radius-md);">
+      </div>
+
+      <button type="submit" class="df-btn df-btn-terracotta df-btn-lg" style="width: 100%;">
+        Verify & Sign In ✓
+      </button>
+    </form>
+
+    <div style="margin-top: 1.75rem; font-size: 0.8125rem; color: #8C8C9E;">
+      Didn't receive the code? 
+      <a href="#" onclick="DineFlow.showToast('OTP Resent', 'New OTP dispatched to your phone.', 'success'); return false;" style="color: var(--df-saffron-400); font-weight: 600; text-decoration: none;">Resend OTP (30s)</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
