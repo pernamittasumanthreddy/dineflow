@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Table Reservations — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Table Reservations & Guest Waitlist</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Front of House</span>
+      <span>›</span>
+      <span style="color:var(--df-maroon-800); font-weight:700;">Evening Service Booking Roster</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('New Booking', 'Opening guest reservation modal...', 'info')">
+      <span>+ New Table Reservation</span>
+    </button>
+    <a href="{% url 'tables:floor_plan' %}" class="df-btn df-btn-outline">
+      <span>🪑 Floor Plan Map</span>
+    </a>
+  </div>
+</div>
+
+<!-- Reservations List Card -->
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Today's Confirmed & Upcoming Reservations</div>
+    <div style="display:flex; gap:0.5rem;">
+      <input type="text" id="df-res-search" class="df-input-search" placeholder="Search guest name, phone, zone...">
+      <button class="df-btn df-btn-outline df-btn-sm" onclick="ExportPrint.exportTableToCSV('df-res-table', 'reservations_today.csv')">Export CSV</button>
+    </div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table" id="df-res-table">
+      <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>Guest Name</th>
+          <th>Mobile (+91)</th>
+          <th>Party Size</th>
+          <th>Preferred Zone</th>
+          <th>Booking Time</th>
+          <th>Special Notes / Occasion</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reservations %}
+          <tr>
+            <td><strong>{{ r.id }}</strong></td>
+            <td><strong>{{ r.guest }}</strong></td>
+            <td>{{ r.phone }}</td>
+            <td><span class="df-badge badge-neutral">{{ r.party_size }} Guests</span></td>
+            <td>{{ r.zone }}</td>
+            <td style="font-weight:700; color:var(--df-maroon-800);">{{ r.time }}</td>
+            <td style="font-size:0.8125rem; color:var(--df-text-secondary); font-style:italic;">{{ r.notes }}</td>
+            <td><span class="df-badge badge-success">{{ r.status }}</span></td>
+            <td>
+              <div class="df-action-btns">
+                <button class="df-btn-icon" onclick="DineFlow.showToast('Guest Arrived', 'Table marked seated for {{ r.guest }}', 'success')" title="Seat Guests">🪑</button>
+                <button class="df-btn-icon" onclick="DineFlow.showToast('WhatsApp Sent', 'Reminder SMS & WhatsApp dispatched to {{ r.phone }}', 'info')" title="WhatsApp Reminder">📱</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    DineFlow.initTableFilter('df-res-search', 'df-res-table');
+  });
+</script>
+{% endblock %}
