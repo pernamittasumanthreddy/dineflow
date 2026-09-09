@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Menu Master Items — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Menu Master Dishes & Pricing</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Menu Engineering</span>
+      <span>›</span>
+      <span>Master Catalog</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <button class="df-btn df-btn-terracotta" onclick="DineFlow.showToast('New Menu Item', 'Opening dish creation wizard...', 'info')">
+      <span>+ Add New Dish</span>
+    </button>
+    <a href="{% url 'menu:recipe_costing' %}" class="df-btn df-btn-maroon">
+      <span>🍲 Recipe Costing Matrix</span>
+    </a>
+    <a href="{% url 'menu:categories' %}" class="df-btn df-btn-outline">
+      <span>🏷️ Manage Categories</span>
+    </a>
+  </div>
+</div>
+
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Food & Beverage Master Catalog</div>
+    <div style="display:flex; gap:0.5rem;">
+      <input type="text" id="df-menu-search" class="df-input-search" placeholder="Search dish, category, tax slab...">
+      <button class="df-btn df-btn-outline df-btn-sm" onclick="ExportPrint.exportTableToCSV('df-menu-table', 'menu_master.csv')">Export CSV</button>
+    </div>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table" id="df-menu-table">
+      <thead>
+        <tr>
+          <th>Dish Name</th>
+          <th>Category</th>
+          <th>Selling Price</th>
+          <th>Ingredient Cost (COGS)</th>
+          <th>Gross Margin</th>
+          <th>GST Tax Slab</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in items %}
+          <tr>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span class="df-diet-mark {{ i.diet|diet_badge }}"></span>
+                <strong>{{ i.name }}</strong>
+              </div>
+            </td>
+            <td>{{ i.category }}</td>
+            <td style="font-weight:700; color:var(--df-maroon-800);">{{ i.price|inr }}</td>
+            <td>{{ i.cost|inr }}</td>
+            <td><span class="df-badge badge-success">{{ i.margin }}</span></td>
+            <td><span class="df-badge badge-neutral">{{ i.tax_rate }}</span></td>
+            <td><span class="df-badge badge-success">{{ i.status }}</span></td>
+            <td>
+              <div class="df-action-btns">
+                <button class="df-btn-icon" onclick="DineFlow.showToast('Edit Dish', 'Opening editor for {{ i.name }}', 'info')">✏️</button>
+                <a href="{% url 'menu:recipe_costing' %}" class="df-btn-icon" title="View Recipe">🍲</a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    DineFlow.initTableFilter('df-menu-search', 'df-menu-table');
+  });
+</script>
+{% endblock %}
