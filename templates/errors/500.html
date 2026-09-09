@@ -1,0 +1,22 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block title %}500 — Server Internal Error | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1.5rem; text-align: center;">
+  <div style="background: rgba(28, 28, 34, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--df-radius-xl); max-width: 500px; padding: 3rem 2rem; backdrop-filter: blur(16px);">
+    <div style="font-size: 4.5rem; font-family: var(--df-font-serif); font-weight: 800; color: var(--df-danger-600); line-height: 1; margin-bottom: 0.75rem;">
+      500
+    </div>
+    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔥</div>
+    <h1 style="font-size: 1.5rem; font-weight: 700; color: #FFF; margin-bottom: 0.75rem;">Kitchen System Flare Up</h1>
+    <p style="color: #A6A6B8; font-size: 0.9375rem; line-height: 1.6; margin-bottom: 2rem;">
+      Our servers encountered an unexpected condition. Incident details have been logged to the audit center.
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center;">
+      <a href="{% url 'dashboard:owner' %}" class="df-btn df-btn-terracotta">Return to Command Center</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
