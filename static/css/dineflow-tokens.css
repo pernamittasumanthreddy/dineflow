@@ -1,0 +1,109 @@
+/**
+ * DineFlow Design Tokens
+ * Strict Zero-Blue Palette: Charcoal, Cream, Terracotta, Saffron, Maroon, Burgundy, Green, Gold
+ */
+
+:root {
+  /* Brand Primary Colors */
+  --df-charcoal-900: #141417;
+  --df-charcoal-800: #1E1E24;
+  --df-charcoal-700: #2B2B33;
+  --df-charcoal-600: #3C3C47;
+  --df-charcoal-500: #555563;
+  --df-charcoal-400: #7A7A8C;
+  --df-charcoal-300: #A6A6B8;
+  --df-charcoal-200: #D1D1DE;
+  --df-charcoal-100: #EDEDF5;
+
+  /* Brand Maroon & Burgundy */
+  --df-maroon-900: #420C12;
+  --df-maroon-800: #5C131B;
+  --df-maroon-700: #7A1A24;
+  --df-maroon-600: #9E222F;
+  --df-maroon-500: #C42B3B;
+  --df-maroon-100: #FCE8EA;
+
+  /* Brand Terracotta & Spice Clay */
+  --df-terracotta-900: #73270A;
+  --df-terracotta-800: #9C350D;
+  --df-terracotta-700: #C24312;
+  --df-terracotta-600: #E0531A;
+  --df-terracotta-500: #F06A33;
+  --df-terracotta-400: #F58C60;
+  --df-terracotta-100: #FDEDE6;
+
+  /* Brand Indian Saffron & Warm Amber */
+  --df-saffron-900: #733E05;
+  --df-saffron-800: #A15707;
+  --df-saffron-700: #CF7009;
+  --df-saffron-600: #F58B14;
+  --df-saffron-500: #FFA238;
+  --df-saffron-400: #FFB96B;
+  --df-saffron-100: #FFF4E5;
+
+  /* Brand Gold */
+  --df-gold-800: #8C731A;
+  --df-gold-700: #B89722;
+  --df-gold-600: #D9B32B;
+  --df-gold-500: #F0CA3F;
+  --df-gold-100: #FDF9E7;
+
+  /* Semantic Status Colors */
+  --df-green-900: #0E421B;
+  --df-green-800: #155C27;
+  --df-green-700: #1E7A35;
+  --df-green-600: #279C44;
+  --df-green-500: #34BD55;
+  --df-green-100: #E6F7EB;
+
+  --df-danger-800: #781717;
+  --df-danger-700: #A32020;
+  --df-danger-600: #CF2D2D;
+  --df-danger-100: #FDE8E8;
+
+  /* Warm Neutral Surfaces & Backgrounds */
+  --df-bg-app: #FAF7F2;
+  --df-bg-cream: #F5EFEB;
+  --df-bg-surface: #FFFFFF;
+  --df-bg-surface-subtle: #F9F6F0;
+  --df-bg-sidebar: #191920;
+  --df-bg-sidebar-hover: #262630;
+  --df-bg-sidebar-active: #7A1A24;
+
+  /* Text Colors */
+  --df-text-primary: #1F1F24;
+  --df-text-secondary: #585866;
+  --df-text-muted: #8C8C9E;
+  --df-text-light: #F7F5F0;
+  --df-text-on-dark: #FFFFFF;
+
+  /* Borders & Dividers */
+  --df-border-light: #EFE9E0;
+  --df-border-medium: #DEC9B5;
+  --df-border-dark: #383842;
+  --df-border-focus: #C24312;
+
+  /* Typography */
+  --df-font-sans: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --df-font-serif: 'Playfair Display', Georgia, serif;
+  --df-font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Elevation Shadows */
+  --df-shadow-xs: 0 1px 2px rgba(33, 20, 10, 0.04);
+  --df-shadow-sm: 0 2px 4px rgba(33, 20, 10, 0.06), 0 1px 2px rgba(33, 20, 10, 0.04);
+  --df-shadow-md: 0 6px 12px -2px rgba(33, 20, 10, 0.08), 0 3px 6px -2px rgba(33, 20, 10, 0.05);
+  --df-shadow-lg: 0 12px 24px -4px rgba(33, 20, 10, 0.12), 0 6px 12px -4px rgba(33, 20, 10, 0.06);
+  --df-shadow-xl: 0 20px 32px -6px rgba(33, 20, 10, 0.16), 0 10px 16px -6px rgba(33, 20, 10, 0.08);
+
+  /* Radii */
+  --df-radius-sm: 6px;
+  --df-radius-md: 10px;
+  --df-radius-lg: 14px;
+  --df-radius-xl: 20px;
+  --df-radius-full: 9999px;
+
+  /* Layout */
+  --df-sidebar-width: 280px;
+  --df-sidebar-collapsed-width: 80px;
+  --df-navbar-height: 70px;
+}
