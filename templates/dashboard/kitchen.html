@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Kitchen Staff & Chef Station — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Kitchen Display System (KDS) & Chef Station</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Kitchen Operations</span>
+      <span>›</span>
+      <span style="color:var(--df-terracotta-700); font-weight:700;">Live Cooking Queue</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'kds:live' %}" class="df-btn df-btn-maroon">
+      <span>🔥 Fullscreen KDS Monitor</span>
+    </a>
+    <a href="{% url 'menu:recipe_costing' %}" class="df-btn df-btn-outline">
+      <span>🍲 Recipe Ingredients Guide</span>
+    </a>
+  </div>
+</div>
+
+<!-- Kitchen KPIs -->
+<div class="df-kpi-grid">
+  {% for kpi in kpis %}
+    <div class="df-kpi-card">
+      <div class="df-kpi-top">
+        <div class="df-kpi-label">{{ kpi.label }}</div>
+        <div class="df-kpi-icon {{ kpi.icon }}">{{ kpi.emoji }}</div>
+      </div>
+      <div class="df-kpi-value">{{ kpi.value }}</div>
+      <div class="df-kpi-bottom">
+        <span class="df-trend-pill {% if kpi.trend_up %}df-trend-up{% else %}df-trend-down{% endif %}">
+          {{ kpi.trend }}
+        </span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Embedded Interactive KDS Kanban -->
+<div class="df-card" style="background:#121215; border-color:#2B2B33; color:#FFF;">
+  <div class="df-card-header" style="border-bottom-color:#2B2B33; background:#1A1A20;">
+    <div class="df-kds-title-group">
+      <span class="df-kds-pulse"></span>
+      <strong style="color:#FFF; font-size:1.1rem;">Live Order Queue & Station Dispatch</strong>
+    </div>
+
+    <!-- Station Filter Buttons -->
+    <div class="df-kds-stations">
+      <button class="df-kds-station-btn active" data-station="all">All Stations (4)</button>
+      <button class="df-kds-station-btn" data-station="tandoor">Tandoor & Starters</button>
+      <button class="df-kds-station-btn" data-station="biryani">Biryani & Rice</button>
+      <button class="df-kds-station-btn" data-station="curry">Curries & Breads</button>
+    </div>
+  </div>
+
+  <div class="df-card-body" style="padding:1.25rem;">
+    <div class="df-kds-board">
+      
+      <!-- 1. NEW ORDERS -->
+      <div class="df-kds-column col-new">
+        <div class="df-kds-column-header">
+          <span>1. New Tickets (KOT)</span>
+          <span class="df-badge badge-warning">Queue</span>
+        </div>
+        <div class="df-kds-order-list" id="df-kds-col-new">
+          <!-- Injected via KDSEngine -->
+        </div>
+      </div>
+
+      <!-- 2. PREPARING (COOKING) -->
+      <div class="df-kds-column col-prep">
+        <div class="df-kds-column-header">
+          <span>2. On Flame / Cooking</span>
+          <span class="df-badge badge-warning" style="background:#E0531A; color:#FFF;">Active</span>
+        </div>
+        <div class="df-kds-order-list" id="df-kds-col-prep">
+          <!-- Injected via KDSEngine -->
+        </div>
+      </div>
+
+      <!-- 3. READY TO SERVE -->
+      <div class="df-kds-column col-ready">
+        <div class="df-kds-column-header">
+          <span>3. Plated & Ready</span>
+          <span class="df-badge badge-success">Call Waiter</span>
+        </div>
+        <div class="df-kds-order-list" id="df-kds-col-ready">
+          <!-- Injected via KDSEngine -->
+        </div>
+      </div>
+
+      <!-- 4. COMPLETED / SERVED -->
+      <div class="df-kds-column col-completed">
+        <div class="df-kds-column-header">
+          <span>4. Served / Dispatched</span>
+          <span class="df-badge badge-neutral">Done</span>
+        </div>
+        <div class="df-kds-order-list" id="df-kds-col-done">
+          <!-- Injected via KDSEngine -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    KDSEngine.init();
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}HR & Indian Payroll — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>Human Resources & Staff Payroll</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>HRMS Suite</span>
+      <span>›</span>
+      <span style="color:var(--df-maroon-800); font-weight:700;">Biometric Attendance & Compliance</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'hr:payroll' %}" class="df-btn df-btn-terracotta">
+      <span>💰 Process Monthly Payroll</span>
+    </a>
+    <a href="{% url 'hr:shifts' %}" class="df-btn df-btn-maroon">
+      <span>🔄 Weekly Shift Rosters</span>
+    </a>
+    <a href="{% url 'hr:employee_list' %}" class="df-btn df-btn-outline">
+      <span>👥 Add New Employee</span>
+    </a>
+  </div>
+</div>
+
+<!-- HR KPIs -->
+<div class="df-kpi-grid">
+  {% for kpi in kpis %}
+    <div class="df-kpi-card">
+      <div class="df-kpi-top">
+        <div class="df-kpi-label">{{ kpi.label }}</div>
+        <div class="df-kpi-icon {{ kpi.icon }}">{{ kpi.emoji }}</div>
+      </div>
+      <div class="df-kpi-value">{{ kpi.value }}</div>
+      <div class="df-kpi-bottom">
+        <span class="df-trend-pill df-trend-up">{{ kpi.trend }}</span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Today's Attendance Table -->
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Live Biometric Punch & Shift Attendance Log</div>
+    <a href="{% url 'hr:attendance' %}" class="df-btn df-btn-outline df-btn-sm">Full Attendance Ledger →</a>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table">
+      <thead>
+        <tr>
+          <th>Employee Name</th>
+          <th>Designation / Role</th>
+          <th>Assigned Shift</th>
+          <th>Biometric Punch-In</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in staff_attendance %}
+          <tr>
+            <td><strong>{{ a.name }}</strong></td>
+            <td>{{ a.role }}</td>
+            <td>{{ a.shift }}</td>
+            <td style="font-family:var(--df-font-mono);">{{ a.punch_in }}</td>
+            <td>
+              <span class="df-badge {% if a.status == 'present' %}badge-success{% elif a.status == 'late' %}badge-warning{% else %}badge-neutral{% endif %}">
+                {{ a.status }}
+              </span>
+            </td>
+            <td>
+              <button class="df-btn df-btn-outline df-btn-sm" onclick="DineFlow.showToast('Shift Adjusted', 'Punch marked for {{ a.name }}', 'info')">
+                Override
+              </button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

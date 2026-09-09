@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dineflow_tags %}
+
+{% block title %}Restaurant Manager Operations — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div class="df-page-header">
+  <div class="df-page-title-group">
+    <h1>General Manager Floor Operations</h1>
+    <div class="df-breadcrumb">
+      <a href="{% url 'landing:index' %}">DineFlow</a>
+      <span>›</span>
+      <span>Operations Command</span>
+      <span>›</span>
+      <span style="color:var(--df-maroon-800); font-weight:600;">Shift: Afternoon Dining</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:0.75rem;">
+    <a href="{% url 'tables:floor_plan' %}" class="df-btn df-btn-terracotta">
+      <span>🪑 Interactive Floor Plan</span>
+    </a>
+    <a href="{% url 'kds:live' %}" class="df-btn df-btn-maroon">
+      <span>🔥 Kitchen Display (KDS)</span>
+    </a>
+    <a href="{% url 'billing:day_end_zreport' %}" class="df-btn df-btn-outline">
+      <span>🌙 Shift Handover Audit</span>
+    </a>
+  </div>
+</div>
+
+<!-- Manager KPIs -->
+<div class="df-kpi-grid">
+  {% for kpi in kpis %}
+    <div class="df-kpi-card">
+      <div class="df-kpi-top">
+        <div class="df-kpi-label">{{ kpi.label }}</div>
+        <div class="df-kpi-icon {{ kpi.icon }}">{{ kpi.emoji }}</div>
+      </div>
+      <div class="df-kpi-value">{{ kpi.value }}</div>
+      <div class="df-kpi-bottom">
+        <span class="df-trend-pill {% if kpi.trend_up %}df-trend-up{% else %}df-trend-down{% endif %}">
+          {{ kpi.trend }}
+        </span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Live Table Status Overview -->
+<div class="df-card">
+  <div class="df-card-header">
+    <div class="df-card-title">Live Table Occupancy & Running Orders</div>
+    <a href="{% url 'tables:floor_plan' %}" class="df-btn df-btn-outline df-btn-sm">Open Full Floor Grid →</a>
+  </div>
+  <div class="df-table-responsive">
+    <table class="df-table">
+      <thead>
+        <tr>
+          <th>Table / Zone</th>
+          <th>Assigned Captain</th>
+          <th>Guests</th>
+          <th>Occupied Duration</th>
+          <th>Running Bill Total</th>
+          <th>Dining Stage</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in live_tables %}
+          <tr>
+            <td><strong>{{ t.table }}</strong></td>
+            <td>{{ t.waiter }}</td>
+            <td>{{ t.guests }} Guests</td>
+            <td>{{ t.occupied_since }}</td>
+            <td style="font-weight:700; color:var(--df-maroon-800);">{{ t.amount }}</td>
+            <td><span class="df-badge badge-warning">{{ t.status }}</span></td>
+            <td>
+              <div class="df-action-btns">
+                <a href="{% url 'pos:terminal' %}?table={{ t.table }}" class="df-btn-icon" title="Open in POS">💻</a>
+                <button class="df-btn-icon" onclick="TableEngine.openTableModal('T-04')" title="Table Actions">⚙️</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
