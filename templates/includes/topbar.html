@@ -1,0 +1,33 @@
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="outlet-badge">
+      <span class="outlet-dot"></span>
+      <span><strong>Outlet:</strong> {{ user_branch.name|default:"Main Flagship (Banjara Hills)" }}</span>
+    </div>
+    <div class="clock-display" id="live-digital-clock">--:--:-- IST</div>
+  </div>
+
+  <div class="topbar-right">
+    <a href="{% url 'notifications:list' %}" class="btn btn-secondary btn-sm" style="position:relative;">
+      🔔 Notifications
+      {% if unread_notifications_count > 0 %}
+        <span class="badge badge-danger" style="position:absolute;top:-6px;right:-6px;padding:2px 6px;">{{ unread_notifications_count }}</span>
+      {% endif %}
+    </a>
+
+    {% if current_user %}
+      <div class="user-profile-pill">
+        <div class="user-avatar-circle">
+          {{ current_user.first_name|default:current_user.username|slice:":1"|upper }}
+        </div>
+        <div>
+          <div style="font-weight:600;font-size:0.85rem;">{{ current_user.display_name }}</div>
+          <div style="font-size:0.7rem;color:var(--gold-accent);">{{ current_user.get_role_display }}</div>
+        </div>
+      </div>
+      <a href="{% url 'accounts:logout' %}" class="btn btn-secondary btn-sm" title="Sign Out">🚪 Logout</a>
+    {% else %}
+      <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">Sign In</a>
+    {% endif %}
+  </div>
+</header>
