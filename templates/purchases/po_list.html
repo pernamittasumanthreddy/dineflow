@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Purchase Orders | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Procurement & Purchase Orders</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Raw material supply replenishment with automatic goods intake</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'suppliers:list' %}" class="btn btn-outline">Suppliers</a>
+        <a href="{% url 'purchases:create' %}" class="btn btn-primary">+ Raise PO</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+        <div style="min-width: 180px;">
+            <select name="status" class="form-control" onchange="this.form.submit()">
+                <option value="">All PO Statuses</option>
+                {% for s_val, s_name in statuses %}
+                    <option value="{{ s_val }}" {% if status_filter == s_val %}selected{% endif %}>{{ s_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if status_filter %}
+            <a href="{% url 'purchases:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">PO Number</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Vendor</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Order Date</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Expected Delivery</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Total (₹)</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for po in pos %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <a href="{% url 'purchases:detail' po.id %}" style="color: var(--accent-gold); font-weight: 700; text-decoration: none;">
+                            {{ po.po_number }}
+                        </a>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ po.items.count }} raw materials</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--text-primary);">
+                        {{ po.supplier.company_name }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ po.order_date|date:"d M Y" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ po.expected_delivery_date|date:"d M Y"|default:"Immediate" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 800; color: var(--accent-gold);">
+                        {{ po.total_amount|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        {% if po.status == 'RECEIVED' %}
+                            <span class="badge badge-success">RECEIVED</span>
+                        {% elif po.status == 'CANCELLED' %}
+                            <span class="badge badge-danger">CANCELLED</span>
+                        {% else %}
+                            <span class="badge badge-info">{{ po.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'purchases:detail' po.id %}" class="btn btn-sm btn-outline">View</a>
+                        {% if po.status != 'RECEIVED' and po.status != 'CANCELLED' %}
+                            <a href="{% url 'purchases:receive_goods' po.id %}" class="btn btn-sm btn-primary" style="margin-left: 0.25rem;">Receive</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No purchase orders raised.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

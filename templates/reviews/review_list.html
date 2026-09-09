@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Guest Reviews & Ratings | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Guest Reviews & Feedback</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Customer dining experience, food ratings, service satisfaction, and manager replies</p>
+    </div>
+    <div class="card stat-card" style="padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; border-left: 3px solid var(--accent-gold);">
+        <span style="font-size: 1.5rem;">⭐</span>
+        <div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-gold);">{{ avg_rating }} / 5.0</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Average Rating</div>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 1.25rem;">
+    {% for rev in reviews %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">{{ rev.customer.name|default:"Guest" }}</strong>
+                {% if rev.order %}
+                    <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;">(Order #{{ rev.order.order_number }})</span>
+                {% endif %}
+                <div style="color: var(--text-muted); font-size: 0.78rem;">{{ rev.created_at|date:"d M Y, H:i" }}</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: var(--accent-gold); font-size: 1.1rem; font-weight: 700;">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= rev.overall_rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </span>
+                <span class="badge badge-info">{{ rev.overall_rating }}.0</span>
+            </div>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin: 0 0 1rem 0;">
+            {{ rev.comment|default:"No written feedback provided." }}
+        </p>
+
+        {% if rev.management_response %}
+        <div style="background: rgba(255,255,255,0.02); border-left: 3px solid var(--accent-gold); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; margin-bottom: 0.5rem;">
+            <div style="font-size: 0.75rem; color: var(--accent-gold); font-weight: 600; text-transform: uppercase; margin-bottom: 0.25rem;">
+                Management Response (by {{ rev.responded_by.display_name }} on {{ rev.responded_at|date:"d M Y" }})
+            </div>
+            <div style="color: var(--text-primary); font-size: 0.85rem;">{{ rev.management_response }}</div>
+        </div>
+        {% else %}
+        <form method="POST" action="{% url 'reviews:reply' rev.id %}" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+            {% csrf_token %}
+            <input type="text" name="response" placeholder="Write official management response to guest..." class="form-control" style="font-size: 0.82rem;" required>
+            <button type="submit" class="btn btn-sm btn-outline">Reply</button>
+        </form>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="card" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        No customer reviews submitted yet.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

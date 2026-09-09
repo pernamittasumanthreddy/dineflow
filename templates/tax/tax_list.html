@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Indian GST Tax Configuration | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Indian GST Slabs & SAC Categories</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">SAC Code 9963, CGST 2.5% + SGST 2.5% splits, and IGST interstate tax parameters</p>
+    </div>
+    <a href="{% url 'billing:list' %}" class="btn btn-outline">Tax Invoices</a>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Tax Category Name</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">SAC / HSN Code</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">CGST Rate</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">SGST Rate</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Total GST Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in categories %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: var(--text-primary);">
+                        {{ t.name }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; font-family: monospace; font-size: 0.85rem; color: var(--accent-gold);">
+                        {{ t.sac_code }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; color: var(--text-secondary);">
+                        {{ t.cgst_rate_percent }}%
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; color: var(--text-secondary);">
+                        {{ t.sgst_rate_percent }}%
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right; font-weight: 800; color: var(--accent-gold); font-size: 1rem;">
+                        {{ t.total_rate_percent }}%
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No tax categories initialized.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

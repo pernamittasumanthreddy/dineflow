@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Purchase Order {{ po.po_number }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">{{ po.po_number }}</h1>
+            <span class="badge {% if po.status == 'RECEIVED' %}badge-success{% elif po.status == 'CANCELLED' %}badge-danger{% else %}badge-info{% endif %}">
+                {{ po.get_status_display }}
+            </span>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Vendor: <strong>{{ po.supplier.company_name }}</strong> | Ordered on {{ po.order_date|date:"d M Y" }}</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'purchases:list' %}" class="btn btn-outline">Back to Orders</a>
+        {% if po.status != 'RECEIVED' and po.status != 'CANCELLED' %}
+            <a href="{% url 'purchases:receive_goods' po.id %}" class="btn btn-primary">
+                📦 Inward Receive Goods (Update Stock)
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    <!-- Line Items Table -->
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary);">
+            Procured Inventory Lines
+        </div>
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.75rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Ingredient</th>
+                    <th style="padding: 0.75rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Ordered Qty</th>
+                    <th style="padding: 0.75rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Received Qty</th>
+                    <th style="padding: 0.75rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Unit Rate</th>
+                    <th style="padding: 0.75rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for itm in items %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <div style="font-weight: 600; color: var(--text-primary);">{{ itm.ingredient.name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Unit: {{ itm.ingredient.unit }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 600; color: var(--text-primary);">
+                        {{ itm.ordered_quantity }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; color: var(--accent-gold);">
+                        {{ itm.received_quantity }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; color: var(--text-secondary);">
+                        {{ itm.unit_cost|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right; font-weight: 700; color: var(--text-primary);">
+                        {{ itm.total_cost|inr }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                        No materials specified.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Details Card -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="card">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin: 0 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                Vendor & Receiving Details
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.88rem;">
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">SUPPLIER</span>
+                    <strong style="color: var(--text-primary);">{{ po.supplier.company_name }}</strong>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">GSTIN: {{ po.supplier.gstin|default:"N/A" }}</div>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">RAISED BY</span>
+                    <span style="color: var(--text-primary);">{{ po.created_by.display_name }}</span>
+                </div>
+                {% if po.received_by %}
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">RECEIVED BY</span>
+                    <span style="color: var(--success-color);">{{ po.received_by.display_name }} ({{ po.received_at|date:"d M Y, H:i" }})</span>
+                </div>
+                {% endif %}
+                {% if po.notes %}
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">NOTES</span>
+                    <span style="color: var(--text-secondary); font-style: italic;">{{ po.notes }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card" style="background: linear-gradient(145deg, #11141c 0%, #0d1017 100%);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                <span>Subtotal:</span>
+                <span>{{ po.subtotal_amount|inr }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                <span>GST (5%):</span>
+                <span>{{ po.tax_amount|inr }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 0.75rem; font-size: 1.2rem; font-weight: 800; color: var(--accent-gold);">
+                <span>Total PO Value:</span>
+                <span>{{ po.total_amount|inr }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

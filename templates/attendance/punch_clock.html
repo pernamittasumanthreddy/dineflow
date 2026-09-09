@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+{% block title %}Time-Clock Terminal — DineFlow{% endblock %}
+
+{% block content %}
+<div style="max-width:650px;margin:0 auto;">
+  <div style="text-align:center;margin-bottom:28px;">
+    <h1>Digital Staff Time-Clock</h1>
+    <p style="color:var(--text-muted);">Biometric attendance punch terminal & automated late tracking</p>
+  </div>
+
+  <div class="glass-card" style="text-align:center;padding:40px;border-color:var(--border-color);box-shadow:var(--shadow-glow);">
+    <div style="font-size:12px;color:var(--gold-accent);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:6px;">
+      Asia/Kolkata Official Time
+    </div>
+    <div style="font-family:monospace;font-size:2.8rem;font-weight:700;color:#ffffff;margin-bottom:20px;">
+      {{ now_time|time:"H:i:s" }}
+    </div>
+
+    {% if employee %}
+      <div style="background:rgba(255,255,255,0.03);padding:16px;border-radius:var(--radius-md);margin-bottom:24px;display:inline-block;text-align:left;min-width:280px;">
+        <div>Staff: <strong>{{ employee.user.display_name }}</strong></div>
+        <div>Emp ID: <strong>{{ employee.employee_id }}</strong></div>
+        <div>Role: <strong>{{ employee.designation.title|default:"Staff" }}</strong></div>
+        <div style="margin-top:6px;font-size:11px;color:var(--text-muted);">Date: {{ today|date:"l, d-M-Y" }}</div>
+      </div>
+
+      <!-- Today's Attendance State -->
+      {% if today_record %}
+        <div style="margin-bottom:24px;">
+          {{ today_record.status|status_badge }}
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            In: <strong>{{ today_record.check_in|time:"H:i"|default:"Not Yet" }}</strong> | 
+            Out: <strong>{{ today_record.check_out|time:"H:i"|default:"Not Yet" }}</strong>
+            {% if today_record.late_minutes > 0 %}
+              <div style="color:#f87171;margin-top:4px;">⚠️ Late by {{ today_record.late_minutes }} minutes</div>
+            {% endif %}
+            {% if today_record.overtime_hours > 0 %}
+              <div style="color:#34d399;margin-top:4px;">⏱️ Overtime: {{ today_record.overtime_hours }} hrs</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      <form method="POST" action="{% url 'attendance:punch' %}">
+        {% csrf_token %}
+        <div style="display:flex;gap:16px;justify-content:center;">
+          <button type="submit" name="action" value="PUNCH_IN" class="btn btn-success" style="padding:14px 28px;font-size:1rem;">
+            🟢 Punch In (Shift Start)
+          </button>
+          <button type="submit" name="action" value="PUNCH_OUT" class="btn btn-danger" style="padding:14px 28px;font-size:1rem;">
+            🔴 Punch Out (Shift End)
+          </button>
+        </div>
+      </form>
+    {% else %}
+      <div style="color:var(--text-muted);padding:20px;">
+        No employee profile linked to your user account.<br>
+        <a href="{% url 'employees:list' %}" style="color:var(--gold-accent);">View Staff Directory &rarr;</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

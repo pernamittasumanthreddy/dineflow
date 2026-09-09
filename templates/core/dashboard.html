@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+{% block title %}Dashboard — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;">
+  <div>
+    <h1>Welcome, {{ current_user.display_name }}</h1>
+    <p style="color:var(--text-muted);">Role: <strong>{{ current_user.get_role_display }}</strong> | Outlet: <strong>{{ user_branch.name|default:"Flagship Outlet" }}</strong></p>
+  </div>
+  <div style="display:flex;gap:12px;">
+    <a href="{% url 'orders:pos' %}" class="btn btn-primary">⚡ Launch POS</a>
+    <a href="{% url 'kitchen:kds' %}" class="btn btn-secondary">🍳 Live KDS</a>
+    <a href="{% url 'tables:floor_plan' %}" class="btn btn-secondary">🪑 Floor Plan</a>
+  </div>
+</div>
+
+<!-- Stat KPI Cards -->
+<div class="grid-cols-4">
+  <div class="stat-card">
+    <div class="stat-label">Today's Completed Revenue</div>
+    <div class="stat-value">{{ total_sales_today|inr }}</div>
+    <div class="stat-sub"><span>📈</span> Settled GST billing</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Orders Placed Today</div>
+    <div class="stat-value">{{ total_orders_today }}</div>
+    <div class="stat-sub"><span>⚡</span> Real-time ticket count</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Occupied Dining Tables</div>
+    <div class="stat-value">{{ active_tables_count }}</div>
+    <div class="stat-sub" style="color:var(--danger);"><span>🪑</span> In dining service</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Pending Kitchen KDS Tickets</div>
+    <div class="stat-value">{{ pending_kds_count }}</div>
+    <div class="stat-sub" style="color:var(--warning);"><span>🔥</span> Active chef tickets</div>
+  </div>
+</div>
+
+<!-- Recent Orders & Operations -->
+<div class="glass-card">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <h2>Live Orders Stream</h2>
+    <a href="{% url 'orders:list' %}" class="btn btn-secondary btn-sm">View All Orders &rarr;</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Type</th>
+          <th>Table</th>
+          <th>Server</th>
+          <th>Time</th>
+          <th>Grand Total</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in recent_orders %}
+          <tr>
+            <td><strong>#{{ order.order_number }}</strong></td>
+            <td><span class="badge badge-secondary">{{ order.get_order_type_display }}</span></td>
+            <td>{% if order.table %}Table {{ order.table.table_number }}{% else %}Counter / Takeaway{% endif %}</td>
+            <td>{{ order.server.first_name|default:order.server.username }}</td>
+            <td>{{ order.created_at|date:"H:i" }}</td>
+            <td><strong>{{ order.grand_total|inr }}</strong></td>
+            <td>{{ order.status|status_badge }}</td>
+            <td>
+              <a href="{% url 'orders:detail' order.id %}" class="btn btn-secondary btn-sm">Inspect</a>
+              {% if not order.is_paid %}
+                <a href="{% url 'billing:generate' order.id %}" class="btn btn-primary btn-sm">Bill</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="8" style="text-align:center;padding:32px;color:var(--text-muted);">
+              No orders placed yet today. Open <a href="{% url 'orders:pos' %}" style="color:var(--gold-accent);">POS Terminal</a> to take an order.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

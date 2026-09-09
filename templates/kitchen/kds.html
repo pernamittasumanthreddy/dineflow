@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+{% block title %}Kitchen Display System (KDS) — DineFlow{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+  <div>
+    <h1>Live Kitchen Display System (KDS)</h1>
+    <p style="color:var(--text-muted);">Real-time chef station tickets & preparation timer SLAs</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span class="badge badge-warning">Delayed Tickets: {{ delayed_count }}</span>
+    <span class="badge badge-info">Avg Prep Time: {{ avg_prep }} mins</span>
+    <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.reload();">🔄 Refresh Board</button>
+  </div>
+</div>
+
+<!-- Station Filter Bar -->
+<div style="display:flex;gap:10px;margin-bottom:24px;overflow-x:auto;">
+  {% for val, label in stations %}
+    <a href="?station={{ val }}" class="btn btn-sm {% if station_filter == val %}btn-primary{% else %}btn-secondary{% endif %}">
+      {{ label }}
+    </a>
+  {% endfor %}
+</div>
+
+<!-- KDS Digital Tickets Grid -->
+<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px;">
+  {% for ticket in tickets %}
+    <div class="glass-card" style="padding:16px;display:flex;flex-direction:column;justify-content:space-between;border-radius:var(--radius-md);{% if ticket.is_delayed %}border-color:#ef4444;box-shadow:0 0 15px rgba(239,68,68,0.25);{% elif ticket.status == 'READY' %}border-color:#10b981;{% endif %}">
+      <!-- Ticket Header -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid var(--border-subtle);padding-bottom:8px;">
+          <div>
+            <div style="font-weight:700;font-size:1.1rem;color:#ffffff;">#{{ ticket.ticket_number }}</div>
+            <div style="font-size:11px;color:var(--gold-accent);">
+              {% if ticket.order.table %}Table {{ ticket.order.table.table_number }}{% else %}{{ ticket.order.get_order_type_display }}{% endif %}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="badge {% if ticket.is_delayed %}badge-danger{% elif ticket.status == 'READY' %}badge-success{% else %}badge-warning{% endif %}">
+              ⏱️ {{ ticket.elapsed_minutes }}m / {{ ticket.expected_prep_minutes }}m
+            </div>
+            <div style="font-size:10px;color:var(--text-subtle);margin-top:2px;">{{ ticket.order.created_at|date:"H:i" }}</div>
+          </div>
+        </div>
+
+        <!-- Ticket Line Items -->
+        <div style="margin-bottom:14px;">
+          {% for item in ticket.order.items.all %}
+            <div style="display:flex;align-items:baseline;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px dashed rgba(255,255,255,0.05);">
+              <div>
+                <strong style="color:var(--gold-accent);font-size:14px;margin-right:6px;">{{ item.quantity }}x</strong>
+                <span>{{ item.menu_item.name }}</span>
+                {% if item.variant %}
+                  <span style="font-size:11px;color:var(--text-muted);">({{ item.variant.name }})</span>
+                {% endif %}
+                {% if item.kitchen_notes %}
+                  <div style="font-size:11px;color:#fca5a5;margin-left:22px;">⚠️ {{ item.kitchen_notes }}</div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if ticket.order.special_instructions %}
+          <div style="background:rgba(239,68,68,0.08);border-left:3px solid #ef4444;padding:6px 10px;font-size:11px;color:#fca5a5;margin-bottom:12px;border-radius:0 4px 4px 0;">
+            <strong>Chef Note:</strong> {{ ticket.order.special_instructions }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Action Bump Buttons -->
+      <div style="padding-top:10px;border-top:1px solid var(--border-subtle);">
+        <form method="POST" action="{% url 'kitchen:bump' ticket.id %}">
+          {% csrf_token %}
+          {% if ticket.status == 'PENDING' %}
+            <button type="submit" class="btn btn-secondary" style="width:100%;padding:8px;font-size:12px;background:rgba(245,158,11,0.15);color:#fbbf24;border-color:rgba(245,158,11,0.3);">
+              👨‍🍳 Start Cooking
+            </button>
+          {% elif ticket.status == 'PREPARING' %}
+            <button type="submit" class="btn btn-success" style="width:100%;padding:8px;font-size:12px;">
+              ✅ Mark Ready for Expeditor
+            </button>
+          {% elif ticket.status == 'READY' %}
+            <button type="submit" class="btn btn-primary" style="width:100%;padding:8px;font-size:12px;">
+              🔔 Bump / Handed to Waiter
+            </button>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  {% empty %}
+    <div class="glass-card" style="grid-column:1/-1;text-align:center;padding:48px;">
+      <div style="font-size:36px;margin-bottom:12px;">✨</div>
+      <h3>All Kitchen Tickets Cleared!</h3>
+      <p style="color:var(--text-muted);font-size:13px;margin-top:4px;">No active orders currently awaiting cooking in this station.</p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-refresh KDS board every 15 seconds
+setTimeout(() => {
+    window.location.reload();
+}, 15000);
+</script>
+{% endblock %}

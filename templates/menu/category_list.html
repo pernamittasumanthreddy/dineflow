@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Menu Categories | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Menu Categories</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Departmental Category Hierarchy for POS and Kitchen Routing</p>
+    </div>
+    <a href="{% url 'menu:catalog' %}" class="btn btn-outline">Back to Catalog</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+    <!-- Add Category Form -->
+    <div class="card">
+        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+            New Category
+        </h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger-color); color: #fca5a5; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Category Name</label>
+                {{ form.name }}
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Slug / Code</label>
+                {{ form.slug }}
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Parent Category (Optional)</label>
+                {{ form.parent }}
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Display Order</label>
+                {{ form.sort_order }}
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Icon / Image</label>
+                {{ form.image }}
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Create Category</button>
+        </form>
+    </div>
+
+    <!-- Category Table -->
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                        <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Category</th>
+                        <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Slug</th>
+                        <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Sort Order</th>
+                        <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Dishes</th>
+                        <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in categories %}
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: var(--text-primary);">
+                            {{ c.name }}
+                        </td>
+                        <td style="padding: 0.85rem 1rem; font-family: monospace; font-size: 0.82rem; color: var(--accent-gold);">
+                            {{ c.slug }}
+                        </td>
+                        <td style="padding: 0.85rem 1rem; text-align: center; color: var(--text-secondary); font-size: 0.85rem;">
+                            {{ c.sort_order }}
+                        </td>
+                        <td style="padding: 0.85rem 1rem; text-align: center;">
+                            <span class="badge badge-info">{{ c.items.count }} items</span>
+                        </td>
+                        <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                            {% if c.is_active %}
+                                <span class="badge badge-success">Active</span>
+                            {% else %}
+                                <span class="badge badge-warning">Disabled</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="padding: 2.5rem; text-align: center; color: var(--text-muted);">
+                            No categories registered. Create one to organize dishes.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

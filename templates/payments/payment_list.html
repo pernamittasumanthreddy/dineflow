@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Settlement & Payment Ledger | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Settlement & Payment Ledger</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Multi-tender settlement: Simulated Dynamic UPI, Card swipes, and Cash floating</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'refunds:list' %}" class="btn btn-outline">Refund Requests</a>
+        <a href="{% url 'orders:list' %}" class="btn btn-primary">⚡ Active Orders</a>
+    </div>
+</div>
+
+<div class="card stat-card" style="margin-bottom: 1.5rem; border-left: 4px solid var(--accent-gold); max-width: 320px;">
+    <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Total Settled Today</div>
+    <div style="font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); margin-top: 0.25rem;">{{ total_collected|inr }}</div>
+</div>
+
+<!-- Filters -->
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div style="min-width: 180px;">
+            <select name="method" class="form-control" onchange="this.form.submit()">
+                <option value="">All Payment Modes</option>
+                {% for m_code, m_name in payment_methods %}
+                    <option value="{{ m_code }}" {% if method_filter == m_code %}selected{% endif %}>{{ m_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="min-width: 160px;">
+            <input type="date" name="date" value="{{ date_filter|default:'' }}" class="form-control" onchange="this.form.submit()">
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if method_filter or date_filter %}
+            <a href="{% url 'payments:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Ledger Table -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Ref / Transaction ID</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Order & Invoice</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Method</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Cashier</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Amount</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in payments %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <div style="font-family: monospace; font-size: 0.82rem; color: var(--accent-gold); font-weight: 600;">
+                            {{ p.transaction_reference|default:"LOCAL-CASH" }}
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ p.created_at|date:"d M, H:i" }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem;">
+                        <a href="{% url 'orders:detail' p.order.id %}" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">
+                            Order #{{ p.order.order_number }}
+                        </a>
+                        {% if p.invoice %}
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Inv: {{ p.invoice.invoice_number }}</div>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1rem;">
+                        <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-primary);">
+                            {{ p.get_payment_method_display }}
+                        </span>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ p.cashier.display_name|default:"POS" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 800; color: var(--accent-gold);">
+                        {{ p.amount|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        {% if p.status == 'SUCCESS' %}
+                            <span class="badge badge-success">SETTLED</span>
+                        {% elif p.status == 'REFUNDED' %}
+                            <span class="badge badge-warning">REFUNDED</span>
+                        {% else %}
+                            <span class="badge badge-danger">{{ p.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        {% if p.status == 'SUCCESS' %}
+                            <a href="{% url 'refunds:request' p.id %}" class="btn btn-sm btn-outline" style="color: var(--warning-color); border-color: var(--warning-color);">Refund</a>
+                        {% else %}
+                            <span style="color: var(--text-muted); font-size: 0.75rem;">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No settlement payments recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

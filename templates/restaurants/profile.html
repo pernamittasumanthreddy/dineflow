@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Corporate Restaurant Entity | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="max-width: 850px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Corporate Entity & Licensing</h1>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">GSTIN, FSSAI statutory license numbers, brand identity, and legal ownership</p>
+        </div>
+        <a href="{% url 'branches:list' %}" class="btn btn-outline">Manage Outlets</a>
+    </div>
+
+    <div class="card" style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+            Statutory Legal Entity Master
+        </h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="save_profile">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Brand Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Legal Entity Name</label>
+                    {{ form.legal_entity_name }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">GSTIN (15-Digit Indian Tax ID)</label>
+                    {{ form.gstin }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">FSSAI Food Safety License #</label>
+                    {{ form.fssai_number }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Contact Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Contact Phone</label>
+                    {{ form.phone }}
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Corporate Registered Address</label>
+                {{ form.address_line1 }}
+            </div>
+
+            <div style="text-align: right;">
+                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem;">Save Corporate Master</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

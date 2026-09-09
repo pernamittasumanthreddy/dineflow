@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}User Directory | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Staff & User Directory</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Enterprise 10-Role RBAC and Multi-Branch Staff Allocation</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'accounts:login_history' %}" class="btn btn-outline">🔒 Audit Logins</a>
+        <a href="{% url 'accounts:user_create' %}" class="btn btn-primary">+ Add New Staff</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 1; min-width: 240px;">
+            <input type="text" name="q" value="{{ search_query|default:'' }}" class="form-control" placeholder="Search by name, email, or phone...">
+        </div>
+        <div style="min-width: 180px;">
+            <select name="role" class="form-control" onchange="this.form.submit()">
+                <option value="">All Staff Roles</option>
+                {% for code, name in roles %}
+                    <option value="{{ code }}" {% if selected_role == code %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if search_query or selected_role %}
+            <a href="{% url 'accounts:user_list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Staff Member</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Assigned Role</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Branch</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Contact</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s ease;">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <div style="font-weight: 600; color: var(--text-primary);">{{ u.display_name }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ u.email }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem;">
+                        <span class="badge badge-info">{{ u.get_role_display }}</span>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        {{ u.branch.name|default:"All Branches (HQ)" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ u.phone_number|default:"—" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        {% if u.is_locked %}
+                            <span class="badge badge-danger">LOCKED</span>
+                        {% elif not u.is_active %}
+                            <span class="badge badge-warning">INACTIVE</span>
+                        {% else %}
+                            <span class="badge badge-success">ACTIVE</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'accounts:user_toggle_lock' u.id %}" class="btn btn-sm {% if u.is_locked %}btn-primary{% else %}btn-outline{% endif %}" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">
+                            {% if u.is_locked %}Unlock{% else %}Lock{% endif %}
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 2.5rem; text-align: center; color: var(--text-muted);">
+                        No staff accounts matched the filter query.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

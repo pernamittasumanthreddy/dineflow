@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+{% block title %}ML Demand & Procurement Forecasting — DineFlow{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+  <div>
+    <h1>Machine Learning Demand & Inventory Forecaster</h1>
+    <p style="color:var(--text-muted);">Predictive guest traffic, daily portion preparation targets & raw material procurement</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    {% if active_model %}
+      <span class="badge badge-info" style="font-size:11px;padding:6px 12px;">
+        Model: {{ active_model.version }} (R²: {{ active_model.r2_score }} | MAE: {{ active_model.mae_score }})
+      </span>
+    {% endif %}
+    <form method="POST" action="{% url 'ml_prediction:train' %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary btn-sm">⚡ Retrain Model Pipeline</button>
+    </form>
+  </div>
+</div>
+
+<!-- Forward Projected 7-Day Demand -->
+<div class="glass-card" style="margin-bottom:28px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <h2>Upcoming 7-Day Operational Projections</h2>
+    <span style="font-size:12px;color:var(--gold-accent);">
+      Projected 7-Day Revenue: <strong>{{ total_projected_revenue|inr }}</strong> ({{ total_projected_orders }} orders)
+    </span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Target Date</th>
+          <th>Day</th>
+          <th>Projected Orders</th>
+          <th>Guest Covers</th>
+          <th>Projected Sales</th>
+          <th>Portion Prep Target (Biryani)</th>
+          <th>Portion Prep Target (Curry)</th>
+          <th>Model Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in forecasts %}
+          <tr>
+            <td><strong>{{ f.target_date|date:"d-M-Y" }}</strong></td>
+            <td><span class="badge badge-secondary">{{ f.target_date|date:"l" }}</span></td>
+            <td><strong>{{ f.predicted_order_count }}</strong> orders</td>
+            <td>👥 {{ f.predicted_guest_covers }} guests</td>
+            <td style="color:var(--gold-accent);font-weight:700;">{{ f.predicted_sales_revenue|inr }}</td>
+            <td>🍛 {{ f.predicted_biryani_servings }} portions</td>
+            <td>🍲 {{ f.predicted_curry_servings }} portions</td>
+            <td><span class="badge badge-success">{{ f.confidence_score }}% Conf.</span></td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="8" style="text-align:center;padding:30px;color:var(--text-muted);">
+              Click "Retrain Model Pipeline" above to generate predictive forecasts.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Recommended Raw Material Procurement -->
+<div class="glass-card">
+  <h2 style="margin-bottom:14px;">Automated Raw Material Reorder Recommendations</h2>
+  <p style="color:var(--text-muted);font-size:12px;margin-bottom:18px;">Derived dynamically by multiplying dish portion demand by BOM recipe ingredient consumption.</p>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Target Date</th>
+          <th>Raw Material</th>
+          <th>Recommended Purchase Qty</th>
+          <th>Est. Inward Cost</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in forecasts %}
+          {% for req in f.ingredient_requirements.all %}
+            <tr>
+              <td>{{ f.target_date|date:"d-M-Y" }}</td>
+              <td><strong>{{ req.ingredient.name }}</strong></td>
+              <td><span style="font-weight:700;color:#38bdf8;">{{ req.predicted_quantity }} {{ req.unit }}</span></td>
+              <td><strong>{{ req.estimated_cost|inr }}</strong></td>
+              <td>
+                <a href="{% url 'purchases:create' %}" class="btn btn-secondary btn-sm" style="font-size:11px;">+ Create PO</a>
+              </td>
+            </tr>
+          {% endfor %}
+        {% empty %}
+          <tr>
+            <td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);">
+              No ingredient forecasts available.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

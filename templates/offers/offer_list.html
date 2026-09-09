@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Offers & Promotions | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Offers, Discounts & Coupon Codes</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Active restaurant promotion vouchers with minimum spend and discount caps</p>
+    </div>
+    <a href="{% url 'customers:list' %}" class="btn btn-outline">CRM Directory</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem;">
+    {% for o in offers %}
+    <div class="card" style="border: 1px dashed var(--accent-gold); position: relative; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <div>
+                <span class="badge badge-info" style="font-family: monospace; font-size: 0.85rem; letter-spacing: 1px;">
+                    {{ o.code }}
+                </span>
+            </div>
+            <div>
+                {% if o.is_valid_now %}
+                    <span class="badge badge-success">ACTIVE</span>
+                {% else %}
+                    <span class="badge badge-warning">EXPIRED</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem 0;">{{ o.title }}</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0;">
+            {% if o.discount_type == 'PERCENTAGE' %}
+                {{ o.discount_value }}% OFF (up to {{ o.max_discount_amount|inr }})
+            {% else %}
+                Flat {{ o.discount_value|inr }} OFF
+            {% endif %}
+            on orders above {{ o.min_order_amount|inr }}
+        </p>
+
+        <div style="font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem;">
+            Valid: {{ o.valid_from|date:"d M Y" }} to {{ o.valid_to|date:"d M Y" }}
+        </div>
+    </div>
+    {% empty %}
+    <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        No active promotional coupons found.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

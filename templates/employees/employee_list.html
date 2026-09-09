@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Employee Directory | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Staff Directory & HR Profiles</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Department allocations, designations, statutory PF/ESI, and salary masters</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'attendance:list' %}" class="btn btn-outline">Attendance</a>
+        <a href="{% url 'payroll:list' %}" class="btn btn-primary">💰 Run Payroll</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+        <div style="min-width: 200px;">
+            <select name="department" class="form-control" onchange="this.form.submit()">
+                <option value="">All Departments</option>
+                {% for d in departments %}
+                    <option value="{{ d.id }}" {% if selected_dept == d.id|stringformat:"s" %}selected{% endif %}>{{ d.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if selected_dept %}
+            <a href="{% url 'employees:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Emp ID & Name</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Department</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Designation</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Branch</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Monthly CTC</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in employees %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <a href="{% url 'employees:detail' emp.id %}" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">
+                            {{ emp.user.display_name }}
+                        </a>
+                        <div style="font-family: monospace; font-size: 0.78rem; color: var(--accent-gold);">{{ emp.employee_id }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        {{ emp.department.name|default:"General" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem;">
+                        <span class="badge badge-info">{{ emp.designation.title|default:"Staff" }}</span>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ emp.branch.name|default:"HQ" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700; color: var(--accent-gold);">
+                        {{ emp.monthly_gross_salary|inr }}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'employees:detail' emp.id %}" class="btn btn-sm btn-outline">Profile & CTC</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No employees recorded.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

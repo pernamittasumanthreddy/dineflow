@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Menu Catalog | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Menu & Culinary Catalog</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Recipe Engineering, Veg/Non-Veg Indicators, and Real-time 86 Inventory Controls</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'menu:category_list' %}" class="btn btn-outline">Categories</a>
+        <a href="{% url 'menu:item_create' %}" class="btn btn-primary">+ Add Menu Item</a>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 1; min-width: 220px;">
+            <input type="text" name="q" value="{{ search_q|default:'' }}" class="form-control" placeholder="Search dishes, item code, description...">
+        </div>
+        <div style="min-width: 170px;">
+            <select name="category" class="form-control" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if selected_cat == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="min-width: 150px;">
+            <select name="food_type" class="form-control" onchange="this.form.submit()">
+                <option value="">All Dietary Types</option>
+                <option value="VEG" {% if food_filter == 'VEG' %}selected{% endif %}>🟢 Vegetarian</option>
+                <option value="NON_VEG" {% if food_filter == 'NON_VEG' %}selected{% endif %}>🔴 Non-Vegetarian</option>
+                <option value="EGG" {% if food_filter == 'EGG' %}selected{% endif %}>🟡 Contains Egg</option>
+                <option value="VEGAN" {% if food_filter == 'VEGAN' %}selected{% endif %}>🌱 Pure Vegan</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if search_q or selected_cat or food_filter %}
+            <a href="{% url 'menu:catalog' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Dish Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;">
+    {% for item in items %}
+    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border: 1px solid {% if not item.is_available %}rgba(239,68,68,0.3){% else %}var(--border-color){% endif %}; background: {% if not item.is_available %}rgba(239,68,68,0.03){% else %}var(--bg-card){% endif %};">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    {% if item.food_type == 'VEG' %}
+                        <span style="border: 1px solid #22c55e; padding: 2px 4px; border-radius: 4px; font-size: 0.75rem; color: #22c55e;">🟢 Veg</span>
+                    {% elif item.food_type == 'NON_VEG' %}
+                        <span style="border: 1px solid #ef4444; padding: 2px 4px; border-radius: 4px; font-size: 0.75rem; color: #ef4444;">🔴 Non-Veg</span>
+                    {% elif item.food_type == 'EGG' %}
+                        <span style="border: 1px solid #eab308; padding: 2px 4px; border-radius: 4px; font-size: 0.75rem; color: #eab308;">🟡 Egg</span>
+                    {% else %}
+                        <span style="border: 1px solid #10b981; padding: 2px 4px; border-radius: 4px; font-size: 0.75rem; color: #10b981;">🌱 Vegan</span>
+                    {% endif %}
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">{{ item.code }}</span>
+                </div>
+                <div>
+                    {% if item.is_available %}
+                        <span class="badge badge-success">Available</span>
+                    {% else %}
+                        <span class="badge badge-danger">86'd / Out</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.35rem 0;">{{ item.name }}</h3>
+            <div style="font-size: 0.8rem; color: var(--accent-gold); margin-bottom: 0.5rem;">{{ item.category.name }}</div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; margin: 0 0 1rem 0; min-height: 2.4rem;">
+                {{ item.description|default:"Delicious culinary preparation freshly curated to order."|truncatechars:85 }}
+            </p>
+        </div>
+
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.5rem;">
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-gold);">
+                    {{ item.base_price|inr }}
+                </div>
+                <div style="display: flex; gap: 0.4rem;">
+                    <a href="{% url 'menu:item_toggle_availability' item.id %}" class="btn btn-sm {% if item.is_available %}btn-outline{% else %}btn-primary{% endif %}" title="Toggle Availability (86)">
+                        {% if item.is_available %}86 Item{% else %}Restock{% endif %}
+                    </a>
+                    <a href="{% url 'menu:item_edit' item.id %}" class="btn btn-sm btn-outline">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🍽️</div>
+        <h3 style="color: var(--text-primary); margin: 0 0 0.5rem 0;">No Menu Items Found</h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0 0 1.5rem 0;">Try adjusting your search criteria or add new culinary items to the menu.</p>
+        <a href="{% url 'menu:item_create' %}" class="btn btn-primary">+ Add First Dish</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

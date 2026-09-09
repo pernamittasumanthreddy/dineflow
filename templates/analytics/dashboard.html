@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+{% block title %}Executive Analytics & RevPASH — DineFlow{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+  <div>
+    <h1>Executive Business Intelligence & KPI Hub</h1>
+    <p style="color:var(--text-muted);">Hospitality performance ratios, RevPASH seat efficiency & menu profitability</p>
+  </div>
+  <div>
+    <a href="{% url 'ml_prediction:forecast' %}" class="btn btn-primary btn-sm">🤖 View ML Demand Predictions &rarr;</a>
+  </div>
+</div>
+
+<!-- Key Hospitality Executive Metrics -->
+<div class="grid-cols-4">
+  <div class="stat-card">
+    <div class="stat-label">30-Day Gross Revenue</div>
+    <div class="stat-value">{{ total_revenue|inr }}</div>
+    <div class="stat-sub"><span>📈</span> Billed sales volume</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Net Operating Profit</div>
+    <div class="stat-value" style="color:#10b981;">{{ net_profit|inr }}</div>
+    <div class="stat-sub"><span>💰</span> Net of branch expenses</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">RevPASH (Seat-Hour Yield)</div>
+    <div class="stat-value" style="color:var(--gold-accent);">₹{{ revpash }}</div>
+    <div class="stat-sub"><span>🪑</span> {{ total_seats }} Total dining seats</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Average Order Value (AOV)</div>
+    <div class="stat-value">{{ aov|inr }}</div>
+    <div class="stat-sub"><span>👥</span> Across {{ order_count }} completed orders</div>
+  </div>
+</div>
+
+<!-- Best Sellers & Category Performance -->
+<div class="grid-cols-2">
+  <!-- Best Sellers -->
+  <div class="glass-card">
+    <h3 style="margin-bottom:16px;">Top Culinary Best-Sellers (30 Days)</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Dish Name</th>
+          <th>Type</th>
+          <th>Servings Sold</th>
+          <th style="text-align:right;">Revenue Yield</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dish in best_sellers %}
+          <tr>
+            <td><strong>{{ dish.menu_item__name }}</strong></td>
+            <td><span class="badge badge-secondary">{{ dish.menu_item__food_type }}</span></td>
+            <td><strong>{{ dish.total_sold }}</strong> orders</td>
+            <td style="text-align:right;color:var(--gold-accent);font-weight:700;">₹{{ dish.revenue }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" style="text-align:center;color:var(--text-muted);">No sales data available.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Category Distribution -->
+  <div class="glass-card">
+    <h3 style="margin-bottom:16px;">Culinary Category Yield</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th style="text-align:right;">Sales Generated</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in category_sales %}
+          <tr>
+            <td><strong>{{ cat.menu_item__category__name }}</strong></td>
+            <td style="text-align:right;color:var(--gold-accent);font-weight:700;">₹{{ cat.cat_revenue }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="2" style="text-align:center;color:var(--text-muted);">No category data available.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

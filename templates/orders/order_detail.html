@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Order #{{ order.order_number }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Order #{{ order.order_number }}</h1>
+            <span class="badge {% if order.status == 'COMPLETED' %}badge-success{% elif order.status == 'CANCELLED' %}badge-danger{% else %}badge-warning{% endif %}">
+                {{ order.get_status_display }}
+            </span>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">
+            Created on {{ order.created_at|date:"d M Y, H:i" }} | Branch: {{ order.branch.name }}
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'orders:list' %}" class="btn btn-outline">Back to Pipeline</a>
+        {% if order.status != 'CANCELLED' and order.status != 'COMPLETED' %}
+            <a href="{% url 'orders:cancel' order.id %}" class="btn btn-outline" style="color: var(--danger-color); border-color: var(--danger-color);">Cancel Order</a>
+            <a href="{% url 'payments:checkout' order.id %}" class="btn btn-primary">💳 Proceed to Settle</a>
+        {% endif %}
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    <!-- Items & Charges -->
+    <div>
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 1.5rem;">
+            <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary);">
+                Ordered Culinary Items
+            </div>
+            <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                        <th style="padding: 0.75rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Item</th>
+                        <th style="padding: 0.75rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Rate</th>
+                        <th style="padding: 0.75rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Qty</th>
+                        <th style="padding: 0.75rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Line Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for itm in items %}
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 0.85rem 1.25rem;">
+                            <div style="font-weight: 600; color: var(--text-primary);">{{ itm.menu_item.name }}</div>
+                            {% if itm.variant %}
+                                <div style="font-size: 0.75rem; color: var(--accent-gold);">Variant: {{ itm.variant.name }}</div>
+                            {% endif %}
+                            {% if itm.notes %}
+                                <div style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">Note: {{ itm.notes }}</div>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 0.85rem 1rem; text-align: center; color: var(--text-secondary);">
+                            {{ itm.unit_price|inr }}
+                        </td>
+                        <td style="padding: 0.85rem 1rem; text-align: center; font-weight: 600; color: var(--text-primary);">
+                            {{ itm.quantity }}
+                        </td>
+                        <td style="padding: 0.85rem 1.25rem; text-align: right; font-weight: 700; color: var(--text-primary);">
+                            {{ itm.line_total|inr }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                            No items present in this order.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Lifecycle Status Stepper Action -->
+        {% if order.status != 'CANCELLED' and order.status != 'COMPLETED' %}
+        <div class="card">
+            <h3 style="font-size: 1rem; color: var(--text-primary); margin: 0 0 1rem 0;">Progress Order Workflow</h3>
+            <form method="POST" action="{% url 'orders:update_status' order.id %}" style="display: flex; gap: 0.75rem;">
+                {% csrf_token %}
+                {% if order.status == 'NEW' %}
+                    <button type="submit" name="status" value="CONFIRMED" class="btn btn-outline" style="flex: 1;">Accept & Confirm</button>
+                {% elif order.status == 'CONFIRMED' %}
+                    <button type="submit" name="status" value="PREPARING" class="btn btn-primary" style="flex: 1;">🍳 Start Kitchen Prep</button>
+                {% elif order.status == 'PREPARING' %}
+                    <button type="submit" name="status" value="READY" class="btn btn-primary" style="flex: 1;">🔔 Mark Ready for Pickup / Service</button>
+                {% elif order.status == 'READY' %}
+                    <button type="submit" name="status" value="COMPLETED" class="btn btn-primary" style="flex: 1; background: var(--success-color); border-color: var(--success-color);">
+                        ✅ Complete Order & Release Table
+                    </button>
+                {% endif %}
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Metadata & Total Summary -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="card">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin: 0 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                Operational Details
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">Order Type:</span>
+                    <span style="font-weight: 600; color: var(--text-primary);">{{ order.get_order_type_display }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">Table Allocation:</span>
+                    <span style="font-weight: 600; color: var(--accent-gold);">
+                        {% if order.table %}Table {{ order.table.table_number }} ({{ order.table.section.name }}){% else %}None{% endif %}
+                    </span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">Staff Server:</span>
+                    <span style="color: var(--text-primary);">{{ order.server.display_name|default:"POS Counter" }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">Customer:</span>
+                    <span style="color: var(--text-primary);">{{ order.customer.name|default:"Walk-in Guest" }}</span>
+                </div>
+                {% if order.cancellation_reason %}
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem;">
+                    <span style="font-size: 0.78rem; color: #ef4444; font-weight: 600;">Cancellation Reason:</span>
+                    <p style="font-size: 0.82rem; color: #fca5a5; margin: 0.25rem 0 0 0;">{{ order.cancellation_reason }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Bill Calculation Card -->
+        <div class="card" style="background: linear-gradient(145deg, #11141c 0%, #0d1017 100%);">
+            <h3 style="font-size: 1.05rem; color: var(--text-primary); margin: 0 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                Financial Summary
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem;">
+                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                    <span>Subtotal:</span>
+                    <span style="font-weight: 600;">{{ order.subtotal|inr }}</span>
+                </div>
+                {% if order.discount_amount > 0 %}
+                <div style="display: flex; justify-content: space-between; color: var(--success-color);">
+                    <span>Discount:</span>
+                    <span>-{{ order.discount_amount|inr }}</span>
+                </div>
+                {% endif %}
+                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                    <span>GST (5% SAC 9963):</span>
+                    <span>{{ order.tax_amount|inr }}</span>
+                </div>
+                {% if order.service_charge > 0 %}
+                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                    <span>Service Charge:</span>
+                    <span>{{ order.service_charge|inr }}</span>
+                </div>
+                {% endif %}
+                <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.25rem; font-size: 1.15rem; font-weight: 800; color: var(--accent-gold);">
+                    <span>Grand Total:</span>
+                    <span>{{ order.grand_total|inr }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

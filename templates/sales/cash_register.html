@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Cash Register Drawer | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Cash Register & Shift Float</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Cash drawer opening float, end-of-shift reconciliation, and variance audit</p>
+    </div>
+    <a href="{% url 'sales:z_report' %}" class="btn btn-outline">Z-Report</a>
+</div>
+
+{% if not active_session %}
+<!-- Open Session Form -->
+<div style="max-width: 500px; margin: 2rem auto;" class="card">
+    <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem 0;">Open Cash Drawer Session</h2>
+    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">Declare the beginning cash float for shift operations.</p>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="OPEN_REGISTER">
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Opening Cash Float (₹)</label>
+            <input type="number" step="0.01" name="opening_cash" value="2000.00" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Start Register Shift</button>
+    </form>
+</div>
+{% else %}
+<!-- Active Session & Close Form -->
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div>
+                <span class="badge badge-success">DRAWER OPEN</span>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+                    Opened by {{ active_session.opened_by.display_name }} at {{ active_session.opened_at|date:"d M Y, H:i" }}
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="color: var(--text-muted); font-size: 0.75rem;">STARTING FLOAT</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-gold);">{{ active_session.opening_cash|inr }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem 0;">Close & Reconcile Shift Drawer</h3>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+            Count physical currency notes and coins in the drawer. The ERP will compute mathematical expected vs physical cash.
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="CLOSE_REGISTER">
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Actual Counted Cash in Drawer (₹)</label>
+                <input type="number" step="0.01" name="closing_cash" placeholder="0.00" class="form-control" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Reconciliation Notes / Discrepancy Reason</label>
+                <textarea name="notes" rows="2" class="form-control" placeholder="Optional explanation if drawer is short/over..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="background: var(--danger-color); border-color: var(--danger-color); width: 100%;">
+                Reconcile & Close Cash Drawer
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

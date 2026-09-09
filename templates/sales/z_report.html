@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Daily Z-Report: {{ z_report.report_date|date:"d M Y" }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">End-of-Day Statutory Z-Report</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">
+            Branch: {{ z_report.branch.name }} | Business Date: {{ z_report.report_date|date:"d F Y" }}
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <button onclick="window.print()" class="btn btn-outline">🖨️ Print Report</button>
+        <a href="{% url 'sales:dashboard' %}" class="btn btn-primary">Sales Dashboard</a>
+    </div>
+</div>
+
+<div style="max-width: 700px; margin: 0 auto;" class="card">
+    <div style="text-align: center; border-bottom: 2px dashed var(--border-color); padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-gold); margin: 0;">DINEFLOW RESTAURANT ERP</h2>
+        <div style="font-size: 0.85rem; color: var(--text-primary); margin-top: 0.25rem;">STATUTORY DAILY FINANCIAL AUDIT (Z-REPORT)</div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">Generated: {{ z_report.created_at|date:"d M Y, H:i:s" }} | Auditor: {{ z_report.generated_by.display_name }}</div>
+    </div>
+
+    <!-- Operational Metrics -->
+    <div style="margin-bottom: 1.5rem;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 0.5rem;">
+            1. Operational Summary
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem;">
+            <span style="color: var(--text-secondary);">Total Completed Orders:</span>
+            <strong style="color: var(--text-primary);">{{ z_report.total_orders }} orders</strong>
+        </div>
+    </div>
+
+    <!-- Revenue Breakdown -->
+    <div style="margin-bottom: 1.5rem;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 0.5rem;">
+            2. Sales & Taxation Breakdown
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem;">
+            <span style="color: var(--text-secondary);">Gross Food & Beverage Sales:</span>
+            <span style="color: var(--text-primary);">{{ z_report.gross_sales|inr }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem;">
+            <span style="color: var(--text-secondary);">Total Discounts & Vouchers:</span>
+            <span style="color: var(--danger-color);">-{{ z_report.discount_total|inr }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem;">
+            <span style="color: var(--text-secondary);">Total GST (5% SAC 9963):</span>
+            <span style="color: var(--text-primary);">{{ z_report.tax_total|inr }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.6rem 0; font-size: 1.1rem; font-weight: 800; color: var(--accent-gold); border-bottom: 1px solid var(--border-color);">
+            <span>Net Realized Revenue:</span>
+            <span>{{ z_report.net_sales|inr }}</span>
+        </div>
+    </div>
+
+    <!-- Payment Modes -->
+    <div style="margin-bottom: 1.5rem;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 0.5rem;">
+            3. Tender Collection Ledger
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem;">
+            <span style="color: var(--text-secondary);">UPI Realized:</span>
+            <span style="color: var(--text-primary);">{{ z_report.upi_sales|inr }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem;">
+            <span style="color: var(--text-secondary);">Card Swipes Realized:</span>
+            <span style="color: var(--text-primary);">{{ z_report.card_sales|inr }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem;">
+            <span style="color: var(--text-secondary);">Gross Cash Collected:</span>
+            <span style="color: var(--text-primary);">{{ z_report.cash_sales|inr }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem;">
+            <span style="color: var(--text-secondary);">Less: Day's Cash Operating Expenses:</span>
+            <span style="color: var(--danger-color);">-{{ z_report.total_expenses|inr }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.6rem 0; font-size: 1.1rem; font-weight: 800; color: var(--success-color);">
+            <span>Net Physical Cash Drawer Balance:</span>
+            <span>{{ z_report.net_drawer_balance|inr }}</span>
+        </div>
+    </div>
+
+    <div style="text-align: center; border-top: 1px dashed var(--border-color); padding-top: 1rem; font-size: 0.75rem; color: var(--text-muted);">
+        *** END OF STATUTORY Z-REPORT — OFFICIAL AUDIT DOCUMENT ***
+    </div>
+</div>
+{% endblock %}

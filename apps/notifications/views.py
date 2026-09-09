@@ -1,6 +1,8 @@
 """In-App Notification Center Views."""
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db import models
+from django.db.models import Q
 from apps.notifications.models import Notification
 
 @login_required

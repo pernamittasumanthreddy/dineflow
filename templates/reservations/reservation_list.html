@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Guest Table Reservations | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Table Bookings & Guest Reservations</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Pre-arrival party allocations, special dining requests, and seating workflow</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'tables:floor_plan' %}" class="btn btn-outline">Floor Plan</a>
+        <a href="{% url 'reservations:create' %}" class="btn btn-primary">+ New Reservation</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+        <div style="min-width: 180px;">
+            <input type="date" name="date" value="{{ selected_date }}" class="form-control" onchange="this.form.submit()">
+        </div>
+        <div style="min-width: 180px;">
+            <select name="status" class="form-control" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                {% for s_val, s_name in statuses %}
+                    <option value="{{ s_val }}" {% if status_filter == s_val %}selected{% endif %}>{{ s_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline">Filter</button>
+        {% if status_filter %}
+            <a href="{% url 'reservations:list' %}" class="btn btn-outline" style="color: var(--danger-color);">Reset</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Time & Guest</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Contact Phone</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Party Size</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Assigned Table</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reservations %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem;">
+                        <div style="font-weight: 700; color: var(--accent-gold); font-family: monospace;">{{ r.reservation_time|time:"H:i" }}</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">{{ r.guest_name }}</div>
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ r.phone }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center; font-weight: 600; color: var(--text-primary);">
+                        👥 {{ r.party_size }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        {% if r.assigned_table %}
+                            <strong style="color: var(--accent-gold);">Table {{ r.assigned_table.table_number }}</strong> ({{ r.assigned_table.section.name }})
+                        {% else %}
+                            <span style="color: var(--text-muted);">Unassigned</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        {% if r.status == 'SEATED' %}
+                            <span class="badge badge-success">SEATED</span>
+                        {% elif r.status == 'CONFIRMED' %}
+                            <span class="badge badge-info">CONFIRMED</span>
+                        {% elif r.status == 'CANCELLED' or r.status == 'NO_SHOW' %}
+                            <span class="badge badge-danger">{{ r.get_status_display }}</span>
+                        {% else %}
+                            <span class="badge badge-warning">{{ r.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        {% if r.status in 'PENDING CONFIRMED' %}
+                            <form method="POST" action="{% url 'reservations:update_status' r.id %}" style="display: inline-flex; gap: 0.4rem;">
+                                {% csrf_token %}
+                                <button type="submit" name="status" value="SEATED" class="btn btn-sm btn-primary" style="background: var(--success-color); border-color: var(--success-color); font-size: 0.75rem; padding: 0.2rem 0.5rem;">Seat Guest</button>
+                                <button type="submit" name="status" value="CANCELLED" class="btn btn-sm btn-outline" style="color: var(--danger-color); border-color: var(--danger-color); font-size: 0.75rem; padding: 0.2rem 0.5rem;">Cancel</button>
+                            </form>
+                        {% else %}
+                            <span style="color: var(--text-muted); font-size: 0.75rem;">Archived</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No reservations scheduled for {{ selected_date }}.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

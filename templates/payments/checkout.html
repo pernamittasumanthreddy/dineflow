@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+{% block title %}Checkout & Payment Settlement — DineFlow{% endblock %}
+
+{% block content %}
+<div style="max-width:680px;margin:0 auto;">
+  <div style="margin-bottom:20px;">
+    <a href="{% url 'orders:detail' order.id %}" style="color:var(--text-muted);font-size:12px;">&larr; Back to Order</a>
+    <h1 style="margin-top:4px;">Payment Settlement</h1>
+    <p style="color:var(--text-muted);">Order #{{ order.order_number }} | Total: <strong>{{ invoice.grand_total|inr }}</strong></p>
+  </div>
+
+  <div class="glass-card" style="padding:32px;border-color:var(--border-color);">
+    <form method="POST" action="{% url 'payments:checkout' order.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="amount" value="{{ invoice.grand_total }}">
+
+      <div class="form-group">
+        <label class="form-label">Select Payment Method</label>
+        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;margin-top:8px;">
+          <label class="glass-card" style="cursor:pointer;padding:16px;text-align:center;border-radius:var(--radius-md);">
+            <input type="radio" name="payment_method" value="CASH" checked onchange="togglePaymentFields('CASH')">
+            <div style="font-size:24px;margin:6px 0;">💵</div>
+            <strong>Cash</strong>
+          </label>
+          <label class="glass-card" style="cursor:pointer;padding:16px;text-align:center;border-radius:var(--radius-md);">
+            <input type="radio" name="payment_method" value="UPI" onchange="togglePaymentFields('UPI')">
+            <div style="font-size:24px;margin:6px 0;">📱</div>
+            <strong>UPI / QR</strong>
+          </label>
+          <label class="glass-card" style="cursor:pointer;padding:16px;text-align:center;border-radius:var(--radius-md);">
+            <input type="radio" name="payment_method" value="CARD" onchange="togglePaymentFields('CARD')">
+            <div style="font-size:24px;margin:6px 0;">💳</div>
+            <strong>Card (POS)</strong>
+          </label>
+        </div>
+      </div>
+
+      <!-- UPI QR Simulation Box -->
+      <div id="upi-details-wrap" style="display:none;background:rgba(217,119,6,0.06);border:1px dashed var(--border-color);border-radius:var(--radius-md);padding:20px;text-align:center;margin:20px 0;">
+        <div style="font-size:14px;font-weight:700;color:var(--gold-accent);margin-bottom:8px;">Scan Dynamic UPI QR</div>
+        <div style="display:inline-block;padding:16px;background:#fff;border-radius:8px;margin:10px 0;">
+          <div style="border:2px solid #000;padding:24px;font-family:monospace;font-size:12px;color:#000;font-weight:700;">
+            [ DINEFLOW INSTANT UPI QR ]<br>
+            ₹{{ invoice.grand_total }}
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Payload: {{ upi_string }}</div>
+      </div>
+
+      <!-- Card Swipe Details -->
+      <div id="card-details-wrap" style="display:none;margin:20px 0;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label class="form-label">Card Last 4 Digits</label>
+            <input type="text" name="card_last4" class="form-control" maxlength="4" placeholder="e.g. 4021">
+          </div>
+          <div>
+            <label class="form-label">Card Network</label>
+            <select name="card_network" class="form-select">
+              <option value="RuPay">RuPay (Domestic)</option>
+              <option value="Visa">Visa</option>
+              <option value="Mastercard">Mastercard</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;font-size:1rem;margin-top:20px;">
+        ✅ Confirm & Settle Payment of {{ invoice.grand_total|inr }}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePaymentFields(method) {
+    document.getElementById('upi-details-wrap').style.display = method === 'UPI' ? 'block' : 'none';
+    document.getElementById('card-details-wrap').style.display = method === 'CARD' ? 'block' : 'none';
+}
+</script>
+{% endblock %}

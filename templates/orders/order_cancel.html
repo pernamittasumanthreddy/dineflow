@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Cancel Order #{{ order.order_number }} | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 2rem auto;">
+    <div class="card" style="border: 1px solid var(--danger-color);">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: var(--danger-color); font-size: 1.25rem;">
+                ⚠️
+            </div>
+            <div>
+                <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;">Cancel Order #{{ order.order_number }}</h2>
+                <div style="color: var(--text-muted); font-size: 0.8rem;">Requires statutory cancellation justification</div>
+            </div>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.25rem;">
+            Cancelling this order will abort active kitchen preparation, release allocated Table {% if order.table %}{{ order.table.table_number }}{% else %}N/A{% endif %}, and record an enterprise audit event.
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Mandatory Cancellation Reason</label>
+                {{ form.reason }}
+                {{ form.reason.errors }}
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <a href="{% url 'orders:detail' order.id %}" class="btn btn-outline">Keep Order</a>
+                <button type="submit" class="btn btn-primary" style="background: var(--danger-color); border-color: var(--danger-color);">Confirm Cancellation</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

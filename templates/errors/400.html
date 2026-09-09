@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}400 - Bad Request | DineFlow{% endblock %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; padding: 2rem;">
+    <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: #ef4444; margin-bottom: 1.5rem;">
+        ⚠️
+    </div>
+    <h1 style="font-size: 3.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -1px;">400</h1>
+    <h2 style="font-size: 1.4rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 1rem;">Bad Request</h2>
+    <p style="max-width: 480px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">
+        The server could not understand the request due to invalid syntax or malformed parameters.
+        {% if error_message %}<br><code style="color: var(--accent-gold); background: rgba(0,0,0,0.3); padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-top: 0.5rem;">{{ error_message }}</code>{% endif %}
+    </p>
+    <div style="display: flex; gap: 1rem;">
+        <a href="{% url 'core:dashboard' %}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem;">
+            <span>Return to Dashboard</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

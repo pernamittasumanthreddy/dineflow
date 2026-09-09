@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block title %}Sales Revenue Dashboard | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Sales Performance & Revenue</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Today's Revenue Realization: {{ today|date:"d M Y" }}</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'sales:register' %}" class="btn btn-outline">💵 Cash Drawer</a>
+        <a href="{% url 'sales:z_report' %}" class="btn btn-primary">📑 Print Z-Report</a>
+    </div>
+</div>
+
+<!-- Financial Summary Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+    <div class="card stat-card" style="border-left: 4px solid var(--accent-gold);">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Net Sales Revenue</div>
+        <div style="font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); margin-top: 0.25rem;">{{ total_net|inr }}</div>
+    </div>
+    <div class="card stat-card" style="border-left: 4px solid #3b82f6;">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">GST Collected (5%)</div>
+        <div style="font-size: 1.8rem; font-weight: 800; color: #3b82f6; margin-top: 0.25rem;">{{ total_tax|inr }}</div>
+    </div>
+    <div class="card stat-card" style="border-left: 4px solid var(--danger-color);">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Expenses Incurred</div>
+        <div style="font-size: 1.8rem; font-weight: 800; color: var(--danger-color); margin-top: 0.25rem;">{{ total_expenses|inr }}</div>
+    </div>
+</div>
+
+<!-- Tender Split Cards -->
+<div class="card">
+    <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+        Tender Breakdown (Payment Modes)
+    </h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; text-align: center;">
+        <div style="background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">📱</div>
+            <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">UPI Payments</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin-top: 0.25rem;">{{ upi_sales|inr }}</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">💳</div>
+            <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Card POS Swipes</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin-top: 0.25rem;">{{ card_sales|inr }}</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">💵</div>
+            <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Cash in Drawer</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-gold); margin-top: 0.25rem;">{{ cash_sales|inr }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

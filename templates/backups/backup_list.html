@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Database Backups & Snapshots | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Database Snapshots & Disaster Recovery</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Zero-external-dependency JSON database snapshots with download archives</p>
+    </div>
+    <form method="POST" action="{% url 'backups:create' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">💾 Take Fresh Database Snapshot</button>
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Backup Filename</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Snapshot Timestamp (IST)</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">File Size</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in backups %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.85rem 1.25rem; font-family: monospace; font-size: 0.85rem; color: var(--accent-gold); font-weight: 600;">
+                        {{ b.filename }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        {{ b.created_at|date:"d M Y, H:i:s" }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: right; font-family: monospace; font-size: 0.85rem; color: var(--text-primary);">
+                        {{ b.file_size_bytes|filesizeformat }}
+                    </td>
+                    <td style="padding: 0.85rem 1rem; text-align: center;">
+                        <span class="badge badge-success">{{ b.status }}</span>
+                    </td>
+                    <td style="padding: 0.85rem 1.25rem; text-align: right;">
+                        <a href="{% url 'backups:download' b.id %}" class="btn btn-sm btn-outline">📥 Download JSON</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                        No database snapshots created yet. Click "Take Fresh Database Snapshot" to initiate.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

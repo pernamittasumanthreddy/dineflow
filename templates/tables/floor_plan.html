@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+{% block title %}Dining Tables & Floor Plan — DineFlow{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+  <div>
+    <h1>Dining Floor Plan & Table Management</h1>
+    <p style="color:var(--text-muted);">Visual table occupancy grid & dining section controls</p>
+  </div>
+  <div>
+    <a href="{% url 'tables:table_create' %}" class="btn btn-primary btn-sm">+ Add New Table</a>
+  </div>
+</div>
+
+<!-- Status Counts Strip -->
+<div style="display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap;">
+  <div class="glass-card" style="padding:12px 18px;display:flex;align-items:center;gap:10px;">
+    <span style="font-size:20px;">🪑</span>
+    <div>
+      <div style="font-size:11px;color:var(--text-muted);">Total Tables</div>
+      <div style="font-weight:700;font-size:1.2rem;">{{ status_counts.total }}</div>
+    </div>
+  </div>
+
+  <div class="glass-card" style="padding:12px 18px;display:flex;align-items:center;gap:10px;border-color:rgba(16,185,129,0.3);">
+    <span style="font-size:20px;">🟢</span>
+    <div>
+      <div style="font-size:11px;color:var(--text-muted);">Available</div>
+      <div style="font-weight:700;font-size:1.2rem;color:var(--success);">{{ status_counts.available }}</div>
+    </div>
+  </div>
+
+  <div class="glass-card" style="padding:12px 18px;display:flex;align-items:center;gap:10px;border-color:rgba(239,68,68,0.3);">
+    <span style="font-size:20px;">🔴</span>
+    <div>
+      <div style="font-size:11px;color:var(--text-muted);">Occupied</div>
+      <div style="font-weight:700;font-size:1.2rem;color:var(--danger);">{{ status_counts.occupied }}</div>
+    </div>
+  </div>
+
+  <div class="glass-card" style="padding:12px 18px;display:flex;align-items:center;gap:10px;border-color:rgba(14,165,233,0.3);">
+    <span style="font-size:20px;">🔵</span>
+    <div>
+      <div style="font-size:11px;color:var(--text-muted);">Reserved</div>
+      <div style="font-weight:700;font-size:1.2rem;color:var(--info);">{{ status_counts.reserved }}</div>
+    </div>
+  </div>
+
+  <div class="glass-card" style="padding:12px 18px;display:flex;align-items:center;gap:10px;border-color:rgba(245,158,11,0.3);">
+    <span style="font-size:20px;">🧹</span>
+    <div>
+      <div style="font-size:11px;color:var(--text-muted);">Cleaning</div>
+      <div style="font-weight:700;font-size:1.2rem;color:var(--warning);">{{ status_counts.cleaning }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section Filters -->
+<div style="display:flex;gap:10px;margin-bottom:20px;">
+  <a href="{% url 'tables:floor_plan' %}" class="btn btn-sm {% if not selected_section %}btn-primary{% else %}btn-secondary{% endif %}">
+    All Dining Sections
+  </a>
+  {% for sec in sections %}
+    <a href="?section={{ sec.id }}" class="btn btn-sm {% if selected_section == sec.id|stringformat:'s' %}btn-primary{% else %}btn-secondary{% endif %}">
+      {{ sec.name }} (Floor {{ sec.floor_number }})
+    </a>
+  {% endfor %}
+</div>
+
+<!-- Tables Layout Cards -->
+<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(210px, 1fr));gap:20px;">
+  {% for table in tables %}
+    <div class="glass-card" style="padding:20px;border-radius:var(--radius-lg);position:relative;display:flex;flex-direction:column;justify-content:space-between;{% if table.status == 'AVAILABLE' %}border-color:rgba(16,185,129,0.35);{% elif table.status == 'OCCUPIED' %}border-color:rgba(239,68,68,0.35);{% elif table.status == 'CLEANING' %}border-color:rgba(245,158,11,0.35);{% endif %}">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <h3 style="font-size:1.2rem;">Table {{ table.table_number }}</h3>
+          <span style="font-size:11px;color:var(--text-muted);">👥 {{ table.seating_capacity }} seats</span>
+        </div>
+        <div style="margin-bottom:12px;">
+          {{ table.status|status_badge }}
+          <div style="font-size:11px;color:var(--text-subtle);margin-top:4px;">{{ table.section.name|default:"Main Hall" }}</div>
+        </div>
+
+        {% if table.current_order %}
+          <div style="background:rgba(255,255,255,0.03);padding:8px;border-radius:6px;font-size:11px;margin-bottom:12px;">
+            <div>Order: <strong>#{{ table.current_order.order_number }}</strong></div>
+            <div>Total: <strong>{{ table.current_order.grand_total|inr }}</strong></div>
+            <a href="{% url 'orders:detail' table.current_order.id %}" style="color:var(--gold-accent);display:inline-block;margin-top:4px;">View Order &rarr;</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Quick Action Form -->
+      <form method="POST" action="{% url 'tables:table_toggle_status' table.id %}" style="margin-top:10px;">
+        {% csrf_token %}
+        <div style="display:flex;gap:6px;">
+          {% if table.status == 'CLEANING' %}
+            <input type="hidden" name="status" value="AVAILABLE">
+            <button type="submit" class="btn btn-success btn-sm" style="width:100%;font-size:11px;">Mark Available</button>
+          {% elif table.status == 'AVAILABLE' %}
+            <a href="{% url 'orders:pos' %}" class="btn btn-primary btn-sm" style="width:100%;font-size:11px;">Open Order</a>
+          {% elif table.status == 'OCCUPIED' %}
+            <input type="hidden" name="status" value="CLEANING">
+            <button type="submit" class="btn btn-secondary btn-sm" style="width:100%;font-size:11px;">Clear Table</button>
+          {% else %}
+            <input type="hidden" name="status" value="AVAILABLE">
+            <button type="submit" class="btn btn-secondary btn-sm" style="width:100%;font-size:11px;">Release</button>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  {% empty %}
+    <div class="glass-card" style="grid-column:1/-1;text-align:center;padding:48px;">
+      <p style="color:var(--text-muted);">No tables created yet. Click "+ Add New Table" above.</p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

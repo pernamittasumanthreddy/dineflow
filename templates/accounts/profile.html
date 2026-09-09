@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div style="margin-bottom: 1.5rem;">
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Account Profile & Security</h1>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0.25rem 0 0 0;">Manage your identity, personal contact details, and session credentials</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <!-- Profile Details -->
+        <div class="card">
+            <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                Profile Details
+            </h3>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="update_profile">
+                
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(217, 119, 6, 0.2); border: 2px solid var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--accent-gold); font-weight: 700;">
+                        {{ request.user.first_name|first|default:"U" }}
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">{{ request.user.display_name }}</div>
+                        <div style="color: var(--text-muted); font-size: 0.82rem;">Role: <span class="badge badge-info">{{ request.user.get_role_display }}</span></div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">First Name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Phone Number</label>
+                    {{ form.phone_number }}
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Avatar Photo</label>
+                    {{ form.avatar }}
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Profile</button>
+            </form>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card">
+            <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 0; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                Change Password
+            </h3>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="change_password">
+
+                {% if pwd_form.errors %}
+                    <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger-color); color: #fca5a5; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;">
+                        {{ pwd_form.errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Current Password</label>
+                    {{ pwd_form.old_password }}
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">New Password</label>
+                    {{ pwd_form.new_password1 }}
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.35rem;">Confirm New Password</label>
+                    {{ pwd_form.new_password2 }}
+                </div>
+                <button type="submit" class="btn btn-outline" style="width: 100%;">Change Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
