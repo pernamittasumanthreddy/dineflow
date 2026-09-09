@@ -1,0 +1,334 @@
+/**
+ * DineFlow POS & Billing Screen Styles
+ * Fast touch-friendly terminal layout for Waiters, Cashiers and Managers
+ */
+
+.df-pos-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  height: calc(100vh - var(--df-navbar-height));
+  overflow: hidden;
+  background-color: var(--df-bg-app);
+}
+
+.df-pos-catalog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--df-border-light);
+}
+
+.df-pos-topbar {
+  padding: 1rem 1.5rem;
+  background-color: #FFF;
+  border-bottom: 1px solid var(--df-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.df-pos-order-type-tabs {
+  display: flex;
+  background-color: var(--df-bg-cream);
+  padding: 4px;
+  border-radius: var(--df-radius-md);
+  gap: 4px;
+}
+
+.df-pos-type-tab {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: var(--df-radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--df-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.df-pos-type-tab.active {
+  background-color: #FFF;
+  color: var(--df-maroon-800);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.df-pos-categories-bar {
+  display: flex;
+  gap: 0.65rem;
+  padding: 0.85rem 1.5rem;
+  background-color: #FAF7F2;
+  border-bottom: 1px solid var(--df-border-light);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.df-pos-category-pill {
+  padding: 0.5rem 1.1rem;
+  background: #FFF;
+  border: 1px solid var(--df-border-medium);
+  border-radius: var(--df-radius-full);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--df-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.df-pos-category-pill:hover {
+  border-color: var(--df-terracotta-500);
+  background-color: var(--df-terracotta-100);
+  color: var(--df-terracotta-800);
+}
+
+.df-pos-category-pill.active {
+  background: linear-gradient(135deg, var(--df-maroon-800), var(--df-maroon-700));
+  border-color: var(--df-maroon-800);
+  color: #FFF;
+  box-shadow: 0 2px 6px rgba(122, 26, 36, 0.3);
+}
+
+.df-pos-food-grid {
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.1rem;
+  align-content: start;
+}
+
+.df-food-card {
+  background: #FFF;
+  border: 1px solid var(--df-border-light);
+  border-radius: var(--df-radius-lg);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  position: relative;
+  box-shadow: var(--df-shadow-xs);
+}
+
+.df-food-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--df-terracotta-500);
+  box-shadow: var(--df-shadow-md);
+}
+
+.df-food-card:active {
+  transform: scale(0.98);
+}
+
+.df-food-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.df-food-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--df-charcoal-900);
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+}
+
+.df-food-category-tag {
+  font-size: 0.72rem;
+  color: var(--df-text-muted);
+}
+
+.df-food-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.85rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--df-border-light);
+}
+
+.df-food-price {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--df-maroon-800);
+  font-feature-settings: "tnum";
+}
+
+.df-food-add-btn {
+  width: 28px;
+  height: 28px;
+  background-color: var(--df-terracotta-100);
+  color: var(--df-terracotta-700);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+}
+
+/* POS Cart Sidebar */
+.df-pos-cart-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #FFF;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.04);
+}
+
+.df-pos-cart-header {
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--df-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FAF8F5;
+}
+
+.df-pos-table-badge {
+  background: var(--df-maroon-800);
+  color: #FFF;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--df-radius-md);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.df-pos-cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1.25rem;
+}
+
+.df-pos-cart-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--df-border-light);
+  gap: 0.65rem;
+}
+
+.df-cart-item-info {
+  flex: 1;
+}
+
+.df-cart-item-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--df-charcoal-900);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.df-cart-item-unit-price {
+  font-size: 0.75rem;
+  color: var(--df-text-muted);
+}
+
+.df-cart-qty-ctrl {
+  display: flex;
+  align-items: center;
+  background-color: var(--df-bg-cream);
+  border-radius: var(--df-radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--df-border-medium);
+}
+
+.df-qty-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: var(--df-charcoal-800);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.df-qty-btn:hover {
+  background-color: #E2D7CC;
+}
+
+.df-qty-val {
+  min-width: 26px;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.df-cart-item-total {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--df-charcoal-900);
+  min-width: 60px;
+  text-align: right;
+}
+
+/* POS Cart Calculation Summary */
+.df-pos-cart-summary {
+  padding: 1.1rem 1.25rem;
+  background-color: #FAF8F5;
+  border-top: 1px solid var(--df-border-light);
+}
+
+.df-summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  color: var(--df-text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.df-summary-row.tax {
+  font-size: 0.75rem;
+  color: var(--df-text-muted);
+  padding-left: 0.5rem;
+}
+
+.df-summary-row.grand-total {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--df-maroon-800);
+  border-top: 1px solid var(--df-border-medium);
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0;
+}
+
+.df-pos-cart-actions {
+  padding: 1rem 1.25rem 1.25rem;
+  background-color: #FAF8F5;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .df-pos-wrapper {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .df-pos-cart-panel {
+    height: auto;
+    border-top: 2px solid var(--df-border-medium);
+  }
+}
