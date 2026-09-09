@@ -1,0 +1,435 @@
+/**
+ * DineFlow Public Landing Page CSS
+ * Warm Indian Restaurant visual identity: Charcoal, Saffron, Terracotta, Maroon, Gold, Cream
+ */
+
+.df-landing-body {
+  background-color: #15151A;
+  color: #EDE8E1;
+  font-family: var(--df-font-sans);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background Canvas Layer */
+#df-spice-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.df-landing-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Landing Navigation */
+.df-landing-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(21, 21, 26, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.df-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.df-nav-links a {
+  color: #D1D1DE;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  transition: color 0.15s ease;
+}
+
+.df-nav-links a:hover {
+  color: var(--df-saffron-400);
+}
+
+/* Hero Section */
+.df-hero-section {
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 1.5rem 4rem;
+  position: relative;
+}
+
+.df-hero-container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.df-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  background: rgba(224, 83, 26, 0.15);
+  border: 1px solid rgba(240, 106, 51, 0.4);
+  border-radius: var(--df-radius-full);
+  color: var(--df-saffron-400);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.df-hero-title {
+  font-family: var(--df-font-serif);
+  font-size: 3.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #FFF;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.df-hero-title span {
+  background: linear-gradient(135deg, #FFA238, #E0531A, #C42B3B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.df-hero-subtitle {
+  font-size: 1.2rem;
+  color: #B5B5C4;
+  line-height: 1.6;
+  max-width: 720px;
+  margin: 0 auto 2.5rem;
+}
+
+.df-hero-cta-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+}
+
+.df-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding: 2rem;
+  background: rgba(30, 30, 36, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--df-radius-xl);
+  backdrop-filter: blur(10px);
+}
+
+.df-stat-num {
+  font-family: var(--df-font-serif);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--df-saffron-400);
+}
+
+.df-stat-label {
+  font-size: 0.8125rem;
+  color: #A6A6B8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+}
+
+/* Sections */
+.df-section {
+  padding: 6rem 1.5rem;
+}
+
+.df-section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.df-section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 4rem;
+}
+
+.df-section-tag {
+  color: var(--df-terracotta-500);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.75rem;
+}
+
+.df-section-title {
+  font-family: var(--df-font-serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #FFF;
+  margin-bottom: 1rem;
+}
+
+.df-section-desc {
+  font-size: 1.05rem;
+  color: #A6A6B8;
+  line-height: 1.6;
+}
+
+/* Role Showcase Grid */
+.df-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.df-role-card {
+  background: rgba(30, 30, 36, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--df-radius-lg);
+  padding: 1.75rem;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(6px);
+}
+
+.df-role-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--df-terracotta-600);
+  background: rgba(40, 40, 48, 0.85);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+}
+
+.df-role-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.df-role-badge-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--df-radius-full);
+  background: rgba(224, 83, 26, 0.2);
+  color: var(--df-saffron-400);
+}
+
+.df-role-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #FFF;
+  margin-bottom: 0.5rem;
+}
+
+.df-role-desc {
+  font-size: 0.875rem;
+  color: #A6A6B8;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.df-role-features {
+  list-style: none;
+  font-size: 0.8125rem;
+  color: #D1D1DE;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.df-role-features li::before {
+  content: '✓';
+  color: #34BD55;
+  font-weight: 800;
+  margin-right: 0.5rem;
+}
+
+/* Modules Catalog Grid */
+.df-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.1rem;
+}
+
+.df-module-pill-card {
+  background: rgba(26, 26, 32, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--df-radius-md);
+  padding: 1rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  transition: all 0.15s ease;
+}
+
+.df-module-pill-card:hover {
+  border-color: var(--df-saffron-500);
+  background: rgba(36, 36, 44, 0.9);
+  transform: translateY(-2px);
+}
+
+.df-module-num {
+  font-family: var(--df-font-mono);
+  font-size: 0.75rem;
+  color: var(--df-terracotta-500);
+  font-weight: 700;
+}
+
+.df-module-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #FFF;
+}
+
+/* Pricing Grid */
+.df-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.df-price-card {
+  background: rgba(28, 28, 34, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--df-radius-xl);
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.df-price-card.featured {
+  background: linear-gradient(180deg, rgba(122, 26, 36, 0.4), rgba(28, 28, 34, 0.95));
+  border: 2px solid var(--df-terracotta-600);
+  transform: scale(1.04);
+  box-shadow: 0 16px 36px rgba(194, 67, 18, 0.25);
+}
+
+.df-featured-ribbon {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--df-terracotta-600), var(--df-saffron-500));
+  color: #FFF;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 1rem;
+  border-radius: var(--df-radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.df-price-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #FFF;
+}
+
+.df-price-amount {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #FFF;
+  font-feature-settings: "tnum";
+}
+
+.df-price-period {
+  font-size: 0.875rem;
+  color: #A6A6B8;
+  font-weight: 400;
+}
+
+.df-price-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #D1D1DE;
+}
+
+.df-price-features li::before {
+  content: '✓';
+  color: #34BD55;
+  font-weight: 800;
+  margin-right: 0.65rem;
+}
+
+/* Footer */
+.df-landing-footer {
+  background: #0E0E12;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4rem 1.5rem 2rem;
+  font-size: 0.875rem;
+  color: #8C8C9E;
+}
+
+.df-footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.df-footer-col h4 {
+  color: #FFF;
+  font-size: 0.9375rem;
+  margin-bottom: 1.25rem;
+}
+
+.df-footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.df-footer-col a {
+  color: #8C8C9E;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.df-footer-col a:hover {
+  color: var(--df-saffron-400);
+}
+
+.df-footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .df-hero-title { font-size: 2.5rem; }
+  .df-hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .df-pricing-grid { grid-template-columns: 1fr; }
+  .df-footer-grid { grid-template-columns: 1fr 1fr; }
+  .df-nav-links { display: none; }
+}
