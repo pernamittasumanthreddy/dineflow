@@ -1,0 +1,19 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block title %}Session Timeout — DineFlow ERP{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1.5rem; text-align: center;">
+  <div style="background: rgba(28, 28, 34, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--df-radius-xl); max-width: 480px; padding: 3rem 2rem; backdrop-filter: blur(16px);">
+    <div style="font-size: 3.5rem; margin-bottom: 0.75rem;">⏳</div>
+    <h1 style="font-size: 1.6rem; font-weight: 700; color: #FFF; margin-bottom: 0.75rem;">Session Inactivity Timeout</h1>
+    <p style="color: #A6A6B8; font-size: 0.9375rem; line-height: 1.6; margin-bottom: 2rem;">
+      For security and cash register protection, your active session timed out after 30 minutes of idle terminal time.
+    </p>
+    <a href="{% url 'accounts:login' %}" class="df-btn df-btn-terracotta df-btn-lg" style="width: 100%;">
+      Re-Authenticate & Unlock POS 🔑
+    </a>
+  </div>
+</div>
+{% endblock %}
