@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Staff Shift Roster Planning and Overtime Hours Calculator | DineFlow Enterprise ERP{% endblock %}
+{% block content %}
+<div class="df-enterprise-container df-theme-warm-spice">
+    <header class="df-page-header">
+        <div class="df-header-breadcrumbs">
+            <span>ERP</span> &gt; <span>HR</span> &gt; <span class="active">Staff Shift Roster Planning and Overtime Hours Calculator</span>
+        </div>
+        <div class="df-header-actions">
+            <button class="df-btn df-btn-spice" id="btn-create-feat_09_shift_roster_scheduler">+ Create Record</button>
+            <button class="df-btn df-btn-outline" id="btn-export-feat_09_shift_roster_scheduler">Export GSTR / CSV</button>
+        </div>
+    </header>
+
+    <section class="df-analytics-strip">
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 1: Staff Shift Ros</span>
+            <span class="df-stat-value">₹{{ stat_1|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 2: Staff Shift Ros</span>
+            <span class="df-stat-value">₹{{ stat_2|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 3: Staff Shift Ros</span>
+            <span class="df-stat-value">₹{{ stat_3|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+        <div class="df-stat-card">
+            <span class="df-stat-label">Metric 4: Staff Shift Ros</span>
+            <span class="df-stat-value">₹{{ stat_4|default:"14,850.00" }}</span>
+            <span class="df-stat-trend positive">↑ 12.4% vs last week</span>
+        </div>
+    </section>
+
+    <main class="df-table-responsive-wrapper">
+        <table class="df-table df-table-striped" id="table-feat_09_shift_roster_scheduler">
+            <thead>
+                <tr>
+                    <th>Record ID</th>
+                    <th>Restaurant Branch</th>
+                    <th>Reference Code</th>
+                    <th>Amount (INR)</th>
+                    <th>CGST (2.5%)</th>
+                    <th>SGST (2.5%)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-01">
+                    <td><code>DF-HR-0001</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-01</code></td>
+                    <td><strong>₹{{ row_1_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-02">
+                    <td><code>DF-HR-0002</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-02</code></td>
+                    <td><strong>₹{{ row_2_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-03">
+                    <td><code>DF-HR-0003</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-03</code></td>
+                    <td><strong>₹{{ row_3_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-04">
+                    <td><code>DF-HR-0004</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-04</code></td>
+                    <td><strong>₹{{ row_4_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-05">
+                    <td><code>DF-HR-0005</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-05</code></td>
+                    <td><strong>₹{{ row_5_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-06">
+                    <td><code>DF-HR-0006</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-06</code></td>
+                    <td><strong>₹{{ row_6_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-07">
+                    <td><code>DF-HR-0007</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-07</code></td>
+                    <td><strong>₹{{ row_7_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-08">
+                    <td><code>DF-HR-0008</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-08</code></td>
+                    <td><strong>₹{{ row_8_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-09">
+                    <td><code>DF-HR-0009</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-09</code></td>
+                    <td><strong>₹{{ row_9_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-10">
+                    <td><code>DF-HR-0010</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-10</code></td>
+                    <td><strong>₹{{ row_10_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-11">
+                    <td><code>DF-HR-0011</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-11</code></td>
+                    <td><strong>₹{{ row_11_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-12">
+                    <td><code>DF-HR-0012</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-12</code></td>
+                    <td><strong>₹{{ row_12_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-13">
+                    <td><code>DF-HR-0013</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-13</code></td>
+                    <td><strong>₹{{ row_13_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-14">
+                    <td><code>DF-HR-0014</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-14</code></td>
+                    <td><strong>₹{{ row_14_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-15">
+                    <td><code>DF-HR-0015</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-15</code></td>
+                    <td><strong>₹{{ row_15_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-16">
+                    <td><code>DF-HR-0016</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-16</code></td>
+                    <td><strong>₹{{ row_16_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-17">
+                    <td><code>DF-HR-0017</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-17</code></td>
+                    <td><strong>₹{{ row_17_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-18">
+                    <td><code>DF-HR-0018</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-18</code></td>
+                    <td><strong>₹{{ row_18_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-19">
+                    <td><code>DF-HR-0019</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-19</code></td>
+                    <td><strong>₹{{ row_19_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-20">
+                    <td><code>DF-HR-0020</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-20</code></td>
+                    <td><strong>₹{{ row_20_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-21">
+                    <td><code>DF-HR-0021</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-21</code></td>
+                    <td><strong>₹{{ row_21_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-22">
+                    <td><code>DF-HR-0022</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-22</code></td>
+                    <td><strong>₹{{ row_22_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-23">
+                    <td><code>DF-HR-0023</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-23</code></td>
+                    <td><strong>₹{{ row_23_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-24">
+                    <td><code>DF-HR-0024</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-24</code></td>
+                    <td><strong>₹{{ row_24_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+                <tr class="df-row" id="row-feat_09_shift_roster_scheduler-25">
+                    <td><code>DF-HR-0025</code></td>
+                    <td>Indiranagar Main Flagship</td>
+                    <td><code>FEAT_09_SH-25</code></td>
+                    <td><strong>₹{{ row_25_amount|default:"450.00" }}</strong></td>
+                    <td>₹11.25</td>
+                    <td>₹11.25</td>
+                    <td><span class="df-badge df-badge-success">COMPLIANT</span></td>
+                    <td>
+                        <button class="df-btn-icon" title="View Details">👁️</button>
+                        <button class="df-btn-icon" title="Print Invoice">🖨️</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+<script src="{% static "js/enterprise/feat_09_shift_roster_scheduler_engine.js" %}"></script>
+{% endblock %}
